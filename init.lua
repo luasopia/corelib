@@ -1,0 +1,163 @@
+if not_required then return end -- This prevents auto-loading in Gideros
+--------------------------------------------------------------------------------
+-- 2019/12/27: 작성 시작 : 60프레임, 화면 1080x1920 기준으로
+-- 2020/02/16: init.lua를 luasopia/init.lua로 옮김
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- Lua 고유의 전역변수들만 남기고 특정SDK의 전역변수들을 tbl로 이동
+--------------------------------------------------------------------------------
+local function moveg()
+    local tbl = {}
+
+    local luag = { -- 39 -- lua global variables
+    '_G', '_VERSION', 'assert', 'collectgarbage', 'coroutine', 'debug', 'dofile',
+    'error', 'gcinfo', 'getfenv', 'getmetatable', 'io', 'ipairs', 'load', 'loadfile',
+    'loadstring', 'math', 'module', 'newproxy', 'next', 'os', 'package', 'pairs',
+    'pcall', 'print', 'rawequal', 'rawget', 'rawset', 'require', 'select', 'setfenv',
+    'setmetatable', 'string', 'table', 'tostring', 'tonumber', 'type', 'unpack', 'xpcall',
+    -- CoronaSDK의 경우 아래 세 개는 전역변수로 남아있어야 정상동작한다.
+    'system', 'Runtime', 'cloneArray',
+    }
+    
+    local function notin(str)
+        for _, v in ipairs(luag) do
+            if v==str then return false end
+        end
+        return true
+    end
+
+    for k, v in pairs(_G) do
+        if notin(k) then
+            tbl[k] = v
+            _G[k] = nil
+        end
+    end
+
+    return tbl
+end
+
+
+if gideros then -- in the case of using Gideros
+
+    print('luasopia.init (gideros)')
+    _Gideros = moveg()
+
+    -- screen = {
+    _baselayer = {
+        __bd = _Gideros.Sprite.new(),
+        add = function(self, child) return self.__bd:addChild(child.__bd) end,
+        
+        width = _Gideros.application.content.width, -- 1080,
+        height = _Gideros.application.content.height, -- 1920,
+        centerx = _Gideros.application.content.width/2,
+        centery = _Gideros.application.content.height/2,
+        fps = _Gideros.application.content.fps,
+    }
+    -- _Gideros.stage:addChild(screen.__bd)
+    _Gideros.stage:addChild(_baselayer.__bd)
+
+
+elseif coronabaselib then -- in the case of using CoronaSDK
+
+    print('luasopia.init (corona)')
+    _Corona = moveg()
+
+	--	__bd = _Corona.display.getCurrentStage(),
+
+    -- screen = {
+    _baselayer = {
+        __bd = _Corona.display.newGroup(),
+        add = function(self, child) return self.__bd:insert(child.__bd) end,
+
+        width = _Corona.display.contentWidth,
+        height = _Corona.display.contentHeight,
+        centerx = _Corona.display.contentCenterX,
+        centery = _Corona.display.contentCenterY,
+        fps = _Corona.display.fps
+    }
+
+
+elseif love then-- in the case of using LOVE2d
+
+end
+
+-- global constants -- 이 위치여야 한다.(위로 옮기면 안됨)
+INF = -math.huge -- infinity constant (일부러 -를 앞에 붙임)
+_isdebugmode = false
+lib = {} -- 2020/03/07 added
+ui = {} -- 2020/03/07 added
+math.randomseed(os.time())
+
+-- load luasopia core/library files
+require 'luasopia.core.01_class'
+require 'luasopia.core.02_timer'
+require 'luasopia.core.03_color'
+require 'luasopia.core.04_util'
+require 'luasopia.core.10_disp'
+require 'luasopia.core.11_disp_shift'
+require 'luasopia.core.12_disp_move'
+require 'luasopia.core.13_disp_touch'
+require 'luasopia.core.14_disp_tap'
+require 'luasopia.core.15_disp_shape'
+require 'luasopia.core.20_group'
+require 'luasopia.core.21_image'
+require 'luasopia.core.22_image_region'
+require 'luasopia.core.23_getsheet'
+require 'luasopia.core.24_sprite'
+require 'luasopia.core.30_text'
+require 'luasopia.core.40_line'
+require 'luasopia.core.41_rect'
+require 'luasopia.core.42_polygon'
+require 'luasopia.core.43_circle'
+require 'luasopia.core.44_star'
+require 'luasopia.core.45_heart'
+require 'luasopia.core.50_sound'
+require 'luasopia.core.60_scene'
+
+local enterFrameInit = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
+
+require 'luasopia.lib.blink'
+require 'luasopia.lib.wave'
+
+-- 반환되는 함수가 아예 호출이 안될 때 log를 빈함수로 설정
+logf = function() end
+
+return function(args)
+    if args then 
+
+        if args.debug then
+
+            if _Gideros then
+
+                _loglayer = {
+                    __bd = _Gideros.Sprite.new(),
+                    add = function(self, child) return self.__bd:addChild(child.__bd) end,
+                }
+                _Gideros.stage:addChild(_loglayer.__bd)
+            
+            elseif _Corona then
+                    
+                _loglayer = {
+                    __bd = _Corona.display.newGroup(),
+                    add = function(self, child) return self.__bd:insert(child.__bd) end,
+                }
+            
+            end
+
+            _isdebugmode = true
+            require 'luasopia.core.98_logf'
+            if args.loglines then logf.setNumLines(args.loglines) end
+            enterFrameInit()
+
+        end
+        
+        if args.border then
+
+            Rect(screen.width, screen.height):fillColor(0,0,0,0):strokeWidth(args.border)
+        
+        end
+
+    end
+
+end
