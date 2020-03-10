@@ -11,6 +11,7 @@ function import(libname)
     local url = string.format('luasopialib.%s.%s',libname, libname)
     u = function(str) return string.format('luasopialib/%s/%s',libname,str) end
     local lib = require(url)
+    u = nil
     
     --lib.path = string.format('luasopialib/%s/',dir)
     

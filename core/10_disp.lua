@@ -28,15 +28,25 @@ local dobjs = {} --Display.objs = {}
 -- static public method
 -------------------------------------------------------------------------------
 Display.updateAll = function()
-    local ndobjs = #dobjs
     --(1) __upd() 호출, 그 내부에서 없앨 객체는 remove()를 호출해야한다
-    for k = 1, ndobjs do dobjs[k]:__upd() end
+    --2020/03/10 이미 __del__()이 호출된 경우는 dobjs 테이블에서 삭제만 한다
+    -- child는 Group이 소멸될 때 이미 __del__()이 호출되었으므로
+    -- 이경우 dobjs에서만 삭제한다.
+    for k = #dobjs, 1, -1 do
+        local obj = dobjs[k]
+        if obj.__bd ~= nil then
+            obj:__upd()
+        else -- 이미 __del__()함수가 호출되어 내부가 삭제된 경우
+             -- dobjs 테이블에서만 삭제한다.
+            tRm(dobjs, k)
+        end
+    end
 
     --(2) 제거될 객체로 표시된 것들을 (반드시 *역순*으로) 제거한다.
-    for k = ndobjs, 1, -1 do
-        local o = dobjs[k]
-        if o.__rm then
-            o:__del__()
+    for k = #dobjs, 1, -1 do
+        local obj = dobjs[k]
+        if obj.__rm then
+            obj:__del__()
             tRm(dobjs, k)
         end
     end
@@ -69,7 +79,7 @@ end
 
 -- This function is called in every frames
 function Display:__upd()
-    if self.__rm or self.__noUpd then return end
+    if self.__rm or self.__noUpd then return end -- 반드시 필요함
 
     if self.__tm then self.__tm = self.__tm + tmgapf end
     if self.__d then self:__playd() end
@@ -80,13 +90,16 @@ function Display:__upd()
     if self.touch and self.__tch==nil then self:touchOn() end
     if self.tap and self.__tap==nil then self:tapOn() end
 
-    if (self.__rma and self.__rma<=self.__tm) or
-            (self.removeIf and self:removeIf()) then
-        return self:remove()
-    end
-
-    -- self.__rm = (self.__rma and self.__rma<=self.__tm) or
-    --             (self.removeIf and self:removeIf())
+    -- if (self.__rma and self.__rma<=self.__tm) or
+    --         (self.removeIf and self:removeIf()) then
+    --     return self:remove()
+    -- end
+    
+    -- 아래가 더 간단해 보이지만 이경우 self.__rm이 true인데 
+    -- 다시 false로 바뀌어버리는 경우도 존재
+    -- 따라서 반드시 맨 처음에 if self.__rm then return end 가 있어야 함
+    self.__rm = (self.__rma and self.__rma<=self.__tm) or
+            (self.removeIf and self:removeIf())
 end
 
 
@@ -109,7 +122,7 @@ function Display:updateOn() self.__noUpd = true; return self end
 function Display:updateOff() self.__noUpd = false; return self end
 
 --2020/03/02: group:add(child) returns child
-function Display:addto(g) return g:add(self) end
+function Display:addto(g) g:add(self); return self end
 
 function Display:remove() self.__rm = true end
 function Display:isremoved() return self.__rm end
@@ -236,7 +249,8 @@ if _Gideros then -- gideros
         end
         if self.__tch then self:touchOff()  end
 
-        return self.__bd:removeFromParent()
+        self.__bd:removeFromParent()
+        self.__bd = nil -- __del__()이 호출되었음을 표시한다.
     end
 
 elseif _Corona then -- if coronaSDK --------------------------------------
@@ -328,14 +342,14 @@ elseif _Corona then -- if coronaSDK --------------------------------------
     
     function Display:visible(v) self.__bd.isVisible = v; return self end
 
-    function Display:__del__() print('disp_del_') 
+    function Display:__del__() --print('disp_del_') 
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
         -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 삭제됨
             for k=1,#self.__tmrs do self.__tmrs[k].__rm = true end
         end
         if self.__tch then print('disp_del_tch'); self:touchOff() end
         self.__bd:removeSelf()
-        self.__bd = nil
+        self.__bd = nil -- __del__()이 호출되었음을 표시하는 역할도 함
     end
 
 end

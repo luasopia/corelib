@@ -19,7 +19,7 @@ if _Gideros then
     child.__pr = self
     self.__bd:addChild(child.__bd)
     child.__bd:setPosition(0,0) -- 2020/03/04
-    return child
+    return self
   end
 
   -- Disp 베이스클래스의 remove()를 오버로딩
@@ -31,7 +31,7 @@ if _Gideros then
       obj:remove() -- 차일드 각각의 소멸자 호출
     end
     -- (2) 자신도 (부모그룹에서) 제거
-    return Disp.remove(self) -- 부모의 소멸자 호출
+    return Disp.__del__(self) -- 부모의 소멸자 호출
   end
 
   -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
@@ -94,20 +94,24 @@ elseif _Corona then
 
   function Group:add(child)
     child.__pr = self
-    child.__bd.x, child.__bd.y = 0,0
-    return self.__bd:insert(child.__bd)
+    child.__bd.x, child.__bd.y = 0, 0
+    self.__bd:insert(child.__bd)
+    return self
   end
 
   -- Disp 베이스클래스의 remove()를 오버로딩
-  function Group:remove()
+  function Group:__del__()
     -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
     -- 여기서 소멸자를 호출하여 그룹이 삭제되는 즉시 child들도 삭제토록 한다.
+    -- 2020/03/10:corona는 Group이 removeSelf()될 때 자식들의 removeSelf()도 같이 호출되는 것 같다.
+    -- 따라서 여기서 자식들을 미리 소멸시켜야 한다.
     for k = self.__bd.numChildren, 1, -1 do
       local obj = self.__bd[k].__obj
-      obj:remove()
+      obj:__del__()
     end
     -- (2) 자신도 (부모그룹에서) 제거
-    return Disp.remove(self) -- 부모의 소멸자 호출
+    return Disp.__del__(self) -- 부모의 소멸자 호출
+    -- self.__rm = true
   end
 
 end
