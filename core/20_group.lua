@@ -27,8 +27,9 @@ if _Gideros then
     -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
     -- 여기서 소멸자를 호출하여 그룹이 삭제되는 즉시 child들도 삭제토록 한다.
     for k = self.__bd:getNumChildren(),1,-1 do
-      local obj = self.__bd:getChildAt(k).__obj
-      obj:remove() -- 차일드 각각의 소멸자 호출
+      -- local obj = self.__bd:getChildAt(k).__obj
+      -- obj:__del__() -- 차일드 각각의 소멸자 호출 (즉시 삭제)
+      self.__bd:getChildAt(k).__obj:__del__()
     end
     -- (2) 자신도 (부모그룹에서) 제거
     return Disp.__del__(self) -- 부모의 소멸자 호출
@@ -39,7 +40,7 @@ if _Gideros then
       -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
       for k = self.__bd:getNumChildren(),1,-1 do
         local obj = self.__bd:getChildAt(k).__obj
-        obj:touchOff() -- 차일드 각각의 소멸자 호출
+        obj:touchOff() -- 차일드 각각의 touchOff() 호출
       end
       -- (2) 자신도 (부모그룹에서) 터치를 멈춤
       return Disp.touchOff(self)
@@ -107,7 +108,7 @@ elseif _Corona then
     -- 따라서 여기서 자식들을 미리 소멸시켜야 한다.
     for k = self.__bd.numChildren, 1, -1 do
       local obj = self.__bd[k].__obj
-      obj:__del__()
+      obj:__del__() -- 즉시 삭제
     end
     -- (2) 자신도 (부모그룹에서) 제거
     return Disp.__del__(self) -- 부모의 소멸자 호출
