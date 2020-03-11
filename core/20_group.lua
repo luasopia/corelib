@@ -24,7 +24,7 @@ if _Gideros then
 
   -- Disp 베이스클래스의 remove()를 오버로딩
   function Group:__del__()
-    -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
+    -- (1) child들은 소멸자 호출 (__obj는 __bd를 가지는 객체)
     -- 여기서 소멸자를 호출하여 그룹이 삭제되는 즉시 child들도 삭제토록 한다.
     for k = self.__bd:getNumChildren(),1,-1 do
       -- local obj = self.__bd:getChildAt(k).__obj
@@ -107,12 +107,41 @@ elseif _Corona then
     -- 2020/03/10:corona는 Group이 removeSelf()될 때 자식들의 removeSelf()도 같이 호출되는 것 같다.
     -- 따라서 여기서 자식들을 미리 소멸시켜야 한다.
     for k = self.__bd.numChildren, 1, -1 do
-      local obj = self.__bd[k].__obj
-      obj:__del__() -- 즉시 삭제
+      -- local obj = self.__bd[k].__obj
+      -- obj:__del__() -- 즉시 삭제
+      self.__bd[k].__obj:__del__()
     end
     -- (2) 자신도 (부모그룹에서) 제거
     return Disp.__del__(self) -- 부모의 소멸자 호출
     -- self.__rm = true
+  end
+
+  function Group:touchOff()
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:touchOff()
+    end
+    return Disp.touchOff(self)
+  end
+
+  function Group:touchOn()
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:touchOff()
+    end
+    return Disp.touchOn(self)
+  end
+
+  function Group:updateOff()
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:updateOff()
+    end
+    return Disp.updateOff(self)
+  end
+
+  function Group:updateOn()
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:touchOff()
+    end
+    return Disp.updateOn(self)
   end
 
 end
