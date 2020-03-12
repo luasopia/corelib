@@ -233,7 +233,7 @@ if _Gideros then -- gideros
     function Display:visible(v) self.__bd:setVisible(v); return self end
 
     function Display:tint(r,g,b)
-        self.__bd:setColorTransform(r/255,g/255,b/255,1)
+        self.__bd:setColorTransform(r, g ,b)
     return self
     end
     --------------------------------------------------------------------------------
@@ -350,6 +350,11 @@ elseif _Corona then -- if coronaSDK --------------------------------------
         if self.__tch then print('disp_del_tch'); self:touchOff() end
         self.__bd:removeSelf()
         self.__bd = nil -- __del__()이 호출되었음을 표시하는 역할도 함
+    end
+
+    function Display:tint(r,g,b)
+        self.__bd:setFillColor(r,g,b)
+    return self
     end
 
 end

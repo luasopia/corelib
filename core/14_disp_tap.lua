@@ -56,7 +56,7 @@ elseif _Corona then ---------------------------------------
     -- 코로나의 'tap'이벤트가 아니라 'touch'이벤트를 이용한다.
     
     function Display:tapOn()
-        if self.tap then print('enable tap')
+        if self.tap then --print('enable tap')
             self.__bd:addEventListener('touch', tapfn)
             self.__tap = true
         end
