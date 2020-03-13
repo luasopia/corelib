@@ -144,4 +144,12 @@ elseif _Corona then
     return Disp.updateOn(self)
   end
 
+  -- 2020/03/13: corona의 setFillColor는 group에는 적용되지 않는다.
+  -- 따라서 모든 child를 순회하여 tint()함수를 호출한다.
+  function Group:tint(...)
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:tint(...)
+    end
+  end
+
 end
