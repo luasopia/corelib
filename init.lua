@@ -133,6 +133,8 @@ return function(args)
                 _loglayer = {
                     __bd = _Gideros.Sprite.new(),
                     add = function(self, child) return self.__bd:addChild(child.__bd) end,
+                    __isobj__ = true,
+                    __clsid__ = Group.__clsid__
                 }
                 _Gideros.stage:addChild(_loglayer.__bd)
             
@@ -141,6 +143,8 @@ return function(args)
                 _loglayer = {
                     __bd = _Corona.display.newGroup(),
                     add = function(self, child) return self.__bd:insert(child.__bd) end,
+                    __isobj__ = true,
+                    __clsid__ = Group.__clsid__
                 }
             
             end

@@ -62,10 +62,13 @@ _baselayer:add(screen)
 --------------------------------------------------------------------------------
 
 -- 아래 함수를 리턴한다. debug모드일 때 실행해야 한다.
+local TCOLOR = Color.LIGHT_PINK
 return function() -- initEnterFrame()
 	if _isdebugmode then
-		mtxts[1] = Text("",_loglayer):xy(screen.centerx, 30):color(255,182,193)
-		mtxts[2] = Text("",_loglayer):xy(screen.centerx, 90):color(255,182,193)
+		mtxts[1] = Text("",_loglayer):xy(screen.centerx, 30):color(TCOLOR)
+		mtxts[2] = Text("",_loglayer):xy(screen.centerx, 90):color(TCOLOR)
+		-- mtxts[1] = Text("", _loglayer):xy(screen.centerx, 30)--:color(255,182,193)
+		-- mtxts[2] = Text("", _loglayer):xy(screen.centerx, 90)--:color(255,182,193)
 	end
 end
 	

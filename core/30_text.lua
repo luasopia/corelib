@@ -184,7 +184,7 @@ elseif _Corona then -- for Corona ########################################
 		return text
 	end
 
-	function Text:init(str, parent)
+	function Text:init(str, opt, parent)
 		self.__str = str
 		
 		-------------------------------------------------------------------------
@@ -204,7 +204,7 @@ elseif _Corona then -- for Corona ########################################
 		self.__tbd = self:__newtext()
 		self.__bd = newGroup()
 		self.__bd:insert(self.__tbd)
-		self.__pr = parent
+
 		return Disp.init(self)
 
 	end

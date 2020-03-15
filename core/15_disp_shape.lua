@@ -63,9 +63,16 @@ elseif _Corona then
 
 end
 
+
 -- 2020/03/15: shape생성자에서 parent 바로 앞 파라메터가
 -- (extra) option일 경우를 처리하는 함수
 -- (이 함수를 호출했다면 호출하는 쪽의 self.__pr = parent는 삭제해야 함)
+-- 공통멤버 :   self.__strkc -- stroke color
+--              self.__strkw -- stroke width
+--              self.__fillca -- fill color (and alpha)
+
+local WHITE = Color.WHITE -- default fill and stroke color
+
 function Disp:__optOrPr(opt, parent)
     if isobj(opt, Group) then -- opt가 parent(Group)인 경우
         self.__pr = opt
@@ -74,5 +81,8 @@ function Disp:__optOrPr(opt, parent)
         self.__pr = parent
         opt = opt or {}
     end
+    self.__strkw = opt.strokewidth or 0
+    self.__strkc = opt.strokecolor or WHITE
+    self.__fillca = opt.fillcolor or WHITE
     return opt
 end

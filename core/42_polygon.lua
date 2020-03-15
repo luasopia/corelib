@@ -38,19 +38,20 @@ if _Gideros then
         return s
     end
 
-    function Polygon:init(radius, points, parent)
+    function Polygon:init(radius, points, opt, parent)
         assert(points>=3, 'Number of points for Polygon must be greater than 2.')
         self.__rd, self.__npts = radius, points
-        self.__strkw, self.__strkc = 0, WHITE -- stroke width and color
-        self.__fillca = Color(WHITE, 1) -- fill color and alpha
+        opt = Disp.__optOrPr(self, opt, parent)
+        -- self.__strkw, self.__strkc = 0, WHITE -- stroke width and color
+        -- self.__fillca = Color(WHITE, 1) -- fill color and alpha
         self.__ancx, self.__ancy = 0.5, 0.5
         self.__bd = Sprtnew()
         self.__sbd = self:__draw()
         self.__bd:addChild(self.__sbd)
-        self.__pr = parent
+
         return Disp.init(self)
     end
-
+--[[
     function Polygon:strokeWidth(w)
         self.__strkw = w
         self.__bd:removeChildAt(1)
@@ -67,7 +68,7 @@ if _Gideros then
         self.__bd:addChild(self.__sbd)
         return self
     end
---]]
+
 
     -- r,g,b는 0-255 범위의 정수
     function Polygon:fillColor(r,g,b,a)
@@ -77,6 +78,7 @@ if _Gideros then
         self.__bd:addChild(self.__sbd)
         return self
     end
+--]]
 
     function Polygon:anchor(ax, ay)
         local x, y = self.__rd*(1-2*ax), self.__rd*(1-2*ay)
@@ -97,9 +99,10 @@ elseif _Corona then --##########################################################
     print('core.Polygon(cor)')
     local newPoly = _Corona.display.newPolygon
     --------------------------------------------------------------------------------
-    function Polygon:init(radius, points, parent)
+    function Polygon:init(radius, points, opt, parent)
         assert(points>=3, 'Number of points for Polygon must be greater than 2.')
         -- self.__rd, self.__npts = radius, points
+        opt = Disp.__optOrPr(self, opt, parent)
 
         local pts = {0,-radius}
         local rgap = _2pi/points
@@ -110,10 +113,17 @@ elseif _Corona then --##########################################################
 
         self.__bd = newPoly(0, 0, pts)
         self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
-        self.__pr = parent
-        return Disp.init(self) --return self:superInit()
+
+        local sc = self.__strkc
+        local fca = self.__fillca
+        self.__bd.strokeWidth = self.__strkw
+        self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
+        self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
+
+        return Disp.init(self)
     end  
--- --[[
+
+    --[[
     function Polygon:strokeWidth(w)
         self.__bd.strokeWidth = w
         return self
@@ -126,7 +136,6 @@ elseif _Corona then --##########################################################
         self.__strkc = c
         return self
     end
---]]
 
     -- r, g, b are integers between 0 and 255
     -- fillcolor 는 외곽선은 불투명, 내부색은 투명일 수 있으므로 a도 받는다.
@@ -137,5 +146,11 @@ elseif _Corona then --##########################################################
         self.__fillca = ca
         return self
     end
+--]]
 
 end
+
+-- refer methods in Display class
+Polygon.strokewidth = Disp.__strokeWidth__
+Polygon.strokecolor = Disp.__strokeColor__
+Polygon.fillcolor = Disp.__fillColor__

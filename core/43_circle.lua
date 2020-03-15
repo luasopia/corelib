@@ -55,17 +55,18 @@ if _Gideros then
         return s
     end
 
-    function Circle:init(radius, parent)
+    function Circle:init(radius, opt, parent)
         self.__rd = radius
-        self.__strkw, self.__strkc = 0, WHITE -- stroke width and color
-        self.__fillca = Color(WHITE, 1) -- fill color and alpha
+        opt = Disp.__optOrPr(self, opt, parent)
+        -- self.__strkw, self.__strkc = 0, WHITE -- stroke width and color
+        -- self.__fillca = Color(WHITE, 1) -- fill color and alpha
         self.__bd = Sprtnew()
         self.__sbd = self:__draw()
         self.__bd:addChild(self.__sbd)
-        self.__pr = parent
+        -- self.__pr = parent
         return Disp.init(self)
     end
-
+--[[
     function Circle:strokeWidth(w)
         self.__strkw = w
         self.__bd:removeChildAt(1)
@@ -93,7 +94,7 @@ if _Gideros then
         self.__bd:addChild(self.__sbd)
         return self
     end
-
+--]]
     function Circle:anchor(ax, ay)
         local x, y = self.__rd*(1-2*ax), self.__rd*(1-2*ay)
         self.__sbd:setPosition(x,y)
@@ -112,13 +113,23 @@ elseif _Corona then --##########################################################
     print('core.Rect(cor)')
     local newCirc = _Corona.display.newCircle
     --------------------------------------------------------------------------------
-    function Circle:init(radius, parent)
+    function Circle:init(radius, opt, parent)
+        opt = Disp.__optOrPr(self, opt, parent)
+
         self.__bd = newCirc(0,0,radius)
         self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
-        self.__pr = parent
+        -- self.__pr = parent
+
+        local sc = self.__strkc
+        local fca = self.__fillca
+        self.__bd.strokeWidth = self.__strkw
+        self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
+        self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
+
         return Disp.init(self) --return self:superInit()
     end  
 
+    --[[
     function Circle:strokeWidth(w)
         self.__bd.strokeWidth = w
         return self
@@ -141,5 +152,12 @@ elseif _Corona then --##########################################################
         self.__strkc = c
         return self
     end
+--]]
 
 end
+
+-- refer methods in Display class
+Circle.strokewidth = Disp.__strokeWidth__
+Circle.strokecolor = Disp.__strokeColor__
+Circle.fillcolor = Disp.__fillColor__
+

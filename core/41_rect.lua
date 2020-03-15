@@ -35,9 +35,6 @@ if _Gideros then
     function Rect:init(width, height, opt, parent)
         self.__width, self.__height = width, height
         opt = Disp.__optOrPr(self, opt, parent)
-        self.__strkw = opt.strokewidth or 0 -- stroke width and color
-        self.__strkc = opt.strokecolor or WHITE -- stroke width and color
-        self.__fillca = opt.fillcolor or WHITE -- fill color and alpha
         ----------------------------------------------------------------------
         self.__ancx, self.__ancy = 0.5, 0.5
         self.__bd = Sprtnew()
@@ -67,19 +64,16 @@ elseif _Corona then
     --------------------------------------------------------------------------------
     function Rect:init(width, height, opt, parent)
         opt = Disp.__optOrPr(self, opt, parent)
-        self.__strkw = opt.strokewidth or 0
-        local sc = opt.strokecolor or WHITE
-        local fca = opt.fillcolor or WHITE
         ----------------------------------------------------------------------
         self.__bd = newRect(0, 0, width, height)
         self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
 
+        local sc = self.__strkc
+        local fca = self.__fillca
         self.__bd.strokeWidth = self.__strkw
         self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
         self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
 
-        self.__strkc, self.__fillca = sc, fca
-        -- self.__pr = parent
         return Disp.init(self) --return self:superInit()
     end  
 
