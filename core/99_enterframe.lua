@@ -28,9 +28,9 @@ local function update()
 	if _isdebugmode then
 		local txtmem = getTxtMem()
 		local mem = int(collectgarbage('count'))
-		mtxts[1]:setText('mem: %d kb, texture mem: %d kb', mem, txtmem)
+		mtxts[1]:string('mem: %d kb, texture mem: %d kb', mem, txtmem)
 		local ndisp = Display.__getNumObjs() - logf.__getNumObjs() - 2
-		mtxts[2]:setText('disp:%d, timer:%d', ndisp, Timer.__getNumObjs())
+		mtxts[2]:string('disp:%d, timer:%d', ndisp, Timer.__getNumObjs())
 	end
 	--]]
 end

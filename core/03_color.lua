@@ -72,13 +72,13 @@ Color.YELLOW            = Color(255,255,0)
 Color.WHITE = Color(255,255,255)
 
 -- Gray and black colors
-Color.black = Color(0,0,0)
+Color.BLACK = Color(0,0,0)
 
 -- Green colors
-Color.green = Color(0, 255, 0)
+Color.GREEN = Color(0, 255, 0)
 
 -- Blue colors
-Color.blue = Color(0, 0, 255)
+Color.BLUE = Color(0, 0, 255)
 
 --[[
 -- 2020/03/02 : {r,g,b}로 부터 Color를 반환하는 함수
