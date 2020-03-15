@@ -8,9 +8,9 @@ Color = class() --:is'Color'
 if _Gideros then
 
     function Color:init(r, g, b, a)
-        if isobj(r,Color) then
+        if isobj(r, Color) then
             self.hex = r.hex
-            self.a = g or 1 -- in this case, 2nd argument is an alpha
+            self.a = g or r.a -- in this case, 2nd argument is an alpha
         else
             self.hex = r*65536 + g*256 + b
             self.a = a or 1
@@ -22,7 +22,7 @@ elseif _Corona then
     function Color:init(r, g, b, a)
         if isobj(r,Color) then
             self.r, self.g, self.b = r.r, r.g, r.b
-            self.a = g or 1 -- in this case, 2nd argument is an alpha
+            self.a = g or r.a -- in this case, 2nd argument is an alpha
         else
             self.r, self.g, self.b = r/255, g/255, b/255
             -- self.rgb = {self.r, self.g, self.b}

@@ -1,7 +1,7 @@
 if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
 local Disp = Display
-local Color, WHITE = Color, Color.WHITE
+local Color, WHITE = Color, Color.WHITE -- default color
 --------------------------------------------------------------------------------
 -- local r = Rect(width, height [, parent])
 --------------------------------------------------------------------------------
@@ -32,48 +32,20 @@ if _Gideros then
         return s
     end
     
-    function Rect:init(width, height, parent)
-        self.__ancx, self.__ancy = 0.5, 0.5
+    function Rect:init(width, height, opt, parent)
         self.__width, self.__height = width, height
-        self.__strkw, self.__strkc = 0, WHITE -- stroke width and color
-        self.__fillca = Color(WHITE, 1) -- fill color and alpha
+        opt = Disp.__optOrPr(self, opt, parent)
+        self.__strkw = opt.strokewidth or 0 -- stroke width and color
+        self.__strkc = opt.strokecolor or WHITE -- stroke width and color
+        self.__fillca = opt.fillcolor or WHITE -- fill color and alpha
+        ----------------------------------------------------------------------
         self.__ancx, self.__ancy = 0.5, 0.5
         self.__bd = Sprtnew()
         self.__sbd = self:__draw()
         self.__bd:addChild(self.__sbd)
-        self.__pr = parent
+
         return Disp.init(self)
     end
-
-
-    --[[
-    function Rect:strokeWidth(w)
-        self.__strkw = w
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
-
-    -- r,g,b는 0-255 범위의 정수
-    function Rect:strokeColor(r,g,b)
-        self.__strkc = Color(r,g,b)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
-
-    -- r,g,b는 0-255 범위의 정수
-    function Rect:fillColor(r,g,b,a)
-        self.__fillca = Color(r,g,b,a)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
-    --]]
-
 
     -- 2020/02/23 : Gideros의 경우 anchor()함수는 오버라이딩해야 한다.
     function Rect:anchor(ax, ay)
@@ -93,40 +65,27 @@ elseif _Corona then
     print('core.Rect(cor)')
     local newRect = _Corona.display.newRect
     --------------------------------------------------------------------------------
-    function Rect:init(width, height, parent)
-        self.__bd = newRect(0,0,width,height)
+    function Rect:init(width, height, opt, parent)
+        opt = Disp.__optOrPr(self, opt, parent)
+        self.__strkw = opt.strokewidth or 0
+        local sc = opt.strokecolor or WHITE
+        local fca = opt.fillcolor or WHITE
+        ----------------------------------------------------------------------
+        self.__bd = newRect(0, 0, width, height)
         self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
-        self.__pr = parent
+
+        self.__bd.strokeWidth = self.__strkw
+        self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
+        self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
+
+        self.__strkc, self.__fillca = sc, fca
+        -- self.__pr = parent
         return Disp.init(self) --return self:superInit()
     end  
---[[
-    function Rect:strokeWidth(w)
-        self.__bd.strokeWidth = w
-        self.__strkw = w
-        return self
-    end
-
-    -- r,g,b는 0-255 범위의 정수
-    function Rect:strokeColor(r,g,b)
-        local c = Color(r,g,b)
-        self.__bd:setStrokeColor(c.r ,c.g, c.b)
-        self.__strkc = c
-        return self
-    end
-
-    -- r, g, b are integers between 0 and 255
-    -- fillcolor 는 외곽선은 불투명, 내부색은 투명일 수 있으므로 a도 받는다.
-    -- 단, a는 0에서 1사이값
-    function Rect:fillColor(r,g,b,a)
-        local ca = Color(r,g,b,a)
-        self.__bd:setFillColor(ca.r, ca.g, ca.b, ca.a)
-        self.__fillca = ca
-        return self
-    end
-    --]]
 
 end
 
-Rect.strokeWidth = Disp.__strokeWidth__
-Rect.strokeColor = Disp.__strokeColor__
-Rect.fillColor = Disp.__fillColor__
+-- refer methods in Display class
+Rect.strokewidth = Disp.__strokeWidth__
+Rect.strokecolor = Disp.__strokeColor__
+Rect.fillcolor = Disp.__fillColor__

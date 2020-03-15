@@ -52,7 +52,7 @@ end
 -- 2020/02/23 : screen 에 touch()를 직접붙이기 위해서 Rect를 screen으로 생성해서
 -- _baselayer에 삽입
 --------------------------------------------------------------------------------
-screen = Rect(_baselayer.width, _baselayer.height):fillColor(0,0,0)
+screen = Rect(_baselayer.width, _baselayer.height,{fillcolor=Color.BLACK})
 screen.width = _baselayer.width
 screen.height = _baselayer.height
 screen.centerx = _baselayer.centerx

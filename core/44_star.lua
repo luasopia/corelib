@@ -47,6 +47,7 @@ if _Gideros then
     function Star:init(radius, opt, parent)
         self.__rd = radius
 
+        --[[
         -------------------------------------------------------------------------
         --2020/03/04 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
         if isobj(opt, Group) then
@@ -57,6 +58,8 @@ if _Gideros then
             opt = opt or {}
         end
         -------------------------------------------------------------------------
+        --]]
+        opt = Disp.__optOrGrp(self, opt, parent)
 
         self.__ingain = opt.ratio or inratio0
         self.__npts = opt.points or 5
@@ -64,6 +67,8 @@ if _Gideros then
         self.__strkw = opt.strokeWidth or 0
         self.__strkc = opt.strokeColor or WHITE
         self.__fillca = opt.fillColor or Color(WHITE,1)
+        -------------------------------------------------------------------------
+
         -- assert(npoints>=3, 'Number of points for Polygon must be greater than 2.')
         self.__ancx, self.__ancy = 0.5, 0.5
         self.__bd = Sprtnew()
@@ -122,7 +127,7 @@ elseif _Corona then --##########################################################
     --------------------------------------------------------------------------------
     function Star:init(radius, opt, parent)
         self.__rd = radius
-
+--[[
         if isobj(opt, Group) then
             self.__pr = opt
             opt = {}
@@ -130,6 +135,8 @@ elseif _Corona then --##########################################################
             self.__pr = parent
             opt = opt or {}
         end
+        --]]
+        opt = Disp.__optOrPr(self, opt, parent)
 
         local inratio = opt.ratio or inratio0
         local npts = opt.points or 5

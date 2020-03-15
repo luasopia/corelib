@@ -62,3 +62,17 @@ elseif _Corona then
     end
 
 end
+
+-- 2020/03/15: shape생성자에서 parent 바로 앞 파라메터가
+-- (extra) option일 경우를 처리하는 함수
+-- (이 함수를 호출했다면 호출하는 쪽의 self.__pr = parent는 삭제해야 함)
+function Disp:__optOrPr(opt, parent)
+    if isobj(opt, Group) then -- opt가 parent(Group)인 경우
+        self.__pr = opt
+        opt = {}
+    else -- opt가 table인 경우
+        self.__pr = parent
+        opt = opt or {}
+    end
+    return opt
+end

@@ -102,7 +102,7 @@ if _Gideros then -- for Gideros ###############################################
 
 		self.__fnm = opt.font or fontname0 -- font name(fnm)
 		self.__fsz = opt.fontsize or fontsize0 -- font size (fsz)
-		self.__fclr = opt.fontcolor or fontcolor0
+		self.__fclr = opt.color or fontcolor0
 
 		self.__tbd = self:__newtext()
 		self.__bd = _Gideros.Sprite.new()
@@ -199,7 +199,7 @@ elseif _Corona then -- for Corona ########################################
         -------------------------------------------------------------------------
 		self.__fnm = opt.font or fontname0 -- font name(fnm)
 		self.__fsz = opt.fontsize or fontsize0 -- font size (fsz)
-		self.__fclr = opt.fontcolor or fontcolor0
+		self.__fclr = opt.color or fontcolor0
 
 		self.__tbd = self:__newtext()
 		self.__bd = newGroup()
