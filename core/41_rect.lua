@@ -57,7 +57,7 @@ if _Gideros then
         return self.__ancx, self.__ancy
     end
 
-elseif _Corona then
+elseif _Corona then --##############################################################
 
     print('core.Rect(cor)')
     local newRect = _Corona.display.newRect

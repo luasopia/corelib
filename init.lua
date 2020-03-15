@@ -133,6 +133,7 @@ return function(args)
                 _loglayer = {
                     __bd = _Gideros.Sprite.new(),
                     add = function(self, child) return self.__bd:addChild(child.__bd) end,
+                    --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
                     __isobj__ = true,
                     __clsid__ = Group.__clsid__
                 }
@@ -143,6 +144,7 @@ return function(args)
                 _loglayer = {
                     __bd = _Corona.display.newGroup(),
                     add = function(self, child) return self.__bd:insert(child.__bd) end,
+                    --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
                     __isobj__ = true,
                     __clsid__ = Group.__clsid__
                 }

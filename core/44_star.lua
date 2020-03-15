@@ -47,26 +47,11 @@ if _Gideros then
     function Star:init(radius, opt, parent)
         self.__rd = radius
 
-        --[[
-        -------------------------------------------------------------------------
-        --2020/03/04 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
-        -------------------------------------------------------------------------
-        --]]
-        opt = Disp.__optOrGrp(self, opt, parent)
+        opt = Disp.__optOrPr(self, opt, parent)
 
         self.__ingain = opt.ratio or inratio0
         self.__npts = opt.points or 5
 
-        self.__strkw = opt.strokeWidth or 0
-        self.__strkc = opt.strokeColor or WHITE
-        self.__fillca = opt.fillColor or Color(WHITE,1)
         -------------------------------------------------------------------------
 
         -- assert(npoints>=3, 'Number of points for Polygon must be greater than 2.')
@@ -76,34 +61,6 @@ if _Gideros then
         self.__bd:addChild(self.__sbd)
 
         return Disp.init(self)
-    end
--- --[[
-    function Star:strokeWidth(w)
-        self.__strkw = w
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
-
-    -- r,g,b는 0-255 범위의 정수
-    function Star:strokeColor(r,g,b)
-        -- self.__strkc = r*65536+g*256+b
-        self.__strkc = Color(r,g,b)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
---]]
-
-    -- r,g,b는 0-255 범위의 정수
-    function Star:fillColor(r,g,b,a)
-        self.__fillca = Color(r,g,b,a)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
     end
 
     function Star:anchor(ax, ay)
@@ -118,8 +75,6 @@ if _Gideros then
         return self.__ancx, self.__ancy
     end
 
-
---]]
 elseif _Corona then --#############################################################
 
     print('core.Polygon(cor)')
@@ -127,25 +82,12 @@ elseif _Corona then --##########################################################
     --------------------------------------------------------------------------------
     function Star:init(radius, opt, parent)
         self.__rd = radius
---[[
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
-        --]]
+
         opt = Disp.__optOrPr(self, opt, parent)
 
         local inratio = opt.ratio or inratio0
         local npts = opt.points or 5
         
-        self.__strkw = opt.strokeWidth or 0
-        self.__strkc = opt.strokeColor or WHITE
-        self.__fillca = opt.fillColor or WHITE
-
-
         local pts = {0,-radius}
         local rgap = PI/npts
         for k=1, 2*npts-1 do
@@ -161,36 +103,18 @@ elseif _Corona then --##########################################################
         self.__bd = newPoly(0, 0, pts)
         self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
         
+        local sc = self.__strkc
+        local fca = self.__fillca
         self.__bd.strokeWidth = self.__strkw
-        self:strokeColor(self.__strkc)
-        self:fillColor(self.__fillca)
+        self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
+        self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
 
         return Disp.init(self) --return self:superInit()
     end  
--- --[[
-    function Star:strokeWidth(w)
-        self.__bd.strokeWidth = w
-        self.__strkw = w
-        return self
-    end
-
-    -- r,g,b는 0-255 범위의 정수
-    function Star:strokeColor(r,g,b)
-        local c = Color(r,g,b)
-        self.__bd:setStrokeColor(c.r, c.g, c.b)
-        self.__strkc = c
-        return self
-    end
---]]
-
-    -- r, g, b are integers between 0 and 255
-    -- fillcolor 는 외곽선은 불투명, 내부색은 투명일 수 있으므로 a도 받는다.
-    -- 단, a는 0에서 1사이값
-    function Star:fillColor(r,g,b,a)
-        local ca = Color(r,g,b,a)
-        self.__bd:setFillColor(ca.r, ca.g, ca.b, ca.a)
-        self.__fillca = ca
-        return self
-    end
 
 end
+
+-- refer methods in Display class
+Star.strokewidth = Disp.__strokeWidth__
+Star.strokecolor = Disp.__strokeColor__
+Star.fillcolor = Disp.__fillColor__

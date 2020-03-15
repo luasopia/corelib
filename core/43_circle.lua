@@ -66,35 +66,7 @@ if _Gideros then
         -- self.__pr = parent
         return Disp.init(self)
     end
---[[
-    function Circle:strokeWidth(w)
-        self.__strkw = w
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
 
-    -- r,g,b는 0-255 범위의 정수
-    function Circle:strokeColor(r,g,b)
-        self.__strkc = Color(r,g,b)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
-
--- r,g,b는 0-255 범위의 정수
-    function Circle:fillColor(r,g,b,a)
-        -- self.__fillc = r*65536+g*256+b
-        -- self.__filla = a or 1
-        self.__fillca = Color(r,g,b,a)
-        self.__bd:removeChildAt(1)
-        self.__sbd = self:__draw()
-        self.__bd:addChild(self.__sbd)
-        return self
-    end
---]]
     function Circle:anchor(ax, ay)
         local x, y = self.__rd*(1-2*ax), self.__rd*(1-2*ay)
         self.__sbd:setPosition(x,y)
@@ -128,31 +100,6 @@ elseif _Corona then --##########################################################
 
         return Disp.init(self) --return self:superInit()
     end  
-
-    --[[
-    function Circle:strokeWidth(w)
-        self.__bd.strokeWidth = w
-        return self
-    end
-
-    -- r, g, b are integers between 0 and 255
-    -- fillcolor 는 외곽선은 불투명, 내부색은 투명일 수 있으므로 a도 받는다.
-    -- 단, a는 0에서 1사이값
-    function Circle:fillColor(r,g,b,a)
-        local ca = Color(r,g,b,a)
-        self.__bd:setFillColor(ca.r, ca.g, ca.b, ca.a)
-        self.__fillca = ca
-        return self
-    end
-    
-    -- r,g,b는 0-255 범위의 정수
-    function Circle:strokeColor(r,g,b)
-        local c = Color(r,g,b)
-        self.__bd:setStrokeColor(c.r, c.g, c.b)
-        self.__strkc = c
-        return self
-    end
---]]
 
 end
 
