@@ -87,19 +87,19 @@ function Display:__upd()
     -- 2020/02/16 call user update if exists
     if self.update then self:update() end 
     
-    if self.touch and self.__tch==nil then self:touchOn() end
-    if self.tap and self.__tap==nil then self:tapOn() end
+    if self.touch and self.__tch==nil then self:touchon() end
+    if self.tap and self.__tap==nil then self:tapon() end
 
-    -- if (self.__rma and self.__rma<=self.__tm) or
-    --         (self.removeIf and self:removeIf()) then
-    --     return self:remove()
-    -- end
+    if (self.__rma and self.__rma<=self.__tm) or
+            (self.removeif and self:removeif()) then
+        return self:remove()
+    end
     
     -- 아래가 더 간단해 보이지만 이경우 self.__rm이 true인데 
     -- 다시 false로 바뀌어버리는 경우도 존재
-    -- 따라서 반드시 맨 처음에 if self.__rm then return end 가 있어야 함
-    self.__rm = (self.__rma and self.__rma<=self.__tm) or
-            (self.removeIf and self:removeIf())
+    -- 2020/03/19:따라서 **절대로** 아래와 같이 하면 안됨
+    -- self.__rm = (self.__rma and self.__rma<=self.__tm) or
+    --         (self.removeif and self:removeif())
 end
 
 
@@ -112,14 +112,14 @@ function Display:timer(...)
     return self
 end
 
-function Display:removeAfter(ms)
+function Display:removeafter(ms)
     self.__tm = 0
     self.__rma = ms
     return self
 end
 
-function Display:updateOn() self.__noUpd = true; return self end
-function Display:updateOff() self.__noUpd = false; return self end
+function Display:updateon() self.__noUpd = true; return self end
+function Display:updateoff() self.__noUpd = false; return self end
 
 --2020/03/02: group:add(child) returns child
 function Display:addto(g) g:add(self); return self end

@@ -13,7 +13,7 @@ if _Gideros then
         end
     end
 
-    function Display:tapOn() print('try tap')
+    function Display:tapon() print('try tap')
         if self.tap then
             self.__bd:addEventListener(Event.TOUCHES_BEGIN, tapfn, self)
             self.__tap = true
@@ -55,7 +55,7 @@ elseif _Corona then ---------------------------------------
     -- 2020/02/17 누르는 순간에 tap이벤트를 발생시키기 위해서
     -- 코로나의 'tap'이벤트가 아니라 'touch'이벤트를 이용한다.
     
-    function Display:tapOn()
+    function Display:tapon()
         if self.tap then --print('enable tap')
             self.__bd:addEventListener('touch', tapfn)
             self.__tap = true
