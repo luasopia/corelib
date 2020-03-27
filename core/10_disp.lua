@@ -109,7 +109,9 @@ function Display:timer(...)
     local t = Timer(...)
     t.__dobj = self -- callback함수의 첫 번째 인자로 넘긴다.
     tIn(self.__tmrs, t)
-    return self
+    
+    --return self
+    return t -- 2020/03/27 수정
 end
 
 function Display:removeafter(ms)
