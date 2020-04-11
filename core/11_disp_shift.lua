@@ -3,7 +3,7 @@ if not_required then return end -- This prevents auto-loading in Gideros
 print('core.disp_tr')
 
 -- local tmgapf = 1000/screen.fps
-local tmgapf = 1000/_baselayer.fps
+local tmgapf = 1000/_luasopia.baselayer.fps
 local int = math.floor
 ----------------------------------------------------------------------------------
 -- shift테이블에 여러 지점을 등록할 수 있다.

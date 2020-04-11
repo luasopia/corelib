@@ -32,8 +32,8 @@ elseif _Corona then
 
 end
 
-local rnd = math.random
-Color.random = function() return Color(rnd(255),rnd(255),rnd(255)) end
+local rand = rand
+Color.rand = function() return Color(rand(255),rand(255),rand(255)) end
 
 -- web color (refer to : https://en.wikipedia.org/wiki/Web_colors )
 

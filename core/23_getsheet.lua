@@ -2,7 +2,7 @@ if not_required then return end -- This prevents auto-loading in Gideros
 
 local tIn = table.insert
 -- local timeGapFrame = 1000/screen.fps
-local timeGapFrame = 1000/_baselayer.fps
+local timeGapFrame = 1000/_luasopia.baselayer.fps
 --------------------------------------------------------------------------------
 -- 생성자 및 멤버함수
 ----------------------------------------------------------------------------

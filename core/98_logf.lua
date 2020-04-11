@@ -12,7 +12,7 @@ local leftmargin = 10
 
 --local function initlog()
 
-    local txtobj = Text("logf ready.", _loglayer):anchor(0,0) --:xy(0,cursorY+yoff)
+    local txtobj = Text("logf ready.", _luasopia.loglayer):anchor(0,0) --:xy(0,cursorY+yoff)
     local fontSize =  txtobj:getfontsize()*linespace
     local maxlines = int(screen.height / fontSize)
     txtobj:xy(leftmargin, fontSize*(maxlines-1)+yoff) -- 맨 마지막줄부터 출력 시작
@@ -27,7 +27,7 @@ local leftmargin = 10
 logf = setmetatable({},{__call=function(_, str,...)
 
     local strf = string.format(str,...)
-    local txtobj = Text(strf,_loglayer):anchor(0,0):xy(leftmargin,cursorY+yoff)
+    local txtobj = Text(strf,_luasopia.loglayer):anchor(0,0):xy(leftmargin,cursorY+yoff)
     tIn(txtobjs, txtobj)
     cursorY = cursorY + fontSize
 

@@ -9,8 +9,6 @@ lib.wave = function(dobj, period, ratio)
     local dratio = ratio-1
     local wavtm = 0
     dobj.__orgnscl = dobj:gets()
-    -- local prevupd = dobj.update
-    -- function dobj:update()
     
     if dobj.__tmrwav then dobj.__tmrwav:remove() end
 
@@ -26,5 +24,6 @@ lib.stopwave = function(dobj)
     if dobj.__tmrwav then
         dobj.__tmrwav:remove()
         dobj:s(dobj.__orgnscl)
+        dobj.__orgnscl = nil
     end
 end

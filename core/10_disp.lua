@@ -4,10 +4,10 @@ print('core.dobj')
 
 local tIn = table.insert
 local tRm = table.remove
-local tmgapf = 1000/_baselayer.fps
+local tmgapf = 1000/_luasopia.baselayer.fps
 local int = math.floor
 local Timer = Timer
-local scrn = _baselayer
+local scrn = _luasopia.baselayer
 local cx, cy = scrn.centerx, scrn.centery
 --------------------------------------------------------------------------------
 -- Display 객체 d에 대해서

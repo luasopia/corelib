@@ -24,12 +24,9 @@ function import(libname)
 end
 
 
-_util={}
+_luasopia.printf = function(...) print(string.format(...)) end
 
-
-_util.printf = function(...) print(string.format(...)) end
-
-_util.showt = function(node)
+_luasopia.showt = function(node)
     local cache, stack, output = {},{},{}
     local depth = 1
     local output_str = "{\n"
@@ -111,7 +108,7 @@ end
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
-_util.showg = function()
+_luasopia.showg = function()
 
 
     ----[[ print global variables that are added by user

@@ -4,7 +4,7 @@ print('core.timer')
 
 local tIn = table.insert
 local tRm = table.remove
-local tmgapf = 1000/_baselayer.fps
+local tmgapf = 1000/_luasopia.baselayer.fps
 --------------------------------------------------------------------------------
 -- 2020/01/15 times that is NOT use intrinsic (Gideros/Corona) Timer class
 --

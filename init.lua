@@ -43,8 +43,10 @@ if gideros then -- in the case of using Gideros
     print('luasopia.init (gideros)')
     _Gideros = moveg()
 
+    _luasopia = {}
+
     -- screen = {
-    _baselayer = {
+    _luasopia.baselayer = {
         __bd = _Gideros.Sprite.new(),
         add = function(self, child) return self.__bd:addChild(child.__bd) end,
         
@@ -55,7 +57,7 @@ if gideros then -- in the case of using Gideros
         fps = _Gideros.application.content.fps,
     }
     -- _Gideros.stage:addChild(screen.__bd)
-    _Gideros.stage:addChild(_baselayer.__bd)
+    _Gideros.stage:addChild(_luasopia.baselayer.__bd)
 
 
 elseif coronabaselib then -- in the case of using CoronaSDK
@@ -63,10 +65,10 @@ elseif coronabaselib then -- in the case of using CoronaSDK
     print('luasopia.init (corona)')
     _Corona = moveg()
 
-	--	__bd = _Corona.display.getCurrentStage(),
+	_luasopia = {}
 
     -- screen = {
-    _baselayer = {
+    _luasopia.baselayer = {
         __bd = _Corona.display.newGroup(),
         add = function(self, child) return self.__bd:insert(child.__bd) end,
 
@@ -83,11 +85,12 @@ elseif love then-- in the case of using LOVE2d
 end
 
 -- global constants -- 이 위치여야 한다.(위로 옮기면 안됨)
+math.randomseed(os.time())
+rand = math.random
 INF = -math.huge -- infinity constant (일부러 -를 앞에 붙임)
-_isdebugmode = false
+_luasopia.debug = false
 lib = {} -- 2020/03/07 added
 ui = {} -- 2020/03/07 added
-math.randomseed(os.time())
 
 -- load luasopia core/library files
 require 'luasopia.core.01_class'
@@ -130,28 +133,28 @@ return function(args)
 
             if _Gideros then
 
-                _loglayer = {
+                _luasopia.loglayer = {
                     __bd = _Gideros.Sprite.new(),
                     add = function(self, child) return self.__bd:addChild(child.__bd) end,
                     --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
                     __isobj__ = true,
                     __clsid__ = Group.__clsid__
                 }
-                _Gideros.stage:addChild(_loglayer.__bd)
+                _Gideros.stage:addChild(_luasopia.loglayer.__bd)
             
             elseif _Corona then
                     
-                _loglayer = {
+                _luasopia.loglayer = {
                     __bd = _Corona.display.newGroup(),
                     add = function(self, child) return self.__bd:insert(child.__bd) end,
-                    --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
+                    --2020/03/15 isobj(_loglayer, Group)가 true가 되려면 아래 두 개 필요
                     __isobj__ = true,
                     __clsid__ = Group.__clsid__
                 }
             
             end
 
-            _isdebugmode = true
+            _luasopia.debug = true
             require 'luasopia.core.98_logf'
             if args.loglines then logf.setNumLines(args.loglines) end
             enterFrameInit()
