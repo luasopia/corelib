@@ -135,5 +135,3 @@ _luasopia.showg = function()
     print('----------')
     --]]
 end
-
-

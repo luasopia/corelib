@@ -123,10 +123,10 @@ local enterFrameInit = require 'luasopia.core.99_enterframe' -- 맨 마지막에
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
 
--- 반환되는 함수가 아예 호출이 안될 때 log를 빈함수로 설정
+-- 반환되는 함수가 아예 호출이 안될 때 logf를 빈함수로 설정
 logf = function() end
 
-return function(args)
+local init = function(args)
     if args then 
 
         if args.debug then
@@ -170,3 +170,18 @@ return function(args)
     end
 
 end
+
+-- 2020/04/12 사용자가 _G에 변수를 생성하는 것을 막는다
+global = {} -- 모든 사용자 전역변수는 _g테이블에 만들어야 한다.
+setmetatable(_G, {
+    __newindex = function(_,n)
+        error('attempt to write to undeclared variable '..n, 2)
+    end,
+--[[
+    __index = function(_,n)
+        error('attempt to read undeclared variable '..n, 2)
+    end
+--]]
+})
+
+return init
