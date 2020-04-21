@@ -132,30 +132,31 @@ logf = function() end
 local init = function(args)
     if args then 
 
+        if _Gideros then
+
+            _luasopia.loglayer = {
+                __bd = _Gideros.Sprite.new(),
+                add = function(self, child) return self.__bd:addChild(child.__bd) end,
+                --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
+                __isobj__ = true,
+                __clsid__ = Group.__clsid__
+            }
+            _Gideros.stage:addChild(_luasopia.loglayer.__bd)
+        
+        elseif _Corona then
+                
+            _luasopia.loglayer = {
+                __bd = _Corona.display.newGroup(),
+                add = function(self, child) return self.__bd:insert(child.__bd) end,
+                --2020/03/15 isobj(_loglayer, Group)가 true가 되려면 아래 두 개 필요
+                __isobj__ = true,
+                __clsid__ = Group.__clsid__
+            }
+        
+        end
+
+
         if args.debug then
-
-            if _Gideros then
-
-                _luasopia.loglayer = {
-                    __bd = _Gideros.Sprite.new(),
-                    add = function(self, child) return self.__bd:addChild(child.__bd) end,
-                    --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
-                    __isobj__ = true,
-                    __clsid__ = Group.__clsid__
-                }
-                _Gideros.stage:addChild(_luasopia.loglayer.__bd)
-            
-            elseif _Corona then
-                    
-                _luasopia.loglayer = {
-                    __bd = _Corona.display.newGroup(),
-                    add = function(self, child) return self.__bd:insert(child.__bd) end,
-                    --2020/03/15 isobj(_loglayer, Group)가 true가 되려면 아래 두 개 필요
-                    __isobj__ = true,
-                    __clsid__ = Group.__clsid__
-                }
-            
-            end
 
             _luasopia.debug = true
             require 'luasopia.core.98_logf'
@@ -167,7 +168,30 @@ local init = function(args)
         if args.border then
 
             Rect(screen.width, screen.height):fillColor(0,0,0,0):strokeWidth(args.border)
+            _luasopia.dcdobj = _luasopia.dcdobj + 1
         
+        end
+
+        -- 2020/04/21 그리드선 추가
+        if args.grid then
+            local grid = args.grid
+            if type(grid) ~= 'table' then grid = {} end
+
+            local xgap = grid.xgap or 100
+            local ygap = grid.ygap or 100
+            local color = grid.color or Color(100,100,100)
+            local width = grid.width or 2
+
+            for x = xgap, screen.width, xgap do
+                Line(x, 0, x, screen.height, {width=width, color=color}, _luasopia.loglayer)
+                _luasopia.dcdobj = _luasopia.dcdobj + 1
+            end
+
+            for y = ygap, screen.height, ygap do
+                Line(0, y, screen.width, y, {width=width, color=color}, _luasopia.loglayer)
+                _luasopia.dcdobj = _luasopia.dcdobj + 1
+            end
+
         end
 
     end

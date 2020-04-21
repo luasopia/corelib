@@ -12,7 +12,7 @@ local leftmargin = 10
 
 --local function initlog()
 
-    local txtobj = Text("logf ready.", _luasopia.loglayer):anchor(0,0) --:xy(0,cursorY+yoff)
+    local txtobj = Text("logf() ready.", _luasopia.loglayer):anchor(0,0) --:xy(0,cursorY+yoff)
     local fontSize =  txtobj:getfontsize()*linespace
     local maxlines = int(screen.height / fontSize)
     txtobj:xy(leftmargin, fontSize*(maxlines-1)+yoff) -- 맨 마지막줄부터 출력 시작
