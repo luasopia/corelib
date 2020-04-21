@@ -18,7 +18,8 @@ local leftmargin = 10
     txtobj:xy(leftmargin, fontSize*(maxlines-1)+yoff) -- 맨 마지막줄부터 출력 시작
     local cursorY = fontSize*maxlines
     tIn(txtobjs, txtobj)
-    print('maxlines:'..maxlines)
+    --print('maxlines:'..maxlines)
+    _luasopia.dcdobj = _luasopia.dcdobj + 1
 
 --end
 
@@ -30,6 +31,7 @@ logf = setmetatable({},{__call=function(_, str,...)
     local txtobj = Text(strf,_luasopia.loglayer):anchor(0,0):xy(leftmargin,cursorY+yoff)
     tIn(txtobjs, txtobj)
     cursorY = cursorY + fontSize
+    _luasopia.dcdobj = _luasopia.dcdobj + 1
 
     if cursorY > maxlines*fontSize then
         for k=#txtobjs,1,-1 do local v = txtobjs[k]
@@ -37,6 +39,7 @@ logf = setmetatable({},{__call=function(_, str,...)
             if v:gety() < fontSize*(maxlines-numlines) then
                 tRm(txtobjs,k)
                 v:remove()
+                _luasopia.dcdobj = _luasopia.dcdobj - 1
             end
         end
         cursorY = cursorY - fontSize
@@ -50,6 +53,7 @@ logf.clear = function()
     for k=#txtobjs,1,-1 do local v = txtobjs[k]
         tRm(txtobjs,k)
         v:remove()
+        _luasopia.dcdobj = _luasopia.dcdobj - 1
     end
     cursorY = 0
 end

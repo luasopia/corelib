@@ -29,8 +29,8 @@ local function update()
 		local txtmem = getTxtMem()
 		local mem = int(collectgarbage('count'))
 		mtxts[1]:string('mem: %d kb, texture mem: %d kb', mem, txtmem)
-		local ndisp = Display.__getNumObjs() - logf.__getNumObjs() - 2
-		mtxts[2]:string('disp:%d, timer:%d', ndisp, Timer.__getNumObjs())
+		local ndisp = Display.__getNumObjs() -- - logf.__getNumObjs() - 2
+		mtxts[2]:string('Display:%d, Timer:%d', ndisp, Timer.__getNumObjs())
 	end
 	--]]
 end
@@ -70,6 +70,7 @@ return function() -- initEnterFrame()
 		mtxts[2] = Text("",_luasopia.loglayer):xy(screen.centerx, 90):color(TCOLOR)
 		-- mtxts[1] = Text("", _luasopia.loglayer):xy(screen.centerx, 30)--:color(255,182,193)
 		-- mtxts[2] = Text("", _luasopia.loglayer):xy(screen.centerx, 90)--:color(255,182,193)
+		_luasopia.dcdobj = _luasopia.dcdobj + 2
 	end
 end
 	

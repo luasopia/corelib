@@ -91,6 +91,9 @@ INF = -math.huge -- infinity constant (일부러 -를 앞에 붙임)
 _luasopia.debug = false
 lib = {} -- 2020/03/07 added
 ui = {} -- 2020/03/07 added
+-- 2020/04/21 Disp.__getNumObjs 에서 빼야될  수
+-- enterframe.lua에서 screen 객체(Rect)가 생성되기 때문에 초기값은 1
+_luasopia.dcdobj = 1 
 
 -- load luasopia core/library files
 require 'luasopia.core.01_class'
@@ -172,12 +175,13 @@ local init = function(args)
 end
 
 -- 2020/04/12 사용자가 _G에 변수를 생성하는 것을 막는다
-global = {} -- 모든 사용자 전역변수는 _g테이블에 만들어야 한다.
+-- 모든 사용자 전역변수는 global테이블에 만들어야 한다.
+global = {} 
 setmetatable(_G, {
     __newindex = function(_,n)
         error('attempt to write to undeclared variable '..n, 2)
     end,
---[[
+--[[ -- 읽는 것 까지 예외를 발생시킨다.
     __index = function(_,n)
         error('attempt to read undeclared variable '..n, 2)
     end

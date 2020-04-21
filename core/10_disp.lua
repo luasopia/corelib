@@ -52,7 +52,7 @@ Display.updateAll = function()
     end
 end
 
-Display.__getNumObjs = function() return #dobjs end
+Display.__getNumObjs = function() return #dobjs - _luasopia.dcdobj end
 
 -------------------------------------------------------------------------------
 -- public methods
