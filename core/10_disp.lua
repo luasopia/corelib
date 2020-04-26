@@ -1,4 +1,4 @@
-if not_required then return end -- This prevents auto-loading in Gideros
+-- if not_required then return end -- This prevents auto-loading in Gideros
 
 print('core.dobj')
 
@@ -207,7 +207,9 @@ if _Gideros then -- gideros
     function Display:scale(x,y) self.__bd:setScale(x,y); return self end
     Display.s = Display.scale
     
-    function Display:alpha(v) self.__bd:setAlpha(v); return self end
+    -- 2020/04/26 : alpha가 1초과면 1로 세팅한다.
+    -- gideros는 1이 넘으면 이미지가 열화(?)되고, 코로나는 자동으로 1로 세팅됨
+    function Display:alpha(v) self.__bd:setAlpha(v>1 and 1 or v);return self end
     Display.a = Display.alpha
 
     -- xs()와 ys()는 x and scale, y and scale로 혼동할 여지가 있어서 삭제
@@ -216,7 +218,6 @@ if _Gideros then -- gideros
 
     function Display:yscale(v) self.__bd:setScaleY(v); return self end
     Display.ys = Display.yscale
-
 
     function Display:xy(x,y) self.__bd:setPosition(x,y); return self end
     function Display:xyr(x,y,r)

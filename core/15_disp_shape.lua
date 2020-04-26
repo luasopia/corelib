@@ -1,4 +1,4 @@
-if not_required then return end -- This prevents auto-loading in Gideros
+-- if not_required then return end -- This prevents auto-loading in Gideros
 print('core.disp_shape')
 
 -- 2020/03/03: Shape의 공통 메서드를 저장함

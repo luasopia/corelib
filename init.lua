@@ -45,16 +45,20 @@ if gideros then -- in the case of using Gideros
 
     _luasopia = {}
 
+    local contentWidth = _Gideros.application:getContentWidth() -- 1080,
+    local contentHeight = _Gideros.application:getContentHeight() -- 1920,
+    --print(contentWidth, contentHeight)
+
     -- screen = {
     _luasopia.baselayer = {
         __bd = _Gideros.Sprite.new(),
         add = function(self, child) return self.__bd:addChild(child.__bd) end,
         
-        width = _Gideros.application.content.width, -- 1080,
-        height = _Gideros.application.content.height, -- 1920,
-        centerx = _Gideros.application.content.width/2,
-        centery = _Gideros.application.content.height/2,
-        fps = _Gideros.application.content.fps,
+        width = contentWidth, -- 1080,
+        height = contentHeight, -- 1920,
+        centerx = contentWidth/2,
+        centery = contentHeight/2,
+        fps = _Gideros.application:getFps(),
     }
     -- _Gideros.stage:addChild(screen.__bd)
     _Gideros.stage:addChild(_luasopia.baselayer.__bd)

@@ -1,4 +1,4 @@
-if not_required then return end -- This prevents auto-loading in Gideros
+-- if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
 -- time  : one peroid time
 -- loops : number of repeatition

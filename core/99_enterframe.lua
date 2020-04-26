@@ -10,8 +10,8 @@ local mtxts = {}
 
 local getTxtMem
 if _Gideros then
-		-- return _Gideros.application:getTextureMemoryUsage()
-	getTxtMem = function() return _Gideros._gorgnapp:getTextureMemoryUsage() end
+
+	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
 
 elseif _Corona then
 		
