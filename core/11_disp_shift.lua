@@ -9,7 +9,7 @@ local int = math.floor
 -- shift테이블에 여러 지점을 등록할 수 있다.
 -- tr = {time, x,...
 --		loops(=1), -- 반복 회수, INF이면 무한반복
---		onEnd = function(self) ... end, --모든 tr이 종료될 때 실행되는 함수
+--		onend = function(self) ... end, --모든 tr이 종료될 때 실행되는 함수
 --		{time(필수), x, y, angle, xscale, yscale, scale, alpha},
 --		{time(필수), x, y, angle, xscale, yscale, scale, alpha},
 --		...
@@ -61,7 +61,7 @@ function Display:__playTr() -- tr == self.__trInfo
 
             self.__sh.__cnt = self.__sh.__cnt + 1
             if self.__sh.loops == self.__sh.__cnt then
-                if self.__sh.onEnd then self.__sh.onEnd(self) end
+                if self.__sh.onend then self.__sh.onend(self) end
                 self.__tr = nil
                 return
             end
@@ -72,7 +72,7 @@ function Display:__playTr() -- tr == self.__trInfo
             self.__tr = calcTr(self, tr.__to)
 
         else 
-            if self.__sh.onEnd then self.__sh.onEnd(self) end
+            if self.__sh.onend then self.__sh.onend(self) end
             self.__tr = nil -- tr=nil로 하면 안된다.
         end
     
