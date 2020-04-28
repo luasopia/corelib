@@ -8,7 +8,7 @@ local int = math.floor
 ----------------------------------------------------------------------------------
 -- shift테이블에 여러 지점을 등록할 수 있다.
 -- tr = {time, x,...
---		loops(=1), -- 반복 회수, 0이면 무한반복
+--		loops(=1), -- 반복 회수, INF이면 무한반복
 --		onEnd = function(self) ... end, --모든 tr이 종료될 때 실행되는 함수
 --		{time(필수), x, y, angle, xscale, yscale, scale, alpha},
 --		{time(필수), x, y, angle, xscale, yscale, scale, alpha},
@@ -22,11 +22,22 @@ local function calcTr(self, shr)
     tr.cnt = 0
     if shr.x then tr.dx = (shr.x-self:getx())/fc end
     if shr.y then tr.dy = (shr.y-self:gety())/fc end
-    if shr.r then tr.dr = (shr.r-self:getr())/fc end
-    if shr.scale then tr.ds = (shr.scale-self:getscale())/fc end
-    if shr.xscale then tr.dxs = (shr.xscale-self:getxscale())/fc end
-    if shr.yscale then tr.dys = (shr.yscale-self:getyscale())/fc end
-    if shr.alpha then tr.da = (shr.alpha-self:getalpha())/fc end
+    
+    local rot = shr.r or shr.rot
+    if rot then tr.dr = (rot-self:getr())/fc end
+    
+    local scale = shr.s or shr.scale
+    if scale then tr.ds = (scale-self:gets())/fc end
+    
+    local alpha = shr.a or shr.alpha
+    if alpha then tr.da = (alpha-self:geta())/fc end
+
+    local xs = shr.xs or shr.xscale
+    if xs then tr.dxs = (xs-self:getxs())/fc end
+
+    local ys = shr.ys or shr.yscale
+    if ys then tr.dys = (ys-self:getys())/fc end
+
     tr.dest = shr
     tr.__to = shr.__to
     tr.__to1 = shr.__to1
