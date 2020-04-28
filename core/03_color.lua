@@ -165,7 +165,7 @@ Color.MEDIUM_AQUAMARINE = Color(102, 205, 170)
 Color.MEDIUM_SEA_GREEN  = Color(60, 179, 113)
 Color.SEA_GREEN         = Color(46, 139, 87)
 Color.FOREST_GREEN      = Color(34, 139, 34)
-Color.Green             = Color(0, 128, 0)
+Color.GREEN             = Color(0, 128, 0)
 Color.DARK_GREEN        = Color(0, 100, 0)
 
 -- cyan colors
