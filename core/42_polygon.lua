@@ -98,6 +98,4 @@ elseif _Corona then --##########################################################
 end
 
 -- refer methods in Display class
-Polygon.strokewidth = Disp.__strokeWidth__
-Polygon.strokecolor = Disp.__strokeColor__
-Polygon.fillcolor = Disp.__fillColor__
+Disp.__regshape__(Polygon)

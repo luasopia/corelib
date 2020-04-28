@@ -80,6 +80,4 @@ elseif _Corona then --##########################################################
 end
 
 -- refer methods in Display class
-Rect.strokewidth = Disp.__strokeWidth__
-Rect.strokecolor = Disp.__strokeColor__
-Rect.fillcolor = Disp.__fillColor__
+Disp.__regshape__(Rect)

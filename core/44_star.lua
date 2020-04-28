@@ -115,6 +115,4 @@ elseif _Corona then --##########################################################
 end
 
 -- refer methods in Display class
-Star.strokewidth = Disp.__strokeWidth__
-Star.strokecolor = Disp.__strokeColor__
-Star.fillcolor = Disp.__fillColor__
+Disp.__regshape__(Star)

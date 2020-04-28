@@ -86,3 +86,16 @@ function Disp:__optOrPr(opt, parent)
     self.__fillca = opt.fillcolor or WHITE
     return opt
 end
+
+--2020/04/27
+function Disp:__empty__()
+    self:__fillColor__(0,0,0,0)
+    return self
+end
+
+function Disp.__regshape__(cls)
+    cls.strokewidth = Disp.__strokeWidth__
+    cls.strokecolor = Disp.__strokeColor__
+    cls.fillcolor = Disp.__fillColor__
+    cls.empty = Disp.__empty__
+end

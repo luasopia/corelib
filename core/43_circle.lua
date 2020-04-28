@@ -104,7 +104,4 @@ elseif _Corona then --##########################################################
 end
 
 -- refer methods in Display class
-Circle.strokewidth = Disp.__strokeWidth__
-Circle.strokecolor = Disp.__strokeColor__
-Circle.fillcolor = Disp.__fillColor__
-
+Disp.__regshape__(Circle)

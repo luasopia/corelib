@@ -34,7 +34,7 @@ elseif _Corona then ---------------------------------------
 
     local function tapfn(e)
         local self = e.target.__obj
-        printf('%s tap event:%s',self.name, e.phase)
+        print(string.format('%s tap event:%s',self.name, e.phase))
         local dx, dy = 0, 0
   
         -- 2020/02/17 : 'ended'이벤트를 self.tap()호출하기 전 강제로 발생시켜

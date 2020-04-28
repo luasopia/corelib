@@ -41,6 +41,9 @@ end
 if gideros then -- in the case of using Gideros
 
     print('luasopia.init (gideros)')
+
+    application:setBackgroundColor(0x000000)
+    
     _Gideros = moveg()
 
     _luasopia = {}

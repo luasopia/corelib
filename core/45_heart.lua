@@ -127,6 +127,4 @@ elseif _Corona then --##########################################################
 end
 
 -- refer methods in Display class
-Heart.strokewidth = Disp.__strokeWidth__
-Heart.strokecolor = Disp.__strokeColor__
-Heart.fillcolor = Disp.__fillColor__
+Disp.__regshape__(Heart)
