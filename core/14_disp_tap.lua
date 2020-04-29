@@ -5,7 +5,7 @@ if _Gideros then
 
     local Event = _Gideros.Event
 
-    local function tapfn(self, event) printf('%s touch begin', self.name)
+    local function tapfn(self, event) --printf('%s touch begin', self.name)
         local t = event.touch
         if self.__bd:hitTestPoint(t.x, t.y) then
             self:tap{numTaps=1, x=t.x, y=t.y}
