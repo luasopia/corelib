@@ -39,12 +39,12 @@ elseif _Corona then ---------------------------------------
   
         -- 2020/02/17 : 'ended'이벤트를 self.tap()호출하기 전 강제로 발생시켜
         -- 터치이벤트를 시작하자마자 종료시킨다.
-        if e.phase=='began' then print('tap begin')
+        if e.phase=='began' then --print('tap begin')
             self.__bd:dispatchEvent{name='touch',id=e.id, phase='ended', target=self.__bd}
             self:tap{id = e.id, phase="begin", x=e.x, y=e.y, dx=dx, dy=dy}
             return true
           
-        elseif e.phase == 'ended' then print('tap end')
+        elseif e.phase == 'ended' then --print('tap end')
             return true
   
         else -- if  event.phase =='cancelled' then

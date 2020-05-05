@@ -50,6 +50,7 @@ if gideros then -- in the case of using Gideros
 
     local contentWidth = _Gideros.application:getContentWidth() -- 1080,
     local contentHeight = _Gideros.application:getContentHeight() -- 1920,
+
     --print(contentWidth, contentHeight)
 
     -- screen = {

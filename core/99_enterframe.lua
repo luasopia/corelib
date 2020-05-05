@@ -1,23 +1,30 @@
-if not_required then return end -- This prevents auto-loading in Gideros
---------------------------------------------------------------------------------
 print('core.enterFrame')
 
 local Display = Display
 local Timer = Timer
 local int = math.floor
--- local str = tostring
 local mtxts = {}
 
 local getTxtMem
+local deviceWidth, deviceHeight, orientation, scaleMode
+
+--[[
 if _Gideros then
+
+	deviceWidth = _Gideros.application:getDeviceWidth() -- 1920,
+    deviceHeight = _Gideros.application:getDeviceHeight() -- 1920,
 
 	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
 
 elseif _Corona then
+
+	deviceWidth = _Corona.display.pixelWidth
+	deviceHeight = _Corona.display.pixelHeight
 		
 	getTxtMem=function() return system.getInfo("textureMemoryUsed") / 1000 end
 
 end
+--]]
 
 local frameCount = 0
 local function update()
@@ -32,15 +39,30 @@ local function update()
 		local ndisp = Display.__getNumObjs() -- - logf.__getNumObjs() - 2
 		mtxts[2]:string('Display:%d, Timer:%d', ndisp, Timer.__getNumObjs())
 	end
-	--]]
+
 end
+
+
 
 if _Gideros then
 
+	deviceWidth = _Gideros.application:getDeviceWidth()
+    deviceHeight = _Gideros.application:getDeviceHeight()
+	orientation = _Gideros.application:getOrientation()
+	scaleMode = _Gideros.application:getScaleMode()
+
+	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
+
 	_Gideros.stage:addEventListener(_Gideros.Event.ENTER_FRAME, update)
-	--screen.__bd:addEventListener(Event.ENTER_FRAME, enterFrame)else
 
 elseif _Corona then
+
+	deviceWidth = _Corona.display.pixelWidth
+	deviceHeight = _Corona.display.pixelHeight
+	orientation = system.orientation
+	scaleMode = 'unknown'
+		
+	getTxtMem = function() return system.getInfo("textureMemoryUsed") / 1000 end
 
 	Runtime:addEventListener( "enterFrame", update)
 
@@ -59,6 +81,11 @@ screen.height = bl.height
 screen.centerx = bl.centerx
 screen.centery = bl.centery
 screen.fps = bl.fps
+-- added 2020/05/05
+screen.devicewidth = deviceWidth
+screen.deviceheight = deviceHeight
+screen.orientation = orientation
+screen.scalemode = scaleMode
 bl:add(screen)
 --------------------------------------------------------------------------------
 
