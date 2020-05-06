@@ -173,9 +173,16 @@ local init = function(args)
 
         end
         
-        if args.border then
+        local linecolor = Color(100,100,100)
 
-            Rect(screen.width, screen.height):fillColor(0,0,0,0):strokeWidth(args.border)
+        if args.border then
+            local border = args.border
+            if type(border) ~= 'table' then border = {} end
+            local color = border.color or linecolor
+            local width = border.width or 3
+
+            local br = Rect(screen.width, screen.height):empty()
+            br:strokewidth(width):strokecolor(color)
             _luasopia.dcdobj = _luasopia.dcdobj + 1
         
         end
@@ -187,7 +194,7 @@ local init = function(args)
 
             local xgap = grid.xgap or 100
             local ygap = grid.ygap or 100
-            local color = grid.color or Color(100,100,100)
+            local color = grid.color or linecolor
             local width = grid.width or 2
 
             for x = xgap, screen.width, xgap do

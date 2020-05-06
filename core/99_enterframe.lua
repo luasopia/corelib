@@ -6,32 +6,16 @@ local int = math.floor
 local mtxts = {}
 
 local getTxtMem
-local deviceWidth, deviceHeight, orientation, scaleMode
+local deviceWidth, deviceHeight, orientation
+--local scaleMode
+local x0, y0, endx, endy -- added 2020/05/06
 
---[[
-if _Gideros then
-
-	deviceWidth = _Gideros.application:getDeviceWidth() -- 1920,
-    deviceHeight = _Gideros.application:getDeviceHeight() -- 1920,
-
-	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
-
-elseif _Corona then
-
-	deviceWidth = _Corona.display.pixelWidth
-	deviceHeight = _Corona.display.pixelHeight
-		
-	getTxtMem=function() return system.getInfo("textureMemoryUsed") / 1000 end
-
-end
---]]
 
 local frameCount = 0
 local function update()
 	frameCount = frameCount + 1
 	Timer.updateAll()
 	Display.updateAll()
-
 	if _luasopia.debug then
 		local txtmem = getTxtMem()
 		local mem = int(collectgarbage('count'))
@@ -39,17 +23,17 @@ local function update()
 		local ndisp = Display.__getNumObjs() -- - logf.__getNumObjs() - 2
 		mtxts[2]:string('Display:%d, Timer:%d', ndisp, Timer.__getNumObjs())
 	end
-
 end
-
-
 
 if _Gideros then
 
 	deviceWidth = _Gideros.application:getDeviceWidth()
     deviceHeight = _Gideros.application:getDeviceHeight()
-	orientation = _Gideros.application:getOrientation()
-	scaleMode = _Gideros.application:getScaleMode()
+	-- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
+	orientation = _Gideros.application:getOrientation() 
+	-- 디바이스에서 실제 표시되는 영역의 (x0,y0), (endx,endy) 좌표값들을 구한다.
+	x0, y0, endx, endy = _Gideros.application:getDeviceSafeArea(true)
+	endx, endy = endx-1, endy-1
 
 	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
 
@@ -59,8 +43,11 @@ elseif _Corona then
 
 	deviceWidth = _Corona.display.pixelWidth
 	deviceHeight = _Corona.display.pixelHeight
-	orientation = system.orientation
-	scaleMode = 'unknown'
+	orientation = system.orientation -- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
+	-- 디바이스에서 실제 표시되는 영역의 (x0,y0), (endx,endy) 좌표값들을 구한다.
+	x0, y0 = _Corona.display.screenOriginX, _Corona.display.screenOriginY
+	endx = _Corona.display.actualContentWidth + x0 - 1
+	endy = _Corona.display.actualContentHeight + y0 - 1
 		
 	getTxtMem = function() return system.getInfo("textureMemoryUsed") / 1000 end
 
@@ -75,7 +62,9 @@ end
 -- _baselayer에 삽입
 --------------------------------------------------------------------------------
 local bl = _luasopia.baselayer
-screen = Rect(bl.width, bl.height,{fillcolor=Color.BLACK})
+--screen = Rect(bl.width, bl.height,{fillcolor=Color.BLACK})
+--2020/05/06 screenRect가 safe영역 전체를 덮도록 수정
+screen = Rect(endx-x0+1, endy-y0+1,{fillcolor=Color.BLACK})
 screen.width = bl.width
 screen.height = bl.height
 screen.centerx = bl.centerx
@@ -84,8 +73,10 @@ screen.fps = bl.fps
 -- added 2020/05/05
 screen.devicewidth = deviceWidth
 screen.deviceheight = deviceHeight
-screen.orientation = orientation
-screen.scalemode = scaleMode
+-- orientations: 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
+screen.orientation = orientation 
+-- added 2020/05/06
+screen.x0, screen.y0, screen.endx, screen.endy = x0, y0, endx, endy
 bl:add(screen)
 --------------------------------------------------------------------------------
 
