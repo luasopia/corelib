@@ -47,14 +47,14 @@ if _Gideros then
   end
 
     -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
-  function Group:touchOn() print('---group enabletch')
+  function Group:touchon() print('---group enabletch')
       -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
       for k = self.__bd:getNumChildren(),1,-1 do
         local obj = self.__bd:getChildAt(k).__obj
-        obj:touchOn() -- 차일드 각각의 소멸자 호출
+        obj:touchon() -- 차일드 각각의 소멸자 호출
       end
       -- (2) 자신도 (부모그룹에서) 터치를 멈춤
-      return Disp.touchOn(self)
+      return Disp.touchon(self)
   end
 
     -- Disp 베이스클래스의 pasuseTouch()를 오버로딩

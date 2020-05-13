@@ -88,7 +88,7 @@ function Display:__upd()
     if self.update then self:update() end 
     
     if self.touch and self.__tch==nil then self:touchon() end
-    if self.tap and self.__tap==nil then self:tapon() end
+    if self.tap and self.__tap==nil then self:__tapon() end
 
     if (self.__rma and self.__rma<=self.__tm) or
             (self.removeif and self:removeif()) then

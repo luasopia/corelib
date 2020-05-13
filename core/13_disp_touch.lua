@@ -167,23 +167,18 @@ elseif _Corona then
   
     end
   
-    function Display:touchon() print('tch on')
+    function Display:touchon() --print('tch on')
         if self.touch then
             self.__bd:addEventListener('touch', tch)
             self.__tch = {}
             -- self.__noTch = false
         end
 
-        if self.tap then print('enable tap')
-            self.__bd:addEventListener('touch', tapfn)
-            self.__tap = true
-        end
-
         return self
     end
 
     -- function Display:__offtouch() print('try dt')
-    function Display:touchoff() print('try dt')
+    function Display:stoptouch() --print('try dt')
         if self.touch then
             -- 현재 begin된 터치가 있다면 강제로 end를 발생
             -- self.__tch는 그대로 남겨두어야 __upd()에서 touchOn()이 안 호출됨
@@ -194,12 +189,9 @@ elseif _Corona then
             self.__bd:removeEventListener('touch', tch)
         end
 
-        if self.tap then 
-            self.__bd:removeEventListener('touch', tapfn)
-            self.__tap = false
-        end
-
         return self
     end
+
+    Display.resumetouch = Display.touchon
 
 end
