@@ -7,8 +7,8 @@ local tRm = table.remove
 local tmgapf = 1000/_luasopia.baselayer.fps
 local int = math.floor
 local Timer = Timer
-local scrn = _luasopia.baselayer
-local cx, cy = scrn.centerx, scrn.centery
+local baselayer = _luasopia.baselayer
+local cx, cy = baselayer.centerx, baselayer.centery
 --------------------------------------------------------------------------------
 -- Display 객체 d에 대해서
 -- 읽기- d:getx(), d:gety(), d:getangle() d:getscale() img:getalpha()
@@ -58,13 +58,11 @@ Display.__getNumObjs = function() return #dobjs - _luasopia.dcdobj end
 -- public methods
 -------------------------------------------------------------------------------
 
-function Display:init() -- coronaSDK ########################################
-    --2020/03/04: add getter
-    -- setmetatable(self, {__index = Display.__get__})
+function Display:init()
 
     -- 2020/02/16 screen에 add하는 경우 중앙에 위치시킨다.
     if self.__pr == nil then
-        self.__pr = scrn
+        self.__pr = baselayer
         self.__pr:add(self)
         self:xy(cx, cy)
     else -- 2020/03/04 : 그룹에 넣는 경우는 원점으로 위치를 바꾼다
@@ -74,20 +72,21 @@ function Display:init() -- coronaSDK ########################################
 
     self.__bd.__obj = self -- body에 원객체를 등록 (_Grp의 __del함수에서 사용)
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)
+
     return tIn(dobjs, self) -- 꼬리호출
 end
 
 -- This function is called in every frames
 function Display:__upd()
-    if self.__rm or self.__noUpd then return end -- 반드시 필요함
+    if self.__rm then return end -- 반드시 필요함
 
     if self.__tm then self.__tm = self.__tm + tmgapf end
     if self.__d then self:__playd() end
     if self.__tr then self:__playTr() end
     -- 2020/02/16 call user update if exists
-    if self.update then self:update() end 
+    if self.update and not self.__noupd then self:update() end 
     
-    if self.touch and self.__tch==nil then self:touchon() end
+    if self.touch and self.__tch==nil then self:__touchon() end
     if self.tap and self.__tap==nil then self:__tapon() end
 
     if (self.__rma and self.__rma<=self.__tm) or
@@ -95,7 +94,7 @@ function Display:__upd()
         return self:remove()
     end
     
-    -- 아래가 더 간단해 보이지만 이경우 self.__rm이 true인데 
+    -- 아래가 더 간단해 보이지만 이경우 self.__rm이 이미 true인데 
     -- 다시 false로 바뀌어버리는 경우도 존재
     -- 2020/03/19:따라서 **절대로** 아래와 같이 하면 안됨
     -- self.__rm = (self.__rma and self.__rma<=self.__tm) or
@@ -120,8 +119,8 @@ function Display:removeafter(ms)
     return self
 end
 
-function Display:updateon() self.__noUpd = true; return self end
-function Display:updateoff() self.__noUpd = false; return self end
+function Display:resumeupdate() self.__noupd = false; return self end
+function Display:stopupdate() self.__noupd = true; return self end
 
 --2020/03/02: group:add(child) returns child
 function Display:addto(g) g:add(self); return self end
@@ -250,7 +249,8 @@ if _Gideros then -- gideros
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
             for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
         end
-        if self.__tch then self:touchOff()  end
+        if self.__tch then self:stoptouch() end
+        if self.__tap then self:stoptap() end
 
         self.__bd:removeFromParent()
         self.__bd = nil -- __del__()이 호출되었음을 표시한다.
@@ -350,7 +350,10 @@ elseif _Corona then -- if coronaSDK --------------------------------------
         -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 삭제됨
             for k=1,#self.__tmrs do self.__tmrs[k].__rm = true end
         end
-        if self.__tch then print('disp_del_tch'); self:touchOff() end
+
+        if self.__tch then self:stoptouch() end
+        if self.__tap then self:stoptap() end
+
         self.__bd:removeSelf()
         self.__bd = nil -- __del__()이 호출되었음을 표시하는 역할도 함
     end

@@ -58,7 +58,7 @@ if _Gideros then
         end
     end
 
-    function Display:touchon() -- print('enable touch try')
+    function Display:__touchon() -- print('enable touch try')
         if self.touch then --printf('%s touch enabled',self.name)
             self.__bd:addEventListener(Event.TOUCHES_BEGIN, tchBegin, self)
             self.__bd:addEventListener(Event.TOUCHES_MOVE, tchMove, self)
@@ -79,7 +79,7 @@ if _Gideros then
     function Display:touchoff() print('try dt')
         if self.touch then --printf('%s touch disabled',self.name)
             -- 현재 begin된 터치가 있다면 end를 발생시키고 __tch를 비운다
-            -- self.__tch 본체는 그대로 남겨두어야 __upd()에서 touchOn()이 안 호출됨
+            -- self.__tch 본체는 그대로 남겨두어야 __upd()에서 __touchOn()이 안 호출됨
             for k, t in pairs(self.__tch) do
                 self:touch{id=t.id, phase='end', x=t.x, y=t.y, dx=0, dy=0}
                 self.__tch[k] = nil
@@ -167,7 +167,7 @@ elseif _Corona then
   
     end
   
-    function Display:touchon() --print('tch on')
+    function Display:__touchon() --print('tch on')
         if self.touch then
             self.__bd:addEventListener('touch', tch)
             self.__tch = {}
@@ -181,7 +181,7 @@ elseif _Corona then
     function Display:stoptouch() --print('try dt')
         if self.touch then
             -- 현재 begin된 터치가 있다면 강제로 end를 발생
-            -- self.__tch는 그대로 남겨두어야 __upd()에서 touchOn()이 안 호출됨
+            -- self.__tch는 그대로 남겨두어야 __upd()에서 __touchOn()이 안 호출됨
             for k, t in pairs(self.__tch) do
                 self.__bd:dispatchEvent{name='touch',id=t.id, phase='ended', target=self.__bd, x=t.x, y=t.y}
             end
@@ -191,7 +191,7 @@ elseif _Corona then
 
         return self
     end
-
-    Display.resumetouch = Display.touchon
-
+  
 end
+
+Display.resumetouch = Display.touchon
