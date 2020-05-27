@@ -41,8 +41,8 @@ end
 if gideros then -- in the case of using Gideros
 
     print('luasopia.init (gideros)')
-
-    application:setBackgroundColor(0x000000)
+    -- 2020/05/27 아래는 (screen Rect객체 때문에)궂이 필요없음
+    --application:setBackgroundColor(0x000000)
     
     _Gideros = moveg()
 
@@ -185,7 +185,7 @@ local init = function(args)
             br:strokewidth(width):strokecolor(color)
             _luasopia.dcdobj = _luasopia.dcdobj + 1
         
-        end
+        end 
 
         -- 2020/04/21 그리드선 추가
         if args.grid then
