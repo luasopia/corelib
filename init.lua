@@ -1,9 +1,6 @@
-if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
 -- 2019/12/27: 작성 시작 : 60프레임, 화면 1080x1920 기준으로
 -- 2020/02/16: init.lua를 luasopia/init.lua로 옮김
---------------------------------------------------------------------------------
-
 --------------------------------------------------------------------------------
 -- Lua 고유의 전역변수들만 남기고 특정SDK의 전역변수들을 tbl로 이동
 --------------------------------------------------------------------------------
@@ -127,9 +124,8 @@ require 'luasopia.core.43_circle'
 require 'luasopia.core.44_star'
 require 'luasopia.core.45_heart'
 require 'luasopia.core.50_sound'
-require 'luasopia.core.60_scene'
-
 local enterFrameInit = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
+require 'luasopia.core.60_scene'
 
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
@@ -145,7 +141,7 @@ local init = function(args)
             _luasopia.loglayer = {
                 __bd = _Gideros.Sprite.new(),
                 add = function(self, child) return self.__bd:addChild(child.__bd) end,
-                --2020/03/15 isobj(_loglayer, Group)==true 이러면 아래 두 개 필요
+                --2020/03/15 isobj(_loglayer, Group)==true 이려면 아래 두 개 필요
                 __isobj__ = true,
                 __clsid__ = Group.__clsid__
             }

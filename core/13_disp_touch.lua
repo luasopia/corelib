@@ -76,7 +76,7 @@ if _Gideros then
         return self
     end
     
-    function Display:touchoff() print('try dt')
+    function Display:stoptouch() --print('try dt')
         if self.touch then --printf('%s touch disabled',self.name)
             -- 현재 begin된 터치가 있다면 end를 발생시키고 __tch를 비운다
             -- self.__tch 본체는 그대로 남겨두어야 __upd()에서 __touchOn()이 안 호출됨
@@ -194,4 +194,4 @@ elseif _Corona then
   
 end
 
-Display.resumetouch = Display.touchon
+Display.resumetouch = Display.__touchon

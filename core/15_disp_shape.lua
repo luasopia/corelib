@@ -33,6 +33,15 @@ if _Gideros then
         self.__bd:addChild(self.__sbd)
         return self
     end
+    -- 2020/05/28 added
+    function Disp:__fill__(ca)
+        assert(isobj(ca,Color), 'argument of fill() must be Color object')
+        self.__fillca = ca
+        self.__bd:removeChildAt(1)
+        self.__sbd = self:__draw()
+        self.__bd:addChild(self.__sbd)
+        return self
+    end
 
 
 elseif _Corona then
@@ -56,6 +65,14 @@ elseif _Corona then
     -- 단, a는 0에서 1사이값
     function Disp:__fillColor__(r,g,b,a)
         local ca = Color(r,g,b,a)
+        self.__bd:setFillColor(ca.r, ca.g, ca.b, ca.a)
+        self.__fillca = ca
+        return self
+    end
+
+    -- 2020/05/28 added
+    function Disp:__fill__(ca)
+        assert(isobj(ca,Color), 'argument of fill() must be Color object')
         self.__bd:setFillColor(ca.r, ca.g, ca.b, ca.a)
         self.__fillca = ca
         return self
@@ -98,4 +115,5 @@ function Disp.__regshape__(cls)
     cls.strokecolor = Disp.__strokeColor__
     cls.fillcolor = Disp.__fillColor__
     cls.empty = Disp.__empty__
+    cls.fill = Disp.__fill__
 end

@@ -36,47 +36,47 @@ if _Gideros then
   end
 
   -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
-  function Group:touchOff()
+  function Group:stoptouch()
       -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
       for k = self.__bd:getNumChildren(),1,-1 do
         local obj = self.__bd:getChildAt(k).__obj
-        obj:touchOff() -- 차일드 각각의 touchOff() 호출
+        obj:stoptouch() -- 차일드 각각의 touchOff() 호출
       end
       -- (2) 자신도 (부모그룹에서) 터치를 멈춤
-      return Disp.touchOff(self)
+      --return Disp.stoptouch(self)
   end
 
     -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
-  function Group:touchon() print('---group enabletch')
+  function Group:resumetouch() print('---group enabletch')
       -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
       for k = self.__bd:getNumChildren(),1,-1 do
         local obj = self.__bd:getChildAt(k).__obj
-        obj:touchon() -- 차일드 각각의 소멸자 호출
+        obj:resumetouch() -- 차일드 각각의 소멸자 호출
       end
       -- (2) 자신도 (부모그룹에서) 터치를 멈춤
-      return Disp.touchon(self)
+      --return Disp.resumetouch(self)
   end
 
     -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
-    function Group:updateOff()
+  function Group:stopupdate()
       -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
       for k = self.__bd:getNumChildren(),1,-1 do
         local obj = self.__bd:getChildAt(k).__obj
-        obj:updateOff() -- 차일드 각각의 소멸자 호출
+        obj:stopupdate() -- 차일드 각각의 소멸자 호출
       end
       -- (2) 자신도 (부모그룹에서) 터치를 멈춤
-      return Disp.updateOff(self)
+      return Disp.stopupdate(self)
   end
 
       -- Disp 베이스클래스의 pasuseTouch()를 오버로딩
-      function Group:updateOn()
+      function Group:resumeupdate()
         -- (1) child들은 소멸자 호출 (__obj는 body를 가지는 객체)
         for k = self.__bd:getNumChildren(),1,-1 do
           local obj = self.__bd:getChildAt(k).__obj
-          obj:updateOn() -- 차일드 각각의 소멸자 호출
+          obj:resumeupdate() -- 차일드 각각의 소멸자 호출
         end
         -- (2) 자신도 (부모그룹에서) 터치를 멈춤
-        return Disp.updateOn(self)
+        return Disp.resumeupdate(self)
     end
   
   
@@ -116,32 +116,32 @@ elseif _Corona then
     -- self.__rm = true
   end
 
-  function Group:touchOff()
+  function Group:stoptouch()
     for k = self.__bd.numChildren, 1, -1 do
-      self.__bd[k].__obj:touchOff()
+      self.__bd[k].__obj:stoptouch()
     end
-    return Disp.touchOff(self)
+    return Disp.stoptouch(self)
   end
 
-  function Group:touchOn()
+  function Group:resumetouch()
     for k = self.__bd.numChildren, 1, -1 do
-      self.__bd[k].__obj:touchOff()
+      self.__bd[k].__obj:resumetouch()
     end
-    return Disp.touchOn(self)
+    return Disp.resumetouch(self)
   end
 
-  function Group:updateOff()
+  function Group:stopupdate()
     for k = self.__bd.numChildren, 1, -1 do
-      self.__bd[k].__obj:updateOff()
+      self.__bd[k].__obj:stopupdate()
     end
-    return Disp.updateOff(self)
+    return Disp.stopupdate(self)
   end
 
-  function Group:updateOn()
+  function Group:resumeupdate()
     for k = self.__bd.numChildren, 1, -1 do
-      self.__bd[k].__obj:touchOff()
+      self.__bd[k].__obj:resumeupdate()
     end
-    return Disp.updateOn(self)
+    return Disp.resumeupdate(self)
   end
 
   -- 2020/03/13: corona의 setFillColor는 group에는 적용되지 않는다.

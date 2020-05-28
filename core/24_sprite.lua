@@ -1,5 +1,3 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
-
 local int = math.floor
 local tIn = table.insert
 local timeGapFrame = 1000/_luasopia.baselayer.fps
