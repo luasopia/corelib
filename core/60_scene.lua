@@ -49,6 +49,7 @@ Scene = class()
 function Scene:init()
     -- scene은 baselayer에 생성한다.
     self.__stg__ = Group(_luasopia.baselayer):xy(0,0)
+    _luasopia.stage = self.__stg__
 end    
 
 -- The following methods are optionally overridden.
