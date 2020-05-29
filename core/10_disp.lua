@@ -62,7 +62,7 @@ function Display:init()
 
     -- 2020/02/16 screen에 add하는 경우 중앙에 위치시킨다.
     if self.__pr == nil then
-        self.__pr = baselayer
+        self.__pr = _luasopia.stage --baselayer
         self.__pr:add(self)
         self:xy(cx, cy)
     else -- 2020/03/04 : 그룹에 넣는 경우는 원점으로 위치를 바꾼다

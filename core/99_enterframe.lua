@@ -64,7 +64,9 @@ end
 local bl = _luasopia.baselayer
 --screen = Rect(bl.width, bl.height,{fillcolor=Color.BLACK})
 --2020/05/06 Rect(screen)가 safe영역 전체를 덮도록 수정
-screen = Rect(endx-x0+1, endy-y0+1,{fillcolor=Color.BLACK})
+--2020/05/29 bl에 생성되어야 한다. xy는 센터로
+screen = Rect(endx-x0+1, endy-y0+1,{fillcolor=Color.BLACK}, bl)
+screen:xy(bl.centerx, bl.centery)
 screen.width = bl.width
 screen.height = bl.height
 screen.centerx = bl.centerx

@@ -130,6 +130,12 @@ require 'luasopia.core.60_scene'
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
 
+-- 2020/05/29 초기에 scene0를 생성한다
+-- baselayer에는 screen과 scene.__stg__ 만을 집어넣는다
+_luasopia.scene0 = Scene()
+_luasopia.stage = _luasopia.scene0.__stg__
+
+
 -- 반환되는 함수가 아예 호출이 안될 때 logf를 빈함수로 설정
 logf = function() end
 
