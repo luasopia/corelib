@@ -43,26 +43,45 @@ if gideros then -- in the case of using Gideros
     
     _Gideros = moveg()
 
-    _luasopia = {}
+    local contentwidth = _Gideros.application:getContentWidth()
+    local contentheight = _Gideros.application:getContentHeight()
+    local x0, y0, endx, endy = _Gideros.application:getDeviceSafeArea(true)
+    local fps = _Gideros.application:getFps()
 
-    local contentWidth = _Gideros.application:getContentWidth() -- 1080,
-    local contentHeight = _Gideros.application:getContentHeight() -- 1920,
+    _luasopia = {
+        width = contentwidth,
+        height = contentheight,
 
-    --print(contentWidth, contentHeight)
+        centerx = contentwidth/2,
+        centery = contentheight/2,
 
-    -- screen = {
+        devicewidth = _Gideros.application:getDeviceWidth(),
+        deviceheight = _Gideros.application:getDeviceHeight(),
+        -- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
+        orientation = _Gideros.application:getOrientation(),
+        -- 디바이스에서 실제 표시되는 영역의 (x0,y0), (endx,endy) 좌표값들을 구한다.
+        x0 = x0,
+        y0 = y0,
+        endx = endx-1,
+        endy = endy-1,
+
+        fps = fps,
+    }
+
     _luasopia.baselayer = {
         __bd = _Gideros.Sprite.new(),
         add = function(self, child) return self.__bd:addChild(child.__bd) end,
-        
-        width = contentWidth, -- 1080,
-        height = contentHeight, -- 1920,
-        centerx = contentWidth/2,
-        centery = contentHeight/2,
-        fps = _Gideros.application:getFps(),
+        --[[
+        width = contentwidth, -- 1080,
+        height = contentheight, -- 1920,
+        centerx = contentwidth/2,
+        centery = contentheight/2,
+        fps = fps,
+        --]]
     }
     -- _Gideros.stage:addChild(screen.__bd)
     _Gideros.stage:addChild(_luasopia.baselayer.__bd)
+
 
 
 elseif coronabaselib then -- in the case of using CoronaSDK
@@ -70,18 +89,47 @@ elseif coronabaselib then -- in the case of using CoronaSDK
     print('luasopia.init (corona)')
     _Corona = moveg()
 
-	_luasopia = {}
+    local contentwidth = _Corona.display.contentWidth
+    local contentheight = _Corona.display.contentHeight
+
+	-- 디바이스에서 실제 표시되는 영역의 (x0,y0), (endx,endy) 좌표값들을 구한다.
+	local x0, y0 = _Corona.display.screenOriginX, _Corona.display.screenOriginY
+	local endx = _Corona.display.actualContentWidth + x0 - 1
+	local endy = _Corona.display.actualContentHeight + y0 - 1
+    local fps = _Corona.display.fps
+
+	_luasopia = {
+
+        width = contentwidth,
+        height = contentheight,
+
+        centerx = contentwidth/2,
+        centery = contentheight/2,
+
+        devicewidth = _Corona.display.pixelWidth,
+        deviceheight = _Corona.display.pixelHeight,
+        -- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'            
+        orientation = system.orientation, 
+
+        x0 = x0,
+        y0 = y0,
+        endx = endx,
+        endy = endy,
+
+        fps = fps,
+    }
 
     -- screen = {
     _luasopia.baselayer = {
         __bd = _Corona.display.newGroup(),
         add = function(self, child) return self.__bd:insert(child.__bd) end,
-
-        width = _Corona.display.contentWidth,
-        height = _Corona.display.contentHeight,
-        centerx = _Corona.display.contentCenterX,
-        centery = _Corona.display.contentCenterY,
-        fps = _Corona.display.fps
+        --[[
+        width = contentwidth,
+        height = contentheight,
+        centerx = contentwidth/2,
+        centery = contentheight/2,
+        fps = fps,
+        --]]
     }
 
 
@@ -172,7 +220,11 @@ local init = function(args)
             require 'luasopia.core.98_logf'
             if args.loglines then logf.setNumLines(args.loglines) end
             enterFrameInit()
-
+            -- 2020/05/30: added
+            logf("(content)width:%d, height:%d", _luasopia.width, _luasopia.height)
+            logf("(device)width:%d, height:%d", _luasopia.devicewidth, _luasopia.deviceheight)
+            logf("orientation:'%s', fps:%d", _luasopia.orientation, _luasopia.fps)
+        
         end
         
         local linecolor = Color(100,100,100)
@@ -215,7 +267,7 @@ local init = function(args)
 
 end
 
--- 2020/04/12 사용자가 _G에 변수를 생성하는 것을 막는다
+-- 2020/04/12: 사용자가 _G에 변수를 생성하는 것을 막는다
 -- 모든 사용자 전역변수는 global테이블에 만들어야 한다.
 global = {} 
 setmetatable(_G, {

@@ -3,7 +3,7 @@
 print('core.disp_tr')
 
 -- local tmgapf = 1000/screen.fps
-local tmgapf = 1000/_luasopia.baselayer.fps
+local tmgapf = 1000/_luasopia.fps
 local int = math.floor
 ----------------------------------------------------------------------------------
 -- shift테이블에 여러 지점을 등록할 수 있다.

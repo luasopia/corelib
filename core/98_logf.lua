@@ -1,6 +1,6 @@
 -- if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
-local cx, cy = screen.centerx, screen.centery
+local cx, cy = _luasopia.centerx, _luasopia.centery
 local tIn, tRm = table.insert, table.remove
 local int = math.floor
 --------------------------------------------------------------------------------

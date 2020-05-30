@@ -2,7 +2,7 @@
 
 local tIn = table.insert
 -- local timeGapFrame = 1000/screen.fps
-local timeGapFrame = 1000/_luasopia.baselayer.fps
+local timeGapFrame = 1000/_luasopia.fps
 --------------------------------------------------------------------------------
 -- 생성자 및 멤버함수
 ----------------------------------------------------------------------------

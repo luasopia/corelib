@@ -4,11 +4,11 @@ print('core.dobj')
 
 local tIn = table.insert
 local tRm = table.remove
-local tmgapf = 1000/_luasopia.baselayer.fps
+local tmgapf = 1000/_luasopia.fps
 local int = math.floor
 local Timer = Timer
-local baselayer = _luasopia.baselayer
-local cx, cy = baselayer.centerx, baselayer.centery
+--local baselayer = _luasopia.baselayer
+local cx, cy = _luasopia.centerx, _luasopia.centery
 --------------------------------------------------------------------------------
 -- Display 객체 d에 대해서
 -- 읽기- d:getx(), d:gety(), d:getangle() d:getscale() img:getalpha()

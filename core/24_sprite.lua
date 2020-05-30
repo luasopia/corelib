@@ -1,6 +1,6 @@
 local int = math.floor
 local tIn = table.insert
-local timeGapFrame = 1000/_luasopia.baselayer.fps
+local timeGapFrame = 1000/_luasopia.fps
 local Disp = Display
 local DispUpd = Disp.__upd
 --[[---------------------------------------------------------------------------

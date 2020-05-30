@@ -6,9 +6,9 @@ local int = math.floor
 local mtxts = {}
 
 local getTxtMem
-local deviceWidth, deviceHeight, orientation
---local scaleMode
-local x0, y0, endx, endy -- added 2020/05/06
+
+-- local deviceWidth, deviceHeight, orientation
+-- local x0, y0, endx, endy -- added 2020/05/06
 
 
 local frameCount = 0
@@ -26,7 +26,7 @@ local function update()
 end
 
 if _Gideros then
-
+--[[
 	deviceWidth = _Gideros.application:getDeviceWidth()
     deviceHeight = _Gideros.application:getDeviceHeight()
 	-- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
@@ -34,13 +34,13 @@ if _Gideros then
 	-- 디바이스에서 실제 표시되는 영역의 (x0,y0), (endx,endy) 좌표값들을 구한다.
 	x0, y0, endx, endy = _Gideros.application:getDeviceSafeArea(true)
 	endx, endy = endx-1, endy-1
+--]]
 
 	getTxtMem = function() return _Gideros.application:getTextureMemoryUsage() end
-
 	_Gideros.stage:addEventListener(_Gideros.Event.ENTER_FRAME, update)
 
 elseif _Corona then
-
+--[[
 	deviceWidth = _Corona.display.pixelWidth
 	deviceHeight = _Corona.display.pixelHeight
 	orientation = system.orientation -- 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
@@ -48,9 +48,9 @@ elseif _Corona then
 	x0, y0 = _Corona.display.screenOriginX, _Corona.display.screenOriginY
 	endx = _Corona.display.actualContentWidth + x0 - 1
 	endy = _Corona.display.actualContentHeight + y0 - 1
-		
-	getTxtMem = function() return system.getInfo("textureMemoryUsed") / 1000 end
+--]]
 
+	getTxtMem = function() return system.getInfo("textureMemoryUsed") / 1000 end
 	Runtime:addEventListener( "enterFrame", update)
 
 elseif _Love then
@@ -61,25 +61,24 @@ end
 -- 2020/02/23 : screen 에 touch()를 직접붙이기 위해서 Rect를 screen으로 생성해서
 -- _baselayer에 삽입
 --------------------------------------------------------------------------------
-local bl = _luasopia.baselayer
---screen = Rect(bl.width, bl.height,{fillcolor=Color.BLACK})
+local ls = _luasopia
+local x0, y0, endx, endy = ls.x0, ls.y0, ls.endx, ls.endy
 --2020/05/06 Rect(screen)가 safe영역 전체를 덮도록 수정
 --2020/05/29 bl에 생성되어야 한다. xy는 센터로
-screen = Rect(endx-x0+1, endy-y0+1,{fillcolor=Color.BLACK}, bl)
-screen:xy(bl.centerx, bl.centery)
-screen.width = bl.width
-screen.height = bl.height
-screen.centerx = bl.centerx
-screen.centery = bl.centery
-screen.fps = bl.fps
+screen = Rect(endx-x0+1, endy-y0+1,{fillcolor=Color.BLACK}, _luasopia.baselayer)
+screen:xy(ls.centerx, ls.centery)
+screen.width = ls.width
+screen.height = ls.height
+screen.centerx = ls.centerx
+screen.centery = ls.centery
+screen.fps = ls.fps
 -- added 2020/05/05
-screen.devicewidth = deviceWidth
-screen.deviceheight = deviceHeight
+screen.devicewidth = ls.devicewidth
+screen.deviceheight = ls.deviceheight
 -- orientations: 'portrait', 'portraitUpsideDown', 'landscapeLeft', 'landscapeRight'
-screen.orientation = orientation 
+screen.orientation = ls.orientation 
 -- added 2020/05/06
 screen.x0, screen.y0, screen.endx, screen.endy = x0, y0, endx, endy
-bl:add(screen)
 --------------------------------------------------------------------------------
 
 -- 아래 함수를 리턴한다. debug모드일 때 실행해야 한다.
