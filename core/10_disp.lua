@@ -83,14 +83,19 @@ function Display:__upd()
     if self.__tm then self.__tm = self.__tm + tmgapf end
     if self.__d then self:__playd() end
     if self.__tr then self:__playTr() end
+    
     -- 2020/02/16 call user update if exists
-    if self.update and not self.__noupd then self:update() end 
+    -- 2020/06/02 : update()가 true를 반환하면 삭제하도록 수정
+    if self.update and not self.__noupd then
+        self.__retupd = self:update()
+    end 
     
     if self.touch and self.__tch==nil then self:__touchon() end
     if self.tap and self.__tap==nil then self:__tapon() end
 
-    if (self.__rma and self.__rma<=self.__tm) or
-            (self.removeif and self:removeif()) then
+    if (self.__rma and self.__rma<=self.__tm)
+        or self.__retupd
+        or (self.removeif and self:removeif()) then
         return self:remove()
     end
     
