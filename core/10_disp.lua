@@ -139,7 +139,7 @@ function Display:tag(name) self.__tag = name; return self end
 function Display.collect(name)
     local r = {}
     for _, obj in ipairs(dobjs) do
-        if obj.__tag == name then tIn(r, obj) end
+        if obj.__bd ~=nil and obj.__tag == name then tIn(r, obj) end
     end
     return r
 end
@@ -261,6 +261,11 @@ if _Gideros then -- gideros
         self.__bd = nil -- __del__()이 호출되었음을 표시한다.
     end
 
+    -- 2020/06/08 : 추가 
+    function Display:getglobalxy(x,y)
+        return self.__bd:localToGlobal(x or 0,y or 0)
+    end
+
 elseif _Corona then -- if coronaSDK --------------------------------------
 
     function Display:getx() return self.__bd.x end
@@ -365,7 +370,11 @@ elseif _Corona then -- if coronaSDK --------------------------------------
 
     function Display:tint(r,g,b)
         self.__bd:setFillColor(r,g,b)
-    return self
+        return self
     end
 
+    -- 2020/06/08 : 추가 
+    function Display:getglobalxy(x,y)
+        return self.__bd:localToContent(x or 0,y or 0)
+    end
 end

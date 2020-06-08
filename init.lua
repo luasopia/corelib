@@ -224,6 +224,7 @@ local init = function(args)
             logf("(content)width:%d, height:%d", _luasopia.width, _luasopia.height)
             logf("(device)width:%d, height:%d", _luasopia.devicewidth, _luasopia.deviceheight)
             logf("orientation:'%s', fps:%d", _luasopia.orientation, _luasopia.fps)
+            logf("x0:%d,y0:%d,ex:%d,ey:%d", screen.x0, screen.y0,screen.endx, screen.endy)
         
         end
         

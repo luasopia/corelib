@@ -1,5 +1,3 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
---------------------------------------------------------------------------------
 local cos, _2PI = math.cos, 2*math.pi
 local tmgap = 50
 local function wavefn(t, p) return (1-cos(_2PI*t/p))/2 end

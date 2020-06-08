@@ -1,4 +1,3 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
 -- time  : one peroid time
 -- loops : number of repeatition
@@ -12,8 +11,8 @@ local function tmrfn(self, e)
     return self:visible(not self:getvisible())
 end
 
-lib.blink = function(obj, time, loops, onEnd)
+lib.blink = function(obj, time, loops, onend)
     obj.__wasv = obj:getvisible() -- wasSeen
     obj:visible(not obj.__wasv)
-    return obj:timer(time/2, tmrfn, loops*2-1, onEnd)
+    return obj:timer(time/2, tmrfn, loops*2-1, onend)
 end
