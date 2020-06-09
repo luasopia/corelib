@@ -8,7 +8,7 @@ local nilFn = function() end
 --[[
 --2020/02/15 class 테이블에 __id__ 필드를 추가하고
 -- 어떤 테이블이 class 자체인지 rawget()함수를 이용하여 검사한다
-local function _isobj(t) return type(t)=='table' and t.__isobj__ end
+local function _isobj(t) return type(t)=='table' and t.__clsid__ end
 local function _iscls(t) return type(t)=='table' and rawget(t,'__id__') end
 
 -- 어떤 객체가 클래스의 객체인지를 판단하는 (전역)함수
@@ -20,7 +20,7 @@ end
 -- 어떤 객체가 클래스의 객체인지를 판단하는 (전역)함수
 -- 2020/06/10 : 수정
 function isobj(obj, cls)
-	return type(obj)=='table' and obj.__isobj__ == cls.__id__
+	return type(obj)=='table' and obj.__clsid__ == cls.__id__
 end
 
 -- function isnum(v) return type(v)=='number' end
@@ -29,6 +29,7 @@ local Object = {
 	init = nilFn, -- default constructor
 	remove = nilFn, -- default destructor
 	__id__ = 0,
+	
 	-- 2020/02/21 added
 	-- name = 'obj',
 	-- classname = 'Object',
@@ -38,9 +39,9 @@ local Object = {
 local clsid = 0
 
 local function constructor(cls, ...)
-	--local obj = setmetatable({ __isobj__ = true }, { __index = cls })
+	--local obj = setmetatable({ __clsid__ = true }, { __index = cls })
 	-- 2020/06/10: (2*) 때문에 아래와 같이 metatable을 cls로 설정 가능
-	local obj = setmetatable({ __isobj__ = cls.__id__ }, cls) -- (*1)
+	local obj = setmetatable({ __clsid__ = cls.__id__ }, cls) -- (*1)
 	cls.init(obj, ...)
 	return obj
 end
@@ -77,7 +78,7 @@ end
 
 --[[
 local function constructor(cls, ...)
-	local obj = setmetatable({ __isobj__ = true }, { __index = cls })
+	local obj = setmetatable({ __clsid__ = true }, { __index = cls })
 	cls.init(obj, ...)
 	return obj
 end
