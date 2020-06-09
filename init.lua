@@ -196,8 +196,7 @@ local init = function(args)
                 __bd = _Gideros.Sprite.new(),
                 add = function(self, child) return self.__bd:addChild(child.__bd) end,
                 --2020/03/15 isobj(_loglayer, Group)==true 이려면 아래 두 개 필요
-                __isobj__ = true,
-                __clsid__ = Group.__clsid__
+                __isobj__ = Group.__id__,
             }
             _Gideros.stage:addChild(_luasopia.loglayer.__bd)
         
@@ -207,8 +206,7 @@ local init = function(args)
                 __bd = _Corona.display.newGroup(),
                 add = function(self, child) return self.__bd:insert(child.__bd) end,
                 --2020/03/15 isobj(_loglayer, Group)가 true가 되려면 아래 두 개 필요
-                __isobj__ = true,
-                __clsid__ = Group.__clsid__
+                __isobj__ = Group.__id__
             }
         
         end
