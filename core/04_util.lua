@@ -1,10 +1,6 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
 --------------------------------------------------------------------------------
---
 -- utility functions for debug
---
 --------------------------------------------------------------------------------
-
 -- this loads main.lua in 'luasopialib' folder
 function import(libname)
 
@@ -13,18 +9,12 @@ function import(libname)
     local lib = require(url)
     global.u = nil
     
-    --lib.path = string.format('luasopialib/%s/',dir)
-    
-    -- lib.r = function(filename)
-    --     return string.format('luasopialib/%s/%s',dir,filename)
-    -- end
-
     return lib
 
 end
 
 
-_luasopia.printf = function(...) print(string.format(...)) end
+_luasopia.puts = function(...) print(string.format(...)) end
 
 _luasopia.showt = function(node)
     local cache, stack, output = {},{},{}

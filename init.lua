@@ -184,8 +184,8 @@ _luasopia.scene0 = Scene()
 _luasopia.stage = _luasopia.scene0.__stg__
 
 
--- 반환되는 함수가 아예 호출이 안될 때 logf를 빈함수로 설정
-logf = function() end
+-- 반환되는 함수(init)가 아예 호출이 안될 때 logf를 빈함수로 설정
+logf = function(...) print(string.format(...)) end
 
 local init = function(args)
     if args then 
