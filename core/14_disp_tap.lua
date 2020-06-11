@@ -41,7 +41,7 @@ elseif _Corona then ---------------------------------------
         --2020/05/16 'ended' 이벤트는 처리하지 않는다.
         if e.phase=='ended' or self.tap==nil then return true end
 
-        print(string.format('%s tap event:%s',self.name, e.phase))
+        --print(string.format('%s tap event:%s',self.name, e.phase))
         local dx, dy = 0, 0
   
         -- 2020/02/17 : 'ended'이벤트를 self.tap()호출하기 전 강제로 발생시켜
