@@ -11,9 +11,9 @@ local getTxtMem
 -- local x0, y0, endx, endy -- added 2020/05/06
 
 
-local frameCount = 0
+--local frameCount = 0
 local function update()
-	frameCount = frameCount + 1
+	--frameCount = frameCount + 1
 	Timer.updateAll()
 	Display.updateAll()
 	if _luasopia.debug then

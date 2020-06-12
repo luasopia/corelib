@@ -3,15 +3,22 @@
 --------------------------------------------------------------------------------
 -- this loads main.lua in 'luasopialib' folder
 function import(libname)
-
     local url = string.format('luasopialib.%s.%s',libname, libname)
     global.u = function(str) return string.format('luasopialib/%s/%s',libname,str) end
     local lib = require(url)
     global.u = nil
-    
     return lib
-
 end
+
+--[[
+function run(utilname)
+    local url = string.format('luasopiautil.%s.%s',utilname, utilname)
+    global.u = function(str) return string.format('luasopiautil/%s/%s',utilname,str) end
+    local util = require(url)
+    global.u = nil
+    return util
+end
+--]]
 
 
 _luasopia.puts = function(...) print(string.format(...)) end

@@ -265,6 +265,10 @@ if _Gideros then -- gideros
     function Display:getglobalxy(x,y)
         return self.__bd:localToGlobal(x or 0,y or 0)
     end
+    --2020/06/12
+    function Display:getparent()
+        return self.__pr
+    end
 
 elseif _Corona then -- if coronaSDK --------------------------------------
 

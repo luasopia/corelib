@@ -33,7 +33,10 @@ elseif _Corona then
 end
 
 local rand = rand
-Color.rand = function() return Color(rand(255),rand(255),rand(255)) end
+local lowval = 40 -- 2020/06/12 added to prevent to generate darker color
+Color.rand = function()
+    return Color(rand(lowval,255),rand(lowval,255),rand(lowval,255))
+end
 
 -- web color (refer to : https://en.wikipedia.org/wiki/Web_colors )
 
