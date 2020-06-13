@@ -177,6 +177,7 @@ require 'luasopia.core.60_scene'
 
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
+require 'luasopia.lib.Path' -- 2020/06/13 added
 
 -- 2020/05/29 초기에 scene0를 생성한다
 -- baselayer에는 screen과 scene.__stg__ 만을 집어넣는다

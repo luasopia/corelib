@@ -81,8 +81,8 @@ function Display:__upd()
     if self.__rm then return end -- 반드시 필요함
 
     if self.__tm then self.__tm = self.__tm + tmgapf end
-    if self.__d then self:__playd() end
-    if self.__tr then self:__playTr() end
+    if self.__d then self:__playd() end  -- move{}
+    if self.__tr then self:__playTr() end -- shift{}
     
     -- 2020/02/16 call user update if exists
     -- 2020/06/02 : update()가 true를 반환하면 삭제하도록 수정

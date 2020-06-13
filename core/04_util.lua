@@ -10,16 +10,21 @@ function import(libname)
     return lib
 end
 
---[[
-function run(utilname)
-    local url = string.format('luasopiautil.%s.%s',utilname, utilname)
-    global.u = function(str) return string.format('luasopiautil/%s/%s',utilname,str) end
+-- --[[
+function runutil(utilname) -- runutil
+    local url = string.format('luasopia.util.%s.%s',utilname, utilname)
+    global.u = function(str) return string.format('luasopia/util/%s/%s', utilname, str) end
     local util = require(url)
     global.u = nil
     return util
 end
 --]]
 
+function _luasopia.copytable(t)
+    local clone = {}
+    for k, v in next, t do  clone[k] = v end
+    return clone
+end
 
 _luasopia.puts = function(...) print(string.format(...)) end
 
