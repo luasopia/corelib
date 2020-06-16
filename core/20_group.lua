@@ -79,6 +79,12 @@ if _Gideros then
         return Disp.resumeupdate(self)
     end
   
+    --2020/06/15 : 그룹자체는 유지하고 내용물들만 삭제함
+    function Group:clear()
+      for k = self.__bd:getNumChildren(),1,-1 do
+        self.__bd:getChildAt(k).__obj:__del__()
+      end
+    end
   
 elseif _Corona then
 
@@ -149,6 +155,13 @@ elseif _Corona then
   function Group:tint(...)
     for k = self.__bd.numChildren, 1, -1 do
       self.__bd[k].__obj:tint(...)
+    end
+  end
+
+  --2020/06/15 : 그룹자체는 유지하고 내용물들만 삭제함
+  function Group:clear()
+    for k = self.__bd.numChildren, 1, -1 do
+      self.__bd[k].__obj:__del__()
     end
   end
 

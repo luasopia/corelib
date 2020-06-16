@@ -165,6 +165,8 @@ require 'luasopia.core.22_image_region'
 require 'luasopia.core.23_getsheet'
 require 'luasopia.core.24_sprite'
 require 'luasopia.core.30_text'
+
+require 'luasopia.core.39_shape'
 require 'luasopia.core.40_line'
 require 'luasopia.core.41_rect'
 require 'luasopia.core.42_polygon'
