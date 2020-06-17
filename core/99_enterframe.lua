@@ -10,10 +10,12 @@ local getTxtMem
 -- local deviceWidth, deviceHeight, orientation
 -- local x0, y0, endx, endy -- added 2020/05/06
 
+--  local noupd = false; Timer(1000, function() noupd=true end)
 
---local frameCount = 0
 local function update()
-	--frameCount = frameCount + 1
+	-- if noupd then return end
+
+
 	Timer.updateAll()
 	Display.updateAll()
 	if _luasopia.debug then
