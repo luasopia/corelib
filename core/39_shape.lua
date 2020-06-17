@@ -120,6 +120,7 @@ local tblin = table.insert
 local tblrm = table.remove
 local unpack = unpack
 
+--[[
 local function upd(self)
 
     tblin(self.__pxy, {self:getxy()})
@@ -133,13 +134,13 @@ local function upd(self)
             tblin(pts, pxy[k][1]-x0); tblin(pts, pxy[k][2]-y0)
         end
         self:__tail(pts)
---[[
-        self:__tail{
-            pxy[7][1]-x0, pxy[7][2]-y0,
-            pxy[4][1]-x0, pxy[4][2]-y0,
-            pxy[1][1]-x0, pxy[1][2]-y0,
-        }
-    --]]
+
+        -- self:__tail{
+        --     pxy[7][1]-x0, pxy[7][2]-y0,
+        --     pxy[4][1]-x0, pxy[4][2]-y0,
+        --     pxy[1][1]-x0, pxy[1][2]-y0,
+        -- }
+    
     end
 end
 
@@ -160,13 +161,13 @@ local function upd2(self)
             tblin(pts, pxy[k][1]-x0); tblin(pts, pxy[k][2]-y0)
         end
         self:__tail(pts)
---[[
-        self:__tail{
-            pxy[7][1]-x0, pxy[7][2]-y0,
-            pxy[4][1]-x0, pxy[4][2]-y0,
-            pxy[1][1]-x0, pxy[1][2]-y0,
-        }
-    --]]
+
+        -- self:__tail{
+        --     pxy[7][1]-x0, pxy[7][2]-y0,
+        --     pxy[4][1]-x0, pxy[4][2]-y0,
+        --     pxy[1][1]-x0, pxy[1][2]-y0,
+        -- }
+
     end
 end
 
@@ -185,7 +186,7 @@ function Shape:drawtail(width, opt)
     self.update = upd
     return self
 end
-
+--]]
 
 
 local function tmrf(self)
@@ -200,14 +201,14 @@ local function tmrf(self)
             tblin(pts, pxy[k][2]-y0)
         end
         self:__tail(pts)
-        --[[
-        self:__tail{
-            pxy[4][1]-x0, pxy[4][2]-y0,
-            pxy[3][1]-x0, pxy[3][2]-y0,
-            pxy[2][1]-x0, pxy[2][2]-y0,
-            pxy[1][1]-x0, pxy[1][2]-y0,
-        }
-        --]]
+        
+        -- self:__tail{
+        --     pxy[4][1]-x0, pxy[4][2]-y0,
+        --     pxy[3][1]-x0, pxy[3][2]-y0,
+        --     pxy[2][1]-x0, pxy[2][2]-y0,
+        --     pxy[1][1]-x0, pxy[1][2]-y0,
+        -- }
+        
     end
 end
 
@@ -228,7 +229,6 @@ local awgt = 0.85 -- 0.85 weight 꼬리 폭의 길이가 점점 줄어드는 비
 local hgt = 0 -- 꼬리가 시작되는 지점
 
 
-
 function Shape:__tail(pts)
     --self:fill(Color.rand())
     self:clear()
@@ -242,25 +242,25 @@ function Shape:__tail(pts)
     --local sc = self.__sopt.sc
     --local sca = sc.a -- backup original fillcolor alpha
     
-    local ww = w0 -- width weighted
+    -- local ww = w0 -- width weighted
 
     local xk_2, yk_2, q1xp, q1yp, q2xp, q2yp
 
     for k=1,npts,2 do
-        w0 = ww
-        ww = wwgt*w0
-        if k>1 then h=0 end
+        -- ww = wwgt*w0
+        -- if k>1 then h=0 end
         -- self.__sopt.fc=Color.rand()
 
         local x, y = pts[k]-xk_1, pts[k+1]-yk_1
         local r = sqrt(x*x+y*y)
 
-        local hr, w0r, wwr = h/r, w0/r, ww/r
+        -- local hr = h/r
+        local w0r = w0/r
+        -- local wwr = ww/r
 
-        --local qx, qy = hr*x + xp,  hr*y + yp
-        local qx, qy = hr*x,  hr*y 
+        -- local qx, qy = hr*x,  hr*y 
         local xw0r, yw0r = x*w0r, y*w0r
-        local xwwr, ywwr = x*wwr, y*wwr
+        -- local xwwr, ywwr = x*wwr, y*wwr
 
         local q1x = -yw0r -- qx - y*wr
         local q1y = xw0r -- qy + x*wr
@@ -268,17 +268,18 @@ function Shape:__tail(pts)
         local q2x = yw0r -- qx + y*wr 
         local q2y = -xw0r -- qy - x*wr
         
-        local rshp = Rawshape({q1x,q1y, q2x,q2y, x, y},self.__sopt)
-        rshp:addto(self):xy(xk_1,yk_1)
+        --local rshp = Rawshape({q1x,q1y, q2x,q2y, x, y},self.__sopt)
+        --rshp:addto(self):xy(xk_1,yk_1)
+        Rawshape({q1x,q1y, q2x,q2y, x, y},self.__sopt):addto(self):xy(xk_1,yk_1)
 
         if k>1 then
-            local rshp = Rawshape({
+            Rawshape({
                 --q2x+xk_1-q1xp, q2y+yk_1-q1yp,
                 pts[k-2]-q1xp, pts[k-1]-q1yp,
                 q1x+xk_1-q1xp, q1y+yk_1-q1yp,
                 0,0
-            },self.__sopt) --{sw=0, sc=Color.WHITE, fc=Color.RED})
-            rshp:addto(self):xy(q1xp, q1yp)
+            },self.__sopt):addto(self):xy(q1xp, q1yp)
+
             Rawshape({
                 --q1x+xk_1-q2xp, q1y+yk_1-q2yp,
                 pts[k-2]-q2xp, pts[k-1]-q2yp,
@@ -290,21 +291,13 @@ function Shape:__tail(pts)
         q1xp, q1yp = q1x+xk_1, q1y+yk_1
         q2xp, q2yp = q2x+xk_1, q2y+yk_1
 
-        -- xk_2, yk_2 = xk_1, xk_1
         xk_1, yk_1 = pts[k], pts[k+1]
-        --xp, yp = x, y
 
-        --fc.a = fc.a-0.2 -- 꼬리로 갈수록 점점 희미해진다.
+        w0 = w0*wwgt -- 꼬리로 갈수록 점점 폭이 좁아진다.
         fc.a = awgt*fc.a -- 꼬리로 갈수록 점점 희미해진다.
-        -- sc.a = sc.a-0.3 -- 꼬리로 갈수록 점점 희미해진다.
     end
 
     fc.a = fca -- 원래 알파값 복원
-    -- sc.a = sca -- 원래 알파값 복원
-    --self:add( Circle(self.__twdt*0.9):fill(self.__sopt.fc) )
-    --self:add( Circle(15):fill(Color.RED) )
-    --local c1 = Circle(15):fill(Color.SKY_BLUE)
-    --self:add(c1); c1:xy(pts[1],pts[2])
 end
 --]]
 --------------------------------------------------------------------------------
