@@ -166,6 +166,7 @@ require 'luasopia.core.23_getsheet'
 require 'luasopia.core.24_sprite'
 require 'luasopia.core.30_text'
 
+require 'luasopia.core.38_rawshape'
 require 'luasopia.core.39_shape'
 require 'luasopia.core.40_line'
 require 'luasopia.core.41_rect'
@@ -180,6 +181,7 @@ require 'luasopia.core.60_scene'
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
 require 'luasopia.lib.Path' -- 2020/06/13 added
+require 'luasopia.lib.Tail' -- 2020/06/18 added
 
 -- 2020/05/29 초기에 scene0를 생성한다
 -- baselayer에는 screen과 scene.__stg__ 만을 집어넣는다

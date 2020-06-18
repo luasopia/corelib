@@ -10,7 +10,7 @@ local getTxtMem
 -- local deviceWidth, deviceHeight, orientation
 -- local x0, y0, endx, endy -- added 2020/05/06
 
---  local noupd = false; Timer(1500, function() noupd=true end)
+--  local noupd = false; Timer(500, function() noupd=true end)
 
 local function update()
 	-- if noupd then return end
