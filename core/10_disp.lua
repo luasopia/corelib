@@ -21,10 +21,13 @@ Display = class()
 --------------------------------------------------------------------------------
 -- static members of this class ------------------------------------------------
 --------------------------------------------------------------------------------
-local dobjs = {} --Display.objs = {} 
+local dobjs = {} -- Display OBJectS
+local dtobj = {} -- Display Tagged OBJect
+local ndobjs = 0
 -------------------------------------------------------------------------------
 -- static public method
 -------------------------------------------------------------------------------
+--[[
 Display.updateAll = function()
     --(1) __upd() 호출, 그 내부에서 없앨 객체는 remove()를 호출해야한다
     --2020/03/10 이미 __del__()이 호출된 경우는 dobjs 테이블에서 삭제만 한다
@@ -49,8 +52,15 @@ Display.updateAll = function()
         end
     end
 end
+--]]
 
-Display.__getNumObjs = function() return #dobjs - _luasopia.dcdobj end
+Display.updateAll = function()
+    for _, obj in pairs(dobjs) do --for k = #dobjs, 1, -1 do local obj = dobjs[k]
+        obj:__upd()
+    end
+end
+
+Display.__getNumObjs = function() return ndobjs - _luasopia.dcdobj end
 
 -------------------------------------------------------------------------------
 -- public methods
@@ -71,7 +81,9 @@ function Display:init()
     self.__bd.__obj = self -- body에 원객체를 등록 (_Grp의 __del함수에서 사용)
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)
 
-    return tIn(dobjs, self) -- 꼬리호출
+    --return tIn(dobjs, self) -- 꼬리호출
+    dobjs[self] = self
+    ndobjs = ndobjs + 1
 end
 
 -- This function is called in every frames
@@ -94,7 +106,9 @@ function Display:__upd()
     if (self.__rma and self.__rma<=self.__tm)
         or self.__retupd
         or (self.removeif and self:removeif()) then
-        return self:remove()
+        --return self:remove()
+        --self.__rm = true
+        self:remove()
     end
     
     -- 아래가 더 간단해 보이지만 이경우 self.__rm이 이미 true인데 
@@ -128,15 +142,15 @@ function Display:stopupdate() self.__noupd = true; return self end
 --2020/03/02: group:add(child) returns child
 function Display:addto(g) g:add(self); return self end
 
-function Display:remove() self.__rm = true end
-function Display:isremoved() return self.__rm end
+--function Display:remove() self.__rm = true end
+function Display:isremoved() return self.__bd==nil end
 
 --2020/03/03
 function Display:tag(name) self.__tag = name; return self end
 
 function Display.collect(name)
     local r = {}
-    for _, obj in ipairs(dobjs) do
+    for _, obj in pairs(dobjs) do --for _, obj in ipairs(dobjs) do
         if obj.__bd ~=nil and obj.__tag == name then tIn(r, obj) end
     end
     return r
@@ -247,7 +261,7 @@ if _Gideros then -- gideros
     -- remove()함수가 호출된 즉시 내부 타이머가 실행되지 않는다
     --------------------------------------------------------------------------------
 
-    function Display:__del__()
+    function Display:remove()
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
             for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
@@ -257,6 +271,10 @@ if _Gideros then -- gideros
 
         self.__bd:removeFromParent()
         self.__bd = nil -- __del__()이 호출되었음을 표시한다.
+
+        --2020/06/20
+        dobjs[self] = nil
+        ndobjs = ndobjs - 1
     end
 
     -- 2020/06/08 : 추가 
@@ -357,7 +375,7 @@ elseif _Corona then -- if coronaSDK --------------------------------------
     
     function Display:visible(v) self.__bd.isVisible = v; return self end
 
-    function Display:__del__() --print('disp_del_') 
+    function Display:remove() --print('disp_del_') 
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
         -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 삭제됨
             for k=1,#self.__tmrs do self.__tmrs[k].__rm = true end
@@ -368,6 +386,10 @@ elseif _Corona then -- if coronaSDK --------------------------------------
 
         self.__bd:removeSelf()
         self.__bd = nil -- __del__()이 호출되었음을 표시하는 역할도 함
+
+        --2020/06/20 소멸자안에서 dobjs 테이블의 참조를 삭제한다
+        dobjs[self] = nil
+        ndobjs = ndobjs - 1
     end
 
     function Display:tint(r,g,b)
