@@ -54,8 +54,10 @@ Display.updateAll = function()
 end
 --]]
 
+--2020/06/20 dobj[self]=self로 저장하기 때문에 self:remove()안에서 바로 삭제 가능
+-- 따라서 updateAll()함수의 구조가 (위의 함수와 비교해서) 매우 간단해 짐.
 Display.updateAll = function()
-    for _, obj in pairs(dobjs) do --for k = #dobjs, 1, -1 do local obj = dobjs[k]
+    for _, obj in pairs(dobjs) do --for k = #dobjs,1,-1 do local obj = dobjs[k]
         obj:__upd()
     end
 end
@@ -145,15 +147,20 @@ function Display:addto(g) g:add(self); return self end
 --function Display:remove() self.__rm = true end
 function Display:isremoved() return self.__bd==nil end
 
---2020/03/03
-function Display:tag(name) self.__tag = name; return self end
+--2020/03/03 추가
+function Display:tag(name)
+    self._tag = name
+    -- 2020/06/21 tagged객체는 아래와 같이 dtobj에 별도로 (중복) 저장
+    if dtobj[name] == nil then dtobj[name] = {[self]=self}
+    else dtobj[name][self] = self  end
+    return self
+end
 
+--2020/06/21 dtobj에 tagged객체를 따로 저장하기 때문에
+-- collect()함수에서 매번 for반복문으로 tagged객체를 모을 필요가 없어졌음
+local emptytbl = {}
 function Display.collect(name)
-    local r = {}
-    for _, obj in pairs(dobjs) do --for _, obj in ipairs(dobjs) do
-        if obj.__bd ~=nil and obj.__tag == name then tIn(r, obj) end
-    end
-    return r
+    return dtobj[name] or emptytbl
 end
 
 ----------------------------------------------------------------------------------
@@ -272,9 +279,10 @@ if _Gideros then -- gideros
         self.__bd:removeFromParent()
         self.__bd = nil -- __del__()이 호출되었음을 표시한다.
 
-        --2020/06/20
+        --2020/06/20 dobj[self]=self로 저장하기 때문에 삭제가 아래에서 바로 가능해짐
         dobjs[self] = nil
         ndobjs = ndobjs - 1
+        if self._tag ~=nil then dtobj[self._tag][self] = nil end
     end
 
     -- 2020/06/08 : 추가 
@@ -390,6 +398,7 @@ elseif _Corona then -- if coronaSDK --------------------------------------
         --2020/06/20 소멸자안에서 dobjs 테이블의 참조를 삭제한다
         dobjs[self] = nil
         ndobjs = ndobjs - 1
+        if self._tag ~=nil then dtobj[self._tag][self] = nil end
     end
 
     function Display:tint(r,g,b)
