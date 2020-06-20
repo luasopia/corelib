@@ -37,6 +37,10 @@ if _Gideros then
       self.__pr = parent or scrn
       return Disp.init(self) --return self:superInit()
     end
+
+    -- 2020/06/20 arguemt ture means 'do not consider transformation'
+    function Image:getwidth() return self.__bd:getWidth(true) end
+    function Image:getheight() return self.__bd:getHeight(true) end
   
 elseif _Corona then
 
@@ -50,4 +54,8 @@ elseif _Corona then
     return Disp.init(self) --return self:superInit()
   end  
   
+  -- 2020/06/20
+  function Image:getwidth() return self.__bd.width end
+  function Image:getheight() return self.__bd.height end
+
 end

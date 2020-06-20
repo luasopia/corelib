@@ -80,11 +80,13 @@ if _Gideros then
         if self.touch then --printf('%s touch disabled',self.name)
             -- 현재 begin된 터치가 있다면 end를 발생시키고 __tch를 비운다
             -- self.__tch 본체는 그대로 남겨두어야 __upd()에서 __touchOn()이 안 호출됨
-            for k, t in pairs(self.__tch) do
-                self:touch{id=t.id, phase='end', x=t.x, y=t.y, dx=0, dy=0}
-                self.__tch[k] = nil
+            if self.__tch then
+                for k, t in pairs(self.__tch) do
+                    self:touch{id=t.id, phase='end', x=t.x, y=t.y, dx=0, dy=0}
+                    self.__tch[k] = nil
+                end
             end
-
+            
             -- 이벤트를 제거
             self.__bd:removeEventListener(Event.TOUCHES_BEGIN, tchBegin, self)
             self.__bd:removeEventListener(Event.TOUCHES_MOVE, tchMove, self)
@@ -171,7 +173,7 @@ elseif _Corona then
         if self.touch then
             self.__bd:addEventListener('touch', tch)
             self.__tch = {}
-            -- self.__noTch = false
+            --print('resume touch')
         end
 
         return self
@@ -182,8 +184,10 @@ elseif _Corona then
         if self.touch then
             -- 현재 begin된 터치가 있다면 강제로 end를 발생
             -- self.__tch는 그대로 남겨두어야 __upd()에서 __touchOn()이 안 호출됨
-            for k, t in pairs(self.__tch) do
-                self.__bd:dispatchEvent{name='touch',id=t.id, phase='ended', target=self.__bd, x=t.x, y=t.y}
+            if self.__tch then
+                for k, t in pairs(self.__tch) do
+                    self.__bd:dispatchEvent{name='touch',id=t.id, phase='ended', target=self.__bd, x=t.x, y=t.y}
+                end
             end
 
             self.__bd:removeEventListener('touch', tch)

@@ -1,7 +1,5 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
-
 print('core.dobj')
-
+--------------------------------------------------------------------------------
 local tIn = table.insert
 local tRm = table.remove
 local tmgapf = 1000/_luasopia.fps

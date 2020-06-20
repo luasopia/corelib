@@ -49,6 +49,8 @@ function Display:__playTr() -- tr == self.__trInfo
     tr.cnt = tr.cnt + 1
     if tr.cnt == tr.fcnt then
 
+        self:set(tr.dest)
+        --[[
         if tr.dest.x then self:x(tr.dest.x) end
         if tr.dest.y then self:y(tr.dest.y) end
         if tr.dest.r then self:r(tr.dest.r) end
@@ -56,13 +58,16 @@ function Display:__playTr() -- tr == self.__trInfo
         if tr.dest.xscale then self:xscale(tr.dest.xscale) end
         if tr.dest.yscale then self:yscale(tr.dest.yscale) end
         if tr.dest.alpha then self:alpha(tr.dest.alpha) end
+        --]]
+
 
         if tr.__to1 then
 
             self.__sh.__cnt = self.__sh.__cnt + 1
             if self.__sh.loops == self.__sh.__cnt then
-                if self.__sh.onend then self.__sh.onend(self) end
                 self.__tr = nil
+                if self.__sh.onend then self.__sh.onend(self) end
+                -- if self.__sh.next then self:shift(self.__sh.next) end
                 return
             end
             self.__tr = calcTr(self, tr.__to1)
@@ -72,8 +77,8 @@ function Display:__playTr() -- tr == self.__trInfo
             self.__tr = calcTr(self, tr.__to)
 
         else 
-            if self.__sh.onend then self.__sh.onend(self) end
             self.__tr = nil -- tr=nil로 하면 안된다.
+            if self.__sh.onend then self.__sh.onend(self) end
         end
     
     else
