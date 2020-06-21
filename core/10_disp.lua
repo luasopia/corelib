@@ -22,7 +22,8 @@ Display = class()
 -- static members of this class ------------------------------------------------
 --------------------------------------------------------------------------------
 local dobjs = {} -- Display OBJectS
-local dtobj = {} -- Display Tagged OBJect
+Display._dtobj = {}
+local dtobj = Display._dtobj -- Display Tagged OBJect
 local ndobjs = 0
 -------------------------------------------------------------------------------
 -- static public method
@@ -55,7 +56,7 @@ end
 --]]
 
 --2020/06/20 dobj[self]=self로 저장하기 때문에 self:remove()안에서 바로 삭제 가능
--- 따라서 updateAll()함수의 구조가 (위의 함수와 비교해서) 매우 간단해 짐.
+-- 따라서 updateAll()함수의 구조가 (위의 함수와 비교해서) 매우 간단해 짐
 Display.updateAll = function()
     for _, obj in pairs(dobjs) do --for k = #dobjs,1,-1 do local obj = dobjs[k]
         obj:__upd()

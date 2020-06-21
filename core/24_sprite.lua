@@ -233,7 +233,7 @@ elseif _Corona then
 
     -- initially, the animation is paused.
     function Sprite:init(sht, seq, parent)
-        -- self.__sq = seq.__sq or modSeq(seq, sht.__frames)
+        self.__sht = sht
         self.__sq = modseq(seq, sht.__frames)
         -- print_table(self.__sq)
         self.__bd = newS(sht.sheet, self.__sq)
@@ -262,3 +262,7 @@ elseif _Corona then
 
     Sprite.sequence = Sprite.seq
 end
+--------------------------------------------------------------------------------
+-- 2020/06/21
+function Sprite:getwidth() return self.__sht._w end
+function Sprite:getheight() return self.__sht._h end

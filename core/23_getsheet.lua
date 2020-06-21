@@ -21,7 +21,7 @@ if _Gideros then
     
     function getsheet(url, frameWidth, frameHeight, numFrames)
         local txts, frms = {}, {}
-        local sht = {__textures = txts, __frames = frms}
+        local sht = {__textures = txts, __frames = frms, _w = frameWidth, _h = frameHeight}
         local txt = Tnew(url)
         local w, h = txt:getWidth(), txt:getHeight()
         local nfrms = 0
@@ -45,7 +45,7 @@ elseif _Corona then
     
     function getsheet(url, frameWidth, frameHeight, numFrames)
         local args = {width=frameWidth, height=frameHeight, numFrames = numFrames}
-        local sht = {sheet = newIS(url, args), __frames={} }
+        local sht = {sheet = newIS(url, args), __frames={}, _w = frameWidth, _h = frameHeight}
         for k=1,numFrames do tIn(sht.__frames, k) end
         return sht
     end
