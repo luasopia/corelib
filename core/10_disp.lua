@@ -148,20 +148,9 @@ function Display:addto(g) g:add(self); return self end
 --function Display:remove() self.__rm = true end
 function Display:isremoved() return self.__bd==nil end
 
---2020/03/03 추가
-function Display:tag(name)
-    self._tag = name
-    -- 2020/06/21 tagged객체는 아래와 같이 dtobj에 별도로 (중복) 저장
-    if dtobj[name] == nil then dtobj[name] = {[self]=self}
-    else dtobj[name][self] = self  end
-    return self
-end
-
---2020/06/21 dtobj에 tagged객체를 따로 저장하기 때문에
--- collect()함수에서 매번 for반복문으로 tagged객체를 모을 필요가 없어졌음
-local emptytbl = {}
-function Display.collect(name)
-    return dtobj[name] or emptytbl
+--2020/06/12
+function Display:getparent()
+    return self.__pr
 end
 
 ----------------------------------------------------------------------------------
@@ -282,17 +271,13 @@ if _Gideros then -- gideros
 
         --2020/06/20 dobj[self]=self로 저장하기 때문에 삭제가 아래에서 바로 가능해짐
         dobjs[self] = nil
-        ndobjs = ndobjs - 1
         if self._tag ~=nil then dtobj[self._tag][self] = nil end
+        ndobjs = ndobjs - 1
     end
 
     -- 2020/06/08 : 추가 
     function Display:getglobalxy(x,y)
         return self.__bd:localToGlobal(x or 0,y or 0)
-    end
-    --2020/06/12
-    function Display:getparent()
-        return self.__pr
     end
 
 elseif _Corona then -- if coronaSDK --------------------------------------
