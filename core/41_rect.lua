@@ -6,6 +6,8 @@ local Color, WHITE = Color, Color.WHITE -- default color
 -- local r = Rect(width, height [, parent])
 --------------------------------------------------------------------------------
 Rect = class(Disp)
+-- _luasopia.Rawrect = class(Disp)
+-- local Rawrect = _luasopia.Rawrect
 --------------------------------------------------------------------------------
 if _Gideros then
     print('core.Rect(gid)')
@@ -57,25 +59,75 @@ if _Gideros then
         return self.__ancx, self.__ancy
     end
 
+    --2020/06/23
+    function Rect:width(n)
+        self.__width = n
+        return self:_rdrw()
+    end
+
+    function Rect:height(n)
+        self.__height = n
+        return self:_rdrw()
+    end
+
+    function Rect:_rdrw()
+        self.__bd:removeChildAt(1)
+        self.__sbd = self:__draw()
+        self.__bd:addChild(self.__sbd)
+        return self
+    end
+
 elseif _Corona then --##############################################################
 
     print('core.Rect(cor)')
-    local newRect = _Corona.display.newRect
+    local nRect = _Corona.display.newRect
+    local nGrp = _Corona.display.newGroup
     --------------------------------------------------------------------------------
-    function Rect:init(width, height, opt, parent)
-        opt = Disp.__optOrPr(self, opt, parent)
-        ----------------------------------------------------------------------
-        self.__bd = newRect(0, 0, width, height)
-        self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
+    function Rect:_drw()
+        local rect = nRect(0, 0, self._wdh, self._hgt)
+        rect.anchorX, rect.anchorY = self._apx, self._apy
 
         local sc = self.__strkc
         local fca = self.__fillca
-        self.__bd.strokeWidth = self.__strkw
-        self.__bd:setStrokeColor(sc.r, sc.g, sc.b)
-        self.__bd:setFillColor(fca.r, fca.g, fca.b, fca.a)
+        rect.strokeWidth = self.__strkw
+        rect:setStrokeColor(sc.r, sc.g, sc.b)
+        rect:setFillColor(fca.r, fca.g, fca.b, fca.a)
+         
+        return rect
+    end
+    --------------------------------------------------------------------------------
+    function Rect:init(width, height, opt, parent)
+        self._wdh = width
+        self._hgt = height
+        opt = Disp.__optOrPr(self, opt, parent)
+        self._apx, self._apy = 0.5, 0.5
+        ----------------------------------------------------------------------
+        self.__bd = nGrp()
+        self._sbd = self:_drw()
+        self.__bd:insert(self._sbd)
 
         return Disp.init(self) --return self:superInit()
     end  
+
+
+    function Rect:_rdrw()
+        -- print('redraw()')
+        self.__bd[1]:removeSelf()
+        self.__sbd = self:_drw()
+        self.__bd:insert(self.__sbd)
+        return self
+    end
+
+    function Rect:width(w)
+        self._wdh = w
+        return self:_rdrw()
+    end
+
+    function Rect:height(h)
+        self._hgt = h
+        return self:_rdrw()
+    end
+
 
 end
 
