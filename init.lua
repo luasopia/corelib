@@ -127,6 +127,7 @@ end
 -- 이렇게 해야 scene0나 screen 객체를 맨 처음 생성할 때 예외가 발생하지 않음
 _luasopia.stage = _luasopia.baselayer
 
+--------------------------------------------------------------------------------
 -- global constants -- 이 위치여야 한다.(위로 옮기면 안됨)
 math.randomseed(os.time())
 rand = math.random
@@ -162,11 +163,8 @@ require 'luasopia.core.31_getshape'
 require 'luasopia.core.32_shape'
 require 'luasopia.core.33_rect'
 
---require 'luasopia.core.38_rawshape'
---require 'luasopia.core.39_shape'
-
 require 'luasopia.core.40_line'
---require 'luasopia.core.41_rect'
+
 require 'luasopia.core.42_polygon'
 require 'luasopia.core.43_circle'
 require 'luasopia.core.44_star'
@@ -273,7 +271,7 @@ end
 global = {} 
 setmetatable(_G, {
     __newindex = function(_,n)
-        error('attempt to write to undeclared variable '..n, 2)
+        error('attempt to create GLOBAL variable/function '..n, 2)
     end,
 --[[ -- 읽는 것 까지 예외를 발생시킨다.
     __index = function(_,n)

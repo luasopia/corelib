@@ -35,7 +35,6 @@ if _Gideros then
         return s
     end
 
-
 elseif _Corona then
 
     local newPoly = _Corona.display.newPolygon
@@ -68,3 +67,11 @@ elseif _Corona then
 
 end -- elseif _Corona then
 --------------------------------------------------------------------------------
+-- 2020/06/13 Rawshape 클래스는 lib.Tail 클래스에서 사용됨
+local getshp = _luasopia.getshape
+local Disp = Display
+_luasopia.Rawshape = class(Disp)
+function _luasopia.Rawshape:init(pts, opt)
+    self.__bd = getshp(pts, opt)
+    return Disp.init(self)
+end

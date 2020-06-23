@@ -10,7 +10,7 @@ local WHITE = Color.WHITE -- default stroke/fill color
 local tblin = table.insert
 local tblrm = table.remove
 local unpack = unpack
---[[
+--[[ 
 local function tmrf(self)
 
     Display.xy(self, self._fx, self._fy)

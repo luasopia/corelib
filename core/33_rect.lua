@@ -5,19 +5,6 @@
 Rect = class(Shape)
 --------------------------------------------------------------------------------
 -- 2020/02/23 : anchor위치에 따라 네 꼭지점의 좌표를 결정
---[[
-function Rect:_mkpts()
-    local w, h = self._wdth, self._hght
-    local x1, y1 = w*-self._apx, h*-self._apy -- (x,y) of left-top
-    local x2, y2 = w*(1-self._apx), h*(1-self._apy) -- (x,y) of right-bottom
-    return {
-        x1, y1,
-        x2, y1,
-        x2, y2,
-        x1, y2,
-    }
-end
---]]
 local function mkpts(w, h, apx, apy)
     local x1, y1 = w*-apx, h*-apy -- (x,y) of left-top
     local x2, y2 = w*(1-apx), h*(1-apy) -- (x,y) of right-bottom
@@ -28,14 +15,7 @@ local function mkpts(w, h, apx, apy)
         x1, y2,
     }
 end
---[[
-function Rect:init(width, height, opt)
-    self._wdth, self._hght = width, height
-    self._apx, self._apy = 0.5, 0.5 -- AnchorPointX, AnchorPointY
-    self:_mkpts()
-    return Shape.init(self, self._pts, opt)
-end
---]]
+
 function Rect:init(width, height, opt)
     self._wdth, self._hght = width, height
     self._apx, self._apy = 0.5, 0.5 -- AnchorPointX, AnchorPointY
@@ -93,4 +73,3 @@ screen.orientation = ls.orientation
 -- added 2020/05/06
 screen.x0, screen.y0, screen.endx, screen.endy = x0, y0, endx, endy
 --##############################################################################
-
