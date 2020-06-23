@@ -162,10 +162,11 @@ require 'luasopia.core.30_text'
 require 'luasopia.core.31_getshape'
 require 'luasopia.core.32_shape'
 require 'luasopia.core.33_rect'
+require 'luasopia.core.34_polygon'
 
 require 'luasopia.core.40_line'
 
-require 'luasopia.core.42_polygon'
+-- require 'luasopia.core.42_polygon'
 require 'luasopia.core.43_circle'
 require 'luasopia.core.44_star'
 require 'luasopia.core.45_heart'
