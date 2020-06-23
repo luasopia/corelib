@@ -4,7 +4,7 @@ local scenes = {}
 local sceneIn = nil -- current (or scheduled to enter) scene in the screen
 local Group = Group
 local transitionTime = 300
-local x0, y0, endx, endy = screen.x0, screen.y0, screen.endx, screen.endy
+local x0, y0, endx, endy = _luasopia.x0, _luasopia.y0, _luasopia.endx, _luasopia.endy
 
 --------------------------------------------------------------------------------
 -- private static methods
@@ -48,8 +48,12 @@ Scene = class()
 
 function Scene:init()
     -- scene은 baselayer에 생성한다.
-    self.__stg__ = Group(_luasopia.baselayer):xy(0,0)
+    -- self.__stg__ = Group(_luasopia.baselayer):xy(0,0)
+    -- _luasopia.stage = self.__stg__
+    
+    self.__stg__ = Group():addto(_luasopia.baselayer):xy(0,0)
     _luasopia.stage = self.__stg__
+
 end    
 
 -- The following methods are optionally overridden.
@@ -133,3 +137,8 @@ function Scene.goto(url, effect, time)
     end
 
 end
+
+-- 2020/05/29 초기에 scene0를 생성한다
+-- baselayer에는 screen(Rect객체)과 scene.__stg__ 만을 집어넣는다
+_luasopia.scene0 = Scene()
+_luasopia.stage = _luasopia.scene0.__stg__

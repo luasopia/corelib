@@ -71,13 +71,6 @@ if gideros then -- in the case of using Gideros
     _luasopia.baselayer = {
         __bd = _Gideros.Sprite.new(),
         add = function(self, child) return self.__bd:addChild(child.__bd) end,
-        --[[
-        width = contentwidth, -- 1080,
-        height = contentheight, -- 1920,
-        centerx = contentwidth/2,
-        centery = contentheight/2,
-        fps = fps,
-        --]]
     }
     -- _Gideros.stage:addChild(screen.__bd)
     _Gideros.stage:addChild(_luasopia.baselayer.__bd)
@@ -123,19 +116,16 @@ elseif coronabaselib then -- in the case of using CoronaSDK
     _luasopia.baselayer = {
         __bd = _Corona.display.newGroup(),
         add = function(self, child) return self.__bd:insert(child.__bd) end,
-        --[[
-        width = contentwidth,
-        height = contentheight,
-        centerx = contentwidth/2,
-        centery = contentheight/2,
-        fps = fps,
-        --]]
     }
 
 
 elseif love then-- in the case of using LOVE2d
 
 end
+
+-- 2020/06/23 먼저 아래와 같이 저장한 후 나중에 scene0.__stg__로 교체
+-- 이렇게 해야 scene0나 screen 객체를 맨 처음 생성할 때 예외가 발생하지 않음
+_luasopia.stage = _luasopia.baselayer
 
 -- global constants -- 이 위치여야 한다.(위로 옮기면 안됨)
 math.randomseed(os.time())
@@ -168,27 +158,32 @@ require 'luasopia.core.23_getsheet'
 require 'luasopia.core.24_sprite'
 require 'luasopia.core.30_text'
 
-require 'luasopia.core.38_rawshape'
-require 'luasopia.core.39_shape'
+require 'luasopia.core.31_getshape'
+require 'luasopia.core.32_shape'
+require 'luasopia.core.33_rect'
+
+--require 'luasopia.core.38_rawshape'
+--require 'luasopia.core.39_shape'
+
 require 'luasopia.core.40_line'
-require 'luasopia.core.41_rect'
+--require 'luasopia.core.41_rect'
 require 'luasopia.core.42_polygon'
 require 'luasopia.core.43_circle'
 require 'luasopia.core.44_star'
 require 'luasopia.core.45_heart'
 require 'luasopia.core.50_sound'
 local enterFrameInit = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
-require 'luasopia.core.60_scene'
+
+require 'luasopia.core.60_scene'--이후에는 scene0.__stg__안에 객체가 생성
+
+
+
 
 require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
 require 'luasopia.lib.Path' -- 2020/06/13 added
 require 'luasopia.lib.Tail' -- 2020/06/18 added
 
--- 2020/05/29 초기에 scene0를 생성한다
--- baselayer에는 screen과 scene.__stg__ 만을 집어넣는다
-_luasopia.scene0 = Scene()
-_luasopia.stage = _luasopia.scene0.__stg__
 
 
 -- 반환되는 함수(init)가 아예 호출이 안될 때 logf를 빈함수로 설정

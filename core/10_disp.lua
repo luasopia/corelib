@@ -143,7 +143,10 @@ function Display:resumeupdate() self.__noupd = false; return self end
 function Display:stopupdate() self.__noupd = true; return self end
 
 --2020/03/02: group:add(child) returns child
-function Display:addto(g) g:add(self); return self end
+function Display:addto(g)
+    g:add(self)
+    return self
+end
 
 --function Display:remove() self.__rm = true end
 function Display:isremoved() return self.__bd==nil end

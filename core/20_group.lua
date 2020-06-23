@@ -115,7 +115,6 @@ elseif _Corona then
       end
       -- (2) 자신도 (부모그룹에서) 제거
       return Disp.remove(self) -- 부모의 소멸자 호출
-      -- self.__rm = true
     end
 
     function Group:stoptouch()
