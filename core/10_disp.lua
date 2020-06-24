@@ -91,7 +91,7 @@ end
 
 -- This function is called in every frames
 function Display:__upd()
-    if self.__rm then return end -- 반드시 필요함
+    --if self.__rm then return end -- 반드시 필요함
 
     if self.__tm then self.__tm = self.__tm + tmgapf end
     if self.__d then self:__playd() end  -- move{}
@@ -109,9 +109,7 @@ function Display:__upd()
     if (self.__rma and self.__rma<=self.__tm)
         or self.__retupd
         or (self.removeif and self:removeif()) then
-        --return self:remove()
-        --self.__rm = true
-        self:remove()
+        return self:remove()
     end
     
     -- 아래가 더 간단해 보이지만 이경우 self.__rm이 이미 true인데 
@@ -125,12 +123,13 @@ end
 -- function Display:setTimer(delay, func, loops, onEnd)
 function Display:timer(...)
     self.__tmrs = self.__tmrs or {}
-    local t = Timer(...)
-    t.__dobj = self -- callback함수의 첫 번째 인자로 넘긴다.
-    tIn(self.__tmrs, t)
+    local tmr = Timer(...)
+    tmr.__dobj = self -- callback함수의 첫 번째 인자로 넘긴다.
+    --tIn(self.__tmrs, t)
+    self.__tmrs[tmr] = tmr
     
     --return self
-    return t -- 2020/03/27 수정
+    return tmr -- 2020/03/27 수정
 end
 
 function Display:removeafter(ms)
@@ -264,7 +263,10 @@ if _Gideros then -- gideros
     function Display:remove()
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
-            for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
+            -- for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
+            for _, tmr in pairs(self.__tmrs) do
+                tmr:remove()
+            end
         end
         if self.__tch then self:stoptouch() end
         if self.__tap then self:stoptap() end
@@ -374,8 +376,9 @@ elseif _Corona then -- if coronaSDK --------------------------------------
 
     function Display:remove() --print('disp_del_') 
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
-        -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 삭제됨
-            for k=1,#self.__tmrs do self.__tmrs[k].__rm = true end
+            for _, tmr in pairs(self.__tmrs) do
+                tmr:remove()
+            end
         end
 
         if self.__tch then self:stoptouch() end

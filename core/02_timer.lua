@@ -1,4 +1,4 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
+-- 2020/06/24 리팩토링 : timers[tmr]=tmr 로 저장
 --------------------------------------------------------------------------------
 print('core.timer')
 
@@ -26,59 +26,61 @@ local tmgapf = 1000/_luasopia.fps
 --------------------------------------------------------------------------------
 Timer = class()
 -- private static member variable
-local timers = {} 
+local timers = {}
+local ntmrs = 0
 --------------------------------------------------------------------------------
 -- 타이머객체의 삭제는 이 함수안에서만 이루어지도록 해야 한다.(그래야 덜 꼬임)
 -- 외부에서는 remove() 만 호출하면 된다 
 -- public static method
 --------------------------------------------------------------------------------
 function Timer.updateAll()
-	for k = #timers,1,-1 do
-		local tmr = timers[k] 
-		if tmr.__rm then
-			tRm(timers, k)
-		else
-			tmr.__tm = tmr.__tm + tmgapf
-			local count = tmr.__tm/tmr.delay - 1
-			while  count > tmr.count do
-				tmr.count = tmr.count + 1
-				local isfinal = tmr.count == tmr.loops
-				local event = {
-					count = tmr.count,
-					isfinal = isfinal,
-				} --callback 함수에 넘겨질 파라메터
-				if tmr.__dobj then -- display object에 붙어있는 타이머의 경우
-					 tmr.__func(tmr.__dobj, event) --dobj를 먼저 넘김
-				else -- 일반적인 타이머인 경우
-					tmr.__func(event)
-				end
-				-- 정해진 횟수가 다 찬 경우
+	for _, tmr in pairs(timers) do --for k = #timers,1,-1 do local tmr = timers[k] 
+		tmr.__tm = tmr.__tm + tmgapf
+		local count = tmr.__tm/tmr.delay - 1
+		while  count > tmr.count do
+			tmr.count = tmr.count + 1
+			local isfinal = tmr.count == tmr.loops
+			local event = {
+				count = tmr.count,
+				isfinal = isfinal,
+			} --callback 함수에 넘겨질 파라메터
+			if tmr.__dobj then -- display object에 붙어있는 타이머의 경우
+				tmr.__fn(tmr.__dobj, event) --dobj를 (self로) 먼저 넘김
 				if isfinal then
-					if tmr.__onEnd then
-						if tmr.__dobj then -- display object에 붙어있는 타이머의 경우
-							tmr.__onEnd(tmr.__dobj, event) --dobj를 먼저 넘김
-					   else -- 일반적인 타이머인 경우
-						   tmr.__onEnd(event)
-					   end
+					if tmr.__onend then
+						tmr.__onend(tmr.__dobj, event) --dobj를 먼저 넘김
 					end
-					tmr.__rm = true -- Display:update() 내부에서 필요함
-					tRm(timers, k)
+					tmr.__dobj.__tmrs[tmr] = nil -- dobj안의 tmr객체도 삭제
+					timers[tmr] = nil
+					ntmrs = ntmrs - 1
+					break
+				end
+			else -- 일반적인 타이머인 경우
+				tmr.__fn(event)
+				if isfinal then
+					if tmr.__onend then
+						tmr.__onend(event)
+					end
+					timers[tmr] = nil
+					ntmrs = ntmrs - 1
 					break
 				end
 			end
-		end
+		end -- while  count > tmr.count do
 	end
 end
-
 ------------------------------------------------------------------------------------------
 -- 바로 삭제가 아니라 __rm 플래그를 true로 만들면 
 -- updateAll()함수에서 삭제하는 방식으로 해야 한다.
 ------------------------------------------------------------------------------------------
 function Timer.removeAll()
-	for k = 1,#timers do timers[k].__rm = true end
+	for _, tmr in pairs(timers) do
+		 timers[tmr] = nil
+	end
+	ntmrs = 0
 end
 
-function Timer.__getNumObjs() return #timers end
+function Timer.__getNumObjs() return ntmrs end
 ------------------------------------------------------------------------------------------
 -- 생성자
 ------------------------------------------------------------------------------------------
@@ -86,15 +88,17 @@ function Timer:init(delay, func, loops, onEnd)
 	-- local args = args or {}
 	self.delay = delay
 	self.loops = loops or 1
-	self.__func = func
+	self.__fn = func
 	self.__tm = 0
-	self.__onEnd = onEnd
+	self.__onend = onEnd
 	self.count = 0
-	tIn(timers, self)
+	timers[self]=self
+	ntmrs = ntmrs + 1
 end
 
 function Timer:pause() end
 function Timer:resume() end
 function Timer:remove()
-    self.__rm = true
+	timers[self] = nil
+	ntmrs = ntmrs - 1
 end
