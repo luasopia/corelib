@@ -5,7 +5,7 @@ local sceneIn = nil -- current (or scheduled to enter) scene in the screen
 local Group = Group
 local transitionTime = 300
 local x0, y0, endx, endy = _luasopia.x0, _luasopia.y0, _luasopia.endx, _luasopia.endy
-
+local baselayer = _luasopia.baselayer
 --------------------------------------------------------------------------------
 -- private static methods
 --------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ function Scene:init()
     -- self.__stg__ = Group(_luasopia.baselayer):xy(0,0)
     -- _luasopia.stage = self.__stg__
     
-    self.__stg__ = Group():addto(_luasopia.baselayer):xy(0,0)
+    self.__stg__ = Group():addto(baselayer):xy(0,0)
     _luasopia.stage = self.__stg__
 
 end    

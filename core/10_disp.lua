@@ -29,33 +29,6 @@ local dtobj = Display._dtobj -- Display Tagged OBJect
 -------------------------------------------------------------------------------
 -- static public method
 -------------------------------------------------------------------------------
---[[
-Display.updateAll = function()
-    --(1) __upd() 호출, 그 내부에서 없앨 객체는 remove()를 호출해야한다
-    --2020/03/10 이미 __del__()이 호출된 경우는 dobjs 테이블에서 삭제만 한다
-    -- child는 Group이 소멸될 때 이미 __del__()이 호출되었으므로
-    -- 이경우 dobjs에서만 삭제한다.
-    for k = #dobjs, 1, -1 do
-        local obj = dobjs[k]
-        if obj.__bd ~= nil then
-            obj:__upd()
-        else -- 이미 __del__()함수가 호출되어 내부가 삭제된 경우
-             -- dobjs 테이블에서만 삭제한다.
-            tRm(dobjs, k)
-        end
-    end
-
-    --(2) 제거될 객체로 표시된 것들을 (반드시 *역순*으로) 제거한다.
-    for k = #dobjs, 1, -1 do
-        local obj = dobjs[k]
-        if obj.__rm then
-            obj:__del__()
-            tRm(dobjs, k)
-        end
-    end
-end
---]]
-
 --2020/06/20 dobj[self]=self로 저장하기 때문에 self:remove()안에서 바로 삭제 가능
 -- 따라서 updateAll()함수의 구조가 (위의 함수와 비교해서) 매우 간단해 짐
 Display.updateAll = function()
@@ -64,8 +37,8 @@ Display.updateAll = function()
     end
 end
 
+-- debugmode 일 때만 사용되는 함수 (따라서 약간의 overhead는 상관없음)
 Display.__getNumObjs = function() 
-    --return ndobjs - _luasopia.dcdobj
     local cnt = 0
     for _, _ in pairs(dobjs) do
         cnt = cnt + 1
@@ -84,17 +57,14 @@ function Display:init()
         self.__pr = _luasopia.stage --baselayer
         self.__pr:add(self)
         self:xy(cx, cy)
-    else -- 2020/03/04 : 그룹에 넣는 경우는 원점으로 위치를 바꾼다
+    else -- 2020/03/04 : 그룹에 넣는 경우는 그 group의 원점에 놓는다.
         self.__pr:add(self)
     end
-    -- 2020/02/20 그룹에 넣는 경우는 원점(0,0)에 배치한다.
 
     self.__bd.__obj = self -- body에 원객체를 등록 (_Grp의 __del함수에서 사용)
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)
 
-    --return tIn(dobjs, self) -- 꼬리호출
     dobjs[self] = self
-    -- ndobjs = ndobjs + 1
 end
 
 -- This function is called in every frames
@@ -108,16 +78,16 @@ function Display:__upd()
     -- 2020/02/16 call user update if exists
     -- 2020/06/02 : update()가 true를 반환하면 삭제하도록 수정
     if self.update and not self.__noupd then
-        self.__retupd = self:update()
+        self._retupd = self:update()
     end 
     
     if self.touch and self.__tch==nil then self:__touchon() end
     if self.tap and self.__tap==nil then self:__tapon() end
 
     if (self.__rma and self.__rma<=self.__tm)
-        or self.__retupd
+        or self._retupd
         or (self.removeif and self:removeif()) then
-        return self:remove()
+        return self:remove() -- 2020/06/20 여기서 직접 (바로) 삭제
     end
     
     -- 아래가 더 간단해 보이지만 이경우 self.__rm이 이미 true인데 
@@ -133,9 +103,7 @@ function Display:timer(...)
     self.__tmrs = self.__tmrs or {}
     local tmr = Timer(...)
     tmr.__dobj = self -- callback함수의 첫 번째 인자로 넘긴다.
-    --tIn(self.__tmrs, t)
     self.__tmrs[tmr] = tmr
-    
     --return self
     return tmr -- 2020/03/27 수정
 end
@@ -279,7 +247,7 @@ if _Gideros then -- gideros
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
             -- for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
             for _, tmr in pairs(self.__tmrs) do
-                timers[tmr] = nil --tmr:remove()
+                timers[tmr] = nil --tmr:remove() 
             end
         end
         if self.__tch then self:stoptouch() end

@@ -71,16 +71,19 @@ end
 local function scrollx(self, dx)
     self._xspd = dx
     self._yspd = 0
+    return self
 end
 
 local function scrolly(self, dy)
     self._yspd = dy
-    self._xspd=0
+    self._xspd = 0
+    return self
 end
 
 local function scrollxy(self, dx, dy)
     self._xspd = dx
     self._yspd = dy
+    return self
 end
 
 --------------------------------------------------------------------------------
