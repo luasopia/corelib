@@ -5,6 +5,7 @@ local tRm = table.remove
 local tmgapf = 1000/_luasopia.fps
 local int = math.floor
 local Timer = Timer
+local timers = Timer._tmrs -- 2020/06/24:Disp:remove()함수 내에서 직접 접근
 --local baselayer = _luasopia.baselayer
 local cx, cy = _luasopia.centerx, _luasopia.centery
 --------------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Display = class()
 local dobjs = {} -- Display OBJectS
 Display._dtobj = {}
 local dtobj = Display._dtobj -- Display Tagged OBJect
-local ndobjs = 0
+-- local ndobjs = 0
 -------------------------------------------------------------------------------
 -- static public method
 -------------------------------------------------------------------------------
@@ -63,7 +64,14 @@ Display.updateAll = function()
     end
 end
 
-Display.__getNumObjs = function() return ndobjs - _luasopia.dcdobj end
+Display.__getNumObjs = function() 
+    --return ndobjs - _luasopia.dcdobj
+    local cnt = 0
+    for _, _ in pairs(dobjs) do
+        cnt = cnt + 1
+    end
+    return cnt - _luasopia.dcdobj - 1
+end
 
 -------------------------------------------------------------------------------
 -- public methods
@@ -86,7 +94,7 @@ function Display:init()
 
     --return tIn(dobjs, self) -- 꼬리호출
     dobjs[self] = self
-    ndobjs = ndobjs + 1
+    -- ndobjs = ndobjs + 1
 end
 
 -- This function is called in every frames
@@ -155,6 +163,12 @@ function Display:getparent()
     return self.__pr
 end
 
+--[[
+function Display:removetimer(tmr)
+    tmr:remove()
+    self.__tmrs[tmr] = nil
+end
+--]]
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 if _Gideros then -- gideros
@@ -265,7 +279,7 @@ if _Gideros then -- gideros
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
             -- for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
             for _, tmr in pairs(self.__tmrs) do
-                tmr:remove()
+                timers[tmr] = nil --tmr:remove()
             end
         end
         if self.__tch then self:stoptouch() end
@@ -277,7 +291,7 @@ if _Gideros then -- gideros
         --2020/06/20 dobj[self]=self로 저장하기 때문에 삭제가 아래에서 바로 가능해짐
         dobjs[self] = nil
         if self._tag ~=nil then dtobj[self._tag][self] = nil end
-        ndobjs = ndobjs - 1
+        -- ndobjs = ndobjs - 1
     end
 
     -- 2020/06/08 : 추가 
@@ -377,7 +391,7 @@ elseif _Corona then -- if coronaSDK --------------------------------------
     function Display:remove() --print('disp_del_') 
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
             for _, tmr in pairs(self.__tmrs) do
-                tmr:remove()
+                timers[tmr] = nil --tmr:remove()
             end
         end
 
@@ -389,7 +403,7 @@ elseif _Corona then -- if coronaSDK --------------------------------------
 
         --2020/06/20 소멸자안에서 dobjs 테이블의 참조를 삭제한다
         dobjs[self] = nil
-        ndobjs = ndobjs - 1
+        -- ndobjs = ndobjs - 1
         if self._tag ~=nil then dtobj[self._tag][self] = nil end
     end
 

@@ -171,7 +171,7 @@ require 'luasopia.core.43_circle'
 require 'luasopia.core.44_star'
 require 'luasopia.core.45_heart'
 require 'luasopia.core.50_sound'
-local enterFrameInit = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
+local enterframedbg = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
 
 require 'luasopia.core.60_scene'--이후에는 scene0.__stg__안에 객체가 생성
 
@@ -182,6 +182,7 @@ require 'luasopia.lib.blink'
 require 'luasopia.lib.wave'
 require 'luasopia.lib.Path' -- 2020/06/13 added
 require 'luasopia.lib.Tail' -- 2020/06/18 added
+require 'luasopia.lib.maketile' -- 2020/06/24 added
 
 
 
@@ -218,7 +219,9 @@ local init = function(args)
             _luasopia.debug = true
             require 'luasopia.core.98_logf'
             if args.loglines then logf.setNumLines(args.loglines) end
-            enterFrameInit()
+            
+            enterframedbg()
+
             -- 2020/05/30: added
             logf("(content)width:%d, height:%d", _luasopia.width, _luasopia.height)
             logf("(device)width:%d, height:%d", _luasopia.devicewidth, _luasopia.deviceheight)
