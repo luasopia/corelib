@@ -71,7 +71,6 @@ end
 function Display:__upd()
     --if self.__rm then return end -- 반드시 필요함
 
-    if self.__tm then self.__tm = self.__tm + tmgapf end
     if self.__d then self:__playd() end  -- move{}
     if self.__tr then self:__playTr() end -- shift{}
     
@@ -84,19 +83,11 @@ function Display:__upd()
     if self.touch and self.__tch==nil then self:__touchon() end
     if self.tap and self.__tap==nil then self:__tapon() end
 
-    if (self.__rma and self.__rma<=self.__tm)
-        or self._retupd
-        or (self.removeif and self:removeif()) then
+    if self._retupd or (self.removeif and self:removeif()) then
         return self:remove() -- 2020/06/20 여기서 직접 (바로) 삭제
     end
     
-    -- 아래가 더 간단해 보이지만 이경우 self.__rm이 이미 true인데 
-    -- 다시 false로 바뀌어버리는 경우도 존재
-    -- 2020/03/19:따라서 **절대로** 아래와 같이 하면 안됨
-    -- self.__rm = (self.__rma and self.__rma<=self.__tm) or
-    --         (self.removeif and self:removeif())
 end
-
 
 -- function Display:setTimer(delay, func, loops, onEnd)
 function Display:timer(...)
@@ -108,11 +99,12 @@ function Display:timer(...)
     return tmr -- 2020/03/27 수정
 end
 
+--2020/06/26 refactoring removeafter() method
 function Display:removeafter(ms)
-    self.__tm = 0
-    self.__rma = ms
+    self:timer(ms, self.remove)
     return self
 end
+
 
 function Display:resumeupdate() self.__noupd = false; return self end
 function Display:stopupdate() self.__noupd = true; return self end
@@ -131,12 +123,6 @@ function Display:getparent()
     return self.__pr
 end
 
---[[
-function Display:removetimer(tmr)
-    tmr:remove()
-    self.__tmrs[tmr] = nil
-end
---]]
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 if _Gideros then -- gideros
