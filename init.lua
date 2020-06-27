@@ -151,6 +151,7 @@ require 'luasopia.core.13_disp_touch'
 require 'luasopia.core.14_disp_tap'
 require 'luasopia.core.15_disp_shape'
 require 'luasopia.core.16_disp_coll'
+require 'luasopia.core.17_disp_fllw'
 
 require 'luasopia.core.20_group'
 require 'luasopia.core.21_image'

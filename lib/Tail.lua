@@ -33,6 +33,7 @@ end
 --]]
 local function tmrf(self)
     local fx, fy = self._fx, self._fy
+    print(fx,fy)
 
     Disp.xy(self, fx, fy)
     local pxys, njnt, njnt1 = self._pxys, self._njnt, self._njnt1
@@ -89,6 +90,7 @@ function Tail:init(width, opt)
     self._dwr = opt.decwidth or 1
     self._dar = opt.decalpha or 1
     self._yofs = opt.yoffset or 0
+    self._fx, self._fy = 0,0
 
     self:timer(self._rftm, tmrf, INF)
     
@@ -97,9 +99,17 @@ end
 
 -- (중요)갱신시간 사이에 위치가 변경되는 것을 막고 저장만 시켜둔다.
 -- 이렇게 하지 않으면 꼬리가 흔들린다.
+-- 2020/06/27 회전은 막는다
 function Tail:xy(x, y) self._fx, self._fy = x, y end
+function Tail:xyr(x, y, r) self._fx, self._fy = x, y end
 function Tail:x(x) self._fx = x end
 function Tail:y(x) self._fy = y end
+function Tail:r(r) end
+function Tail:rot(r) end
+
+function Tail:getxy() return self._fx, self._fy end
+function Tail:getx() return self._fx end
+function Tail:gety() return self._fy end
 
 
 function Tail:fill(color)

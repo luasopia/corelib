@@ -15,9 +15,9 @@ local tmgapf = 1000/_luasopia.fps
 -- 	if loops is INF, then func is called infinitely with time gap of delay
 --
 -- 	arguments given to func call : event = {
---	   	count = n, -- 호출된 횟수
+--	   	count = n, 	-- count of executing callback function
 --     	isfinal (bool) -- it is true if it is a final call
---     	obj -- timer object
+--     	time 		-- time elapsed
 -- 	}
 -- 	멤버변수 ------------------------------------------------------------------
 --     	tmr.delay
