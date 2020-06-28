@@ -33,7 +33,6 @@ end
 --]]
 local function tmrf(self)
     local fx, fy = self._fx, self._fy
-    print(fx,fy)
 
     Disp.xy(self, fx, fy)
     local pxys, njnt, njnt1 = self._pxys, self._njnt, self._njnt1
@@ -45,7 +44,7 @@ local function tmrf(self)
         np = njnt1
      end
 
-    if np>1 then -- 점이 두 개 이상이라면
+    if np>0 then -- 점이 한 개 이상이라면
         local pts = {}
         for k = np-1,1,-1 do
             tblin(pts, pxys[k][1]-fx)
@@ -56,6 +55,33 @@ local function tmrf(self)
 
     -- self:add( Circle(10):fill(Color.RED) )
 end
+
+local function tmrfrm(self)
+
+    -- 점점 희미해지는 효과
+    self:a(self:geta()-0.06) -- -0.065
+
+    -- 꼬리가 마지막 지점으로 점차 짧아지는 효과
+    local fx, fy = self._ffx, self._ffy
+
+    local pxys =  self._pxys
+    tblrm(pxys,1)
+    local np = #pxys
+
+    if np>0 then -- 점이 한 개 이상이라면
+        local pts = {}
+        for k = np-1,1,-1 do
+            tblin(pts, pxys[k][1]-fx)
+            tblin(pts, pxys[k][2]-fy)
+        end
+        self:_redraw(pts)
+    else
+        self:remove()
+    end
+
+
+end
+
 --------------------------------------------------------------------------------
 local Tail = class(Group)
 lib.Tail = Tail
@@ -86,26 +112,50 @@ function Tail:init(width, opt)
     self._wdt = width/2 -- 2로나눠야 실제 폭이 width가 된다
     self._njnt = opt.joints or 2
     self._njnt1 = self._njnt+1
-    self._rftm = opt.redrawtime or 50
+    -- self._rftm = opt.redrawtime or 35
+    local delay = opt.redrawtime or 34
     self._dwr = opt.decwidth or 1
     self._dar = opt.decalpha or 1
     self._yofs = opt.yoffset or 0
     self._fx, self._fy = 0,0
 
-    self:timer(self._rftm, tmrf, INF)
+    self._tltmr = self:timer(delay, tmrf, INF)
     
-    -- self._frmc=0; self.update = tmrf
+    -- self.update = tmrf
+end
+
+function Tail:removeout()
+    -- 마지막 위치를 저장한다.
+    self._ffx, self._ffy = self._fx, self._fy
+    self._tltmr.__fn = tmrfrm
+    -- self:da(-0.06) -- -0.065
 end
 
 -- (중요)갱신시간 사이에 위치가 변경되는 것을 막고 저장만 시켜둔다.
--- 이렇게 하지 않으면 꼬리가 흔들린다.
+-- 이렇게 하지 않으면 꼬리 전체가 흔들린다.
 -- 2020/06/27 회전은 막는다
-function Tail:xy(x, y) self._fx, self._fy = x, y end
-function Tail:xyr(x, y, r) self._fx, self._fy = x, y end
-function Tail:x(x) self._fx = x end
-function Tail:y(x) self._fy = y end
-function Tail:r(r) end
-function Tail:rot(r) end
+function Tail:xy(x, y)
+    self._fx, self._fy = x, y
+    return self
+end
+
+-- 2020/06/28 초기 발생지점이 정확해야 하는 경우 사용한다.
+function Tail:initxy(x, y)
+    self._pxys = {{x,y}}
+    self._fx, self._fy = x, y
+    return self
+end
+
+
+function Tail:xyr(x, y, r)
+    self._fx, self._fy = x, y
+    return self
+end
+
+function Tail:x(x) self._fx = x;return self end
+function Tail:y(x) self._fy = y;return self end
+function Tail:r(r) return self end
+function Tail:rot(r) return self end
 
 function Tail:getxy() return self._fx, self._fy end
 function Tail:getx() return self._fx end

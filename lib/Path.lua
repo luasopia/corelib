@@ -73,6 +73,7 @@ local function getdists(ptsr, opt)
             pts[k] = copy(ptsr[k])
             pts[k].len = dist(pts[k], pts[k-1])
         end
+
         if opt == 'flipv' then
             for k=1, #pts do
                 pts[k].x = 1-pts[k].x
@@ -82,13 +83,14 @@ local function getdists(ptsr, opt)
                 pts[k].y = 1-pts[k].y
             end
         end
+        
         return pts
     end
 end
 
 -- (정규값)0.5를 1초에 이동하는 속도를 기준속도(speed = 1)로 잡는다.
 -- 따라서 점간거리를 5로 나누면 60frame일 경우 프레임별로 위치할 점의 수가 계산된다.
-local distPerSec = 0.5 --700 -- 550
+local distPerSec = 0.5 -- 0.5
 
 -----------------------------------------------------------------------
 -- speed : speed rate (defaut:1.0)
@@ -132,8 +134,8 @@ function Path:init(ptsr, speed, opt)
         -- local interval = 1/(pts[k].len/divd)
         local interval = divd/pts[k].len
         for t = interval, 1, interval do
-            -- self[#self+1] = (t*t*t)*pta + (t*t)*ptb + t*ptc + ptd
-            self[#self+1] = add4( t*t*t,pta,  t*t,ptb,   t,ptc,  1,ptd )
+            local t2=t*t
+            self[#self+1] = add4( t*t2,pta,  t2,ptb,   t,ptc,  1,ptd )
         end
 
         self[#self+1] = pts[k]-- self[#self+1] = pts[k]:append{isGiven = true}
