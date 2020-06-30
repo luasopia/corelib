@@ -124,7 +124,7 @@ elseif _Corona then
         -- 2020/02/07 : gideros와 반대로 move/end/cancel 이벤트가
         -- dobj위에서만 일어난다. 아래 focus 관련 두 줄은 이 이벤트들이 began 이후에
         -- dobj밖에서도 발생하도록 하는 것이다.
-        if e.phase=='began' then print('tch begin')
+        if e.phase=='began' then --print('tch begin')
 
           _Corona.display.getCurrentStage():setFocus(self.__bd)
           self.__bd.isFocus = true
@@ -132,7 +132,7 @@ elseif _Corona then
           self:touch(self.__tch[e.id])
           return true
           
-        elseif e.phase == 'moved' then print('tch move event')
+        elseif e.phase == 'moved' then --print('tch move event')
 
           if self.__tch[e.id] == nil then return end
 
@@ -150,7 +150,7 @@ elseif _Corona then
             return true
           end
         
-        elseif e.phase == 'ended' then print('tch end')
+        elseif e.phase == 'ended' then --print('tch end')
 
           _Corona.display.getCurrentStage():setFocus(nil)
           self.__bd.isFocus = false

@@ -6,7 +6,7 @@ local dtobj = Disp._dtobj
 
 local function upd(self)
 
-    -- 타겟이 삭제되었다면 직전의 방향으로 계속 진행한다.
+    -- 타겟이 없거나 삭제되었다면 직전의 방향으로 계속 진행한다.
     if self._trgt == nil or self._trgt.__bd == nil then
         local x, y = self:getxy()
         self:xy(x+self._pdx*self._lspd, y+self._pdy*self._lspd)
@@ -58,6 +58,8 @@ local function newtrgt(self)
 
     -- 만약 위에서 trgt가 선택이 안 되었다면 첫 번째 것을 지정
     self._trgt = trgt1
+
+    -- 따라서 self._trgt==nil 일 수도 있다.
 end
 
 local function updtag(self)

@@ -153,6 +153,7 @@ require 'luasopia.core.15_disp_shape'
 require 'luasopia.core.16_disp_coll'
 require 'luasopia.core.17_disp_fllw'
 require 'luasopia.core.18_disp_path'
+require 'luasopia.core.19_disp_wave' -- 2020/07/01
 
 require 'luasopia.core.20_group'
 require 'luasopia.core.21_image'
@@ -165,13 +166,11 @@ require 'luasopia.core.31_getshape'
 require 'luasopia.core.32_shape'
 require 'luasopia.core.33_rect'
 require 'luasopia.core.34_polygon'
+require 'luasopia.core.35_circle'
+require 'luasopia.core.40_line' -- required refactoring
+require 'luasopia.core.44_star'-- required refactoring
+require 'luasopia.core.45_heart'-- required refactoring
 
-require 'luasopia.core.40_line'
-
--- require 'luasopia.core.42_polygon'
-require 'luasopia.core.43_circle'
-require 'luasopia.core.44_star'
-require 'luasopia.core.45_heart'
 require 'luasopia.core.50_sound'
 local enterframedbg = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
 
@@ -181,7 +180,6 @@ require 'luasopia.core.60_scene'--이후에는 scene0.__stg__안에 객체가 �
 
 
 require 'luasopia.lib.blink'
-require 'luasopia.lib.wave'
 require 'luasopia.lib.Path' -- 2020/06/13 added
 require 'luasopia.lib.Tail' -- 2020/06/18 added
 require 'luasopia.lib.maketile' -- 2020/06/24 added
@@ -192,6 +190,7 @@ require 'luasopia.lib.maketile' -- 2020/06/24 added
 logf = function(...) print(string.format(...)) end
 
 local init = function(args)
+    
     if args then 
 
         if _Gideros then

@@ -28,7 +28,8 @@ local leftmargin = 10
 logf = setmetatable({},{__call=function(_, str,...)
 
     local strf = string.format(str,...)
-    local txtobj = Text(strf,_luasopia.loglayer):anchor(0,0):xy(leftmargin,cursorY+yoff)
+    local txtobj = Text(strf,_luasopia.loglayer):anchor(0,0)
+    txtobj:xy(leftmargin, cursorY+yoff)
     tIn(txtobjs, txtobj)
     cursorY = cursorY + fontSize
     _luasopia.dcdobj = _luasopia.dcdobj + 1
