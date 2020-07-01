@@ -167,8 +167,9 @@ require 'luasopia.core.32_shape'
 require 'luasopia.core.33_rect'
 require 'luasopia.core.34_polygon'
 require 'luasopia.core.35_circle'
+require 'luasopia.core.36_star'
 require 'luasopia.core.40_line' -- required refactoring
-require 'luasopia.core.44_star'-- required refactoring
+-- require 'luasopia.core.44_star'-- required refactoring
 require 'luasopia.core.45_heart'-- required refactoring
 
 require 'luasopia.core.50_sound'

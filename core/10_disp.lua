@@ -86,14 +86,11 @@ function Display:__upd()
 
     --2020/07/01 내부갱신함수들이 있다면 호출
     for _, fn in pairs(self._iupds) do
-        if fn(self) then
-            return self:remove()
-            --break
-        end
+        if fn(self) then return self:remove() end
     end
 
     --2020/07/01 removeif함수는 삭제됨
-    -- if self._retupd or (self.removeif and self:removeif()) then
+    -- if self._retupd or (self.removeif and self:()) then
     --     return self:remove() -- 2020/06/20 여기서 직접 (바로) 삭제
     -- end
 end
@@ -137,9 +134,7 @@ end
 function Display:isremoved() return self.__bd==nil end
 
 --2020/06/12
-function Display:getparent()
-    return self.__pr
-end
+function Display:getparent() return self.__pr end
 
 --2020/07/01 : handle Internal UPDateS (_iupds)
 function Display:addupdate( fn )

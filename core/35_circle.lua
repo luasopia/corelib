@@ -9,7 +9,7 @@ local cos, sin, _2PI, floor = math.cos, math.sin, 2*math.pi, math.floor
 --    return cos(r)*x-sin(r)*y, sin(r)*x+cos(r)*y
 --end
 --------------------------------------------------------------------------------
--- 2020/02/23 : anchor위치에 따라 네 꼭지점의 좌표를 결정
+--[[
 -- 점의 개수를 반지름에 따라 결정 (4배수로 해야 anchorpt를 동일하게 잡을 수 있다)
 local function detnpts(r)
     if r<=30 then return 12
@@ -20,23 +20,44 @@ local function detnpts(r)
         return m+(4-m%4) -- 4의 배수로 만든다
     end
 end
+--]]
 
+local function rawmkpts(r)
+
+    -- 점의 갯수(4의 배수로)를 결정한다.
+    -- (4배수로 해야 anchor point를 gid/solar 둘 다 동일하게 잡을 수 있다)
+    local np
+    if r<=30 then np = 12
+    elseif r<=100 then np = 16
+    elseif r<=300 then np = 24
+    else
+        local m = floor(r/12.5)
+        np = m+(4-m%4) -- 4의 배수로 만든다
+    end
+
+    -- 점들의 좌표를 계산한다.
+    local rgap = _2PI/np
+    local pts = {0, -r}
+    for k=1, np-1 do
+        local rot = k*rgap
+        local xr, yr = sin(rot)*r, -cos(rot)*r
+        tblin(pts, xr) -- x
+        tblin(pts, yr) -- y
+    end
+
+    return pts, np
+end
+
+--------------------------------------------------------------------------------
 
 local mkpts
+
 if _Gideros then
 
     mkpts = function(r, ax, ay)
-        local np = detnpts(r)
-        local rgap = _2PI/np
-        local pts = {0, -r}
 
-        for k=1, np-1 do
-            local rot = k*rgap
-            local xr, yr = sin(rot)*r, -cos(rot)*r
-            tblin(pts, xr) -- x
-            tblin(pts, yr) -- y
-        end
-        
+        local pts, np = rawmkpts(r)
+
         -- anchor 위치에 따른 좌표값 보정
         -- local xof, yof = (xmax-xmin)*(0.5-ax), (ymax-ymin)*(0.5-ay)
         local xof, yof = 2*r*(0.5-ax), 2*r*(0.5-ay)
@@ -69,16 +90,9 @@ if _Gideros then
 elseif _Corona then
 
     mkpts = function(r, ax, ay)
-        local np = detnpts(r)
-        local rgap = _2PI/np
-        local pts = {0, -r}
 
-        for k=1, np-1 do
-            local rot = k*rgap
-            tblin(pts, sin(rot)*r) -- x
-            tblin(pts, -cos(rot)*r) -- y
-        end
-        
+        local pts, np = rawmkpts(r)
+
         -- anchor 위치에 따른 좌표값 보정
         local xof, yof = 2*r*(0.5-ax), 2*r*(0.5-ay)
         for k=1,2*np-1,2 do
@@ -96,6 +110,8 @@ elseif _Corona then
     end
 
 end
+
+--------------------------------------------------------------------------------
 
 function Circle:init(radius, opt)
     self._rds = radius

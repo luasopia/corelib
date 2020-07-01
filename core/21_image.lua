@@ -5,12 +5,12 @@ local Disp = Display
 -- 2020/02/04: Image클래스의 인수를 두 개로 간단히 (parent는 생략 가능)
 -- local p = Image(url [, parent])
 -- p:set{x=0, y=0, xscale=1, yscale=1, scale=1, alpha=1}
--- p:getX(), p:getY(), p:getXscale(), p:getYscale(), p:getScale(), p:getAlpha() 
--- p:setX(v), p:setY(v), p:setXscale(v), p:setYscale(v), p:setScale(v), p:setAlpha(v) 
--- p:removeIf = function(self) ... end
--- p:removeAfter(ms)
+-- p:getx()), p:gety(), p:getxscale(), p:getyscale(), p:getscale(), p:getalpha() 
+-- p:x(v), p:y(v), p:xscale(v), p:yscale(v), p:scale(v), p:alpha(v) 
+-- function p:update() ... end
 -- p:remove() -- 즉시 삭제
--- p:setSpeed{x=n, y=n, xscale=n, yscale=n, scale=n, alpha=n}
+-- p:removeafter(ms) -- ms 이후에 삭제
+-- p:move{dx=n, dy=n, dxscale=n, dyscale=n, dscale=n, dalpha=n}
 --------------------------------------------------------------------------------
 
 
