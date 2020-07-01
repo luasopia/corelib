@@ -11,6 +11,6 @@ end
 function Disp:path(path)
     self._frmc = 0 -- frame count
     self._pth = path
-    self.removeif = upd
+    self:addupdate( upd )
     return self
 end

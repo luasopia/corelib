@@ -65,28 +65,37 @@ function Display:init()
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)
 
     dobjs[self] = self
+    self._iupds = {}
 end
 
 -- This function is called in every frames
 function Display:__upd()
-    --if self.__rm then return end -- 반드시 필요함
+    
+    if self.touch and self.__tch==nil then self:__touchon() end
+    if self.tap and self.__tap==nil then self:__tapon() end
+
+    if self._noupd then return end -- self._noupd==true이면 갱신 금지------------
 
     if self.__d then self:__playd() end  -- move{}
     if self.__tr then self:__playTr() end -- shift{}
     
     -- 2020/02/16 call user update if exists
-    -- 2020/06/02 : update()가 true를 반환하면 삭제하도록 수정
-    if self.update and not self.__noupd then
-        self._retupd = self:update()
-    end 
-    
-    if self.touch and self.__tch==nil then self:__touchon() end
-    if self.tap and self.__tap==nil then self:__tapon() end
-
-    if self._retupd or (self.removeif and self:removeif()) then
-        return self:remove() -- 2020/06/20 여기서 직접 (바로) 삭제
+    if self.update and self:update() then
+        return self:remove() -- 꼬리호출로 즉시 종료
     end
-    
+
+    --2020/07/01 내부갱신함수들이 있다면 호출
+    for _, fn in pairs(self._iupds) do
+        if fn(self) then
+            return self:remove()
+            --break
+        end
+    end
+
+    --2020/07/01 removeif함수는 삭제됨
+    -- if self._retupd or (self.removeif and self:removeif()) then
+    --     return self:remove() -- 2020/06/20 여기서 직접 (바로) 삭제
+    -- end
 end
 
 -- function Display:setTimer(delay, func, loops, onEnd)
@@ -106,8 +115,17 @@ function Display:removeafter(ms)
 end
 
 
-function Display:resumeupdate() self.__noupd = false; return self end
-function Display:stopupdate() self.__noupd = true; return self end
+function Display:resumeupdate()
+    self._noupd = false
+    --타이머도 다시 시작해야 한다.(2020/07/01)
+    return self
+end
+
+function Display:stopupdate()
+    self._noupd = true
+    --타이머도 다 멈추어야 한다.(2020/07/01)
+    return self
+end
 
 --2020/03/02: group:add(child) returns child
 function Display:addto(g)
@@ -123,6 +141,10 @@ function Display:getparent()
     return self.__pr
 end
 
+--2020/07/01 : handle Internal UPDateS (_iupds)
+function Display:addupdate( fn )
+    self._iupds[fn] = fn
+end
 ----------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
 if _Gideros then -- gideros
