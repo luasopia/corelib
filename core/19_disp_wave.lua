@@ -34,6 +34,8 @@ function Disp:stopwave()
     end
 end
 
+Disp.stopxwave = Disp.stopwave
+Disp.stopywave = Disp.stopwave
 --------------------------------------------------------------------------------
 
 local function xwvtmr(self, e)
