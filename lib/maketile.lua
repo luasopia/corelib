@@ -22,7 +22,7 @@ local function update(self)
             end
         end 
 
-        -- 가장 끝쪽의 열만 맨 처음으로 옮긴다
+        -- 가장 끝쪽의 열(column)만 맨 처음으로 옮긴다
         if self._xspd > 0 then 
             if xmax > endx + w/2 then
                 maxcol.x = xmin - w

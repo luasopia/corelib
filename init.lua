@@ -154,6 +154,7 @@ require 'luasopia.core.16_disp_coll'
 require 'luasopia.core.17_disp_fllw'
 require 'luasopia.core.18_disp_path'
 require 'luasopia.core.19_disp_wave' -- 2020/07/01
+require 'luasopia.core.1a_disp_blink' -- 2020/07/01
 
 require 'luasopia.core.20_group'
 require 'luasopia.core.21_image'
@@ -180,7 +181,7 @@ require 'luasopia.core.60_scene'--이후에는 scene0.__stg__안에 객체가 �
 
 
 
-require 'luasopia.lib.blink'
+--require 'luasopia.lib.blink'
 require 'luasopia.lib.Path' -- 2020/06/13 added
 require 'luasopia.lib.Tail' -- 2020/06/18 added
 require 'luasopia.lib.maketile' -- 2020/06/24 added

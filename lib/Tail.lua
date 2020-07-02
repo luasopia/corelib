@@ -88,7 +88,7 @@ lib.Tail = Tail
 --[[----------------------------------------------------------------------------
 opt = {
     joints (default=2) : number of joints of tail
-    redraw (default=50) : redraw time interval
+    redrawtime (default=50) : redraw time interval
     decwidth (default=1) : decreasing rate of width
     decalpha (default=1) : decreasing rate of alpha
     yoffset
