@@ -17,9 +17,9 @@ local function mkpts(w, h, apx, apy)
 end
 
 function Rect:init(width, height, opt)
-    self._wdth, self._hght = width, height
+    self._wdth, self._hght = width, height or width
     self._apx, self._apy = 0.5, 0.5 -- AnchorPointX, AnchorPointY
-    return Shape.init(self, mkpts(width, height, 0.5, 0.5), opt)
+    return Shape.init(self, mkpts(width, self._hght, 0.5, 0.5), opt)
 end
 
 -- 2020/02/23 : Gideros의 경우 anchor()함수는 오버라이딩해야 한다.
@@ -45,6 +45,9 @@ function Rect:height(h)
     self:_re_pts1( mkpts(self._wdth, h, self._apx, self._apy) )
     return self
 end
+
+function Rect:getwidth() return self._wdth end
+function Rect:getheight() return self._hght end
 
 --##############################################################################
 --------------------------------------------------------------------------------

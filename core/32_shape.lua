@@ -58,7 +58,7 @@ function Shape:init(pts, opt)
         self._sopt = {
             sw = opt.strokewidth or 0,
             sc = opt.strokecolor or WHITE,
-            fc = opt.fillcolor or WHITE,
+            fc = opt.fill or opt.fillcolor or WHITE,
         }
     end
 
@@ -75,7 +75,7 @@ function Shape:_rdrw(pts, opt)
         local so = self._sopt
         so.sw = opt.strokewidth or so.sw
         so.sc = opt.strokecolor or so.sc
-        so.fc = opt.fillcolor or so.fc
+        so.fc = opt.fill or opt.fillcolor or so.fc
     end
     
     self:_clr()
@@ -94,7 +94,7 @@ function Shape:_re_opt1(pts, opt)
     local so = self._sopt
     so.sw = opt.strokewidth or so.sw
     so.sc = opt.strokecolor or so.sc
-    so.fc = opt.fillcolor or so.fc
+    so.fc = opt.fill or opt.fillcolor or so.fc
     
     self:_clr1()
     return self:_add( getshp(self._pts, so) )
@@ -109,7 +109,7 @@ function Shape:_rdrw1(pts, opt)
     local so = self._sopt
     so.sw = opt.strokewidth or so.sw
     so.sc = opt.strokecolor or so.sc
-    so.fc = opt.fillcolor or so.fc
+    so.fc = opt.fill or opt.fillcolor or so.fc
     --end
     
     self:_clr1()
@@ -121,6 +121,7 @@ function Shape:fill(color)
     self:_clr1()
     return self:_add( getshp(self._pts, self._sopt) )
 end
+Shape.fillcolor = Shape.fill
 
 function Shape:strokewidth(sw)
     self._sopt.sw = sw
