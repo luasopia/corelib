@@ -134,3 +134,8 @@ function Shape:strokecolor(color)
     self:_clr1()
     return self:_add( getshp(self._pts, self._sopt) )
 end
+
+function Shape:empty()
+    self._sopt.fc = Color(0,0,0,0)    self:_clr1()
+    return self:_add( getshp(self._pts, self._sopt) )
+end

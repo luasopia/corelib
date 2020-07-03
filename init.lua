@@ -140,43 +140,46 @@ ui = {} -- 2020/03/07 added
 _luasopia.dcdobj = 1 
 
 -- load luasopia core/library files
-require 'luasopia.core.01_class'
-require 'luasopia.core.02_timer'
-require 'luasopia.core.03_color'
-require 'luasopia.core.04_util'
-require 'luasopia.core.10_disp'
-require 'luasopia.core.11_disp_shift'
-require 'luasopia.core.12_disp_move'
-require 'luasopia.core.13_disp_touch'
-require 'luasopia.core.14_disp_tap'
-require 'luasopia.core.15_disp_shape'
-require 'luasopia.core.16_disp_coll'
-require 'luasopia.core.17_disp_fllw'
-require 'luasopia.core.18_disp_path'
-require 'luasopia.core.19_disp_wave' -- 2020/07/01
-require 'luasopia.core.1a_disp_blink' -- 2020/07/01
+require 'luasopia.core.a01_class'
+require 'luasopia.core.a02_timer'
+require 'luasopia.core.a03_util'
+require 'luasopia.core.a04_color'
 
-require 'luasopia.core.20_group'
-require 'luasopia.core.21_image'
-require 'luasopia.core.22_image_region'
-require 'luasopia.core.23_getsheet'
-require 'luasopia.core.24_sprite'
-require 'luasopia.core.30_text'
+require 'luasopia.core.b01_disp'
+require 'luasopia.core.b02_disp_move'
+require 'luasopia.core.b03_disp_shift'
+require 'luasopia.core.b04_disp_touch'
+require 'luasopia.core.b05_disp_tap'
+require 'luasopia.core.b06_disp_blink' -- 2020/07/01
+require 'luasopia.core.b07_disp_path'
+require 'luasopia.core.b08_disp_fllw'
+require 'luasopia.core.b09_disp_wave' -- 2020/07/01
+require 'luasopia.core.b10_disp_coll'
+require 'luasopia.core.b20_disp_shape' -- will be deprecated
 
-require 'luasopia.core.31_getshape'
-require 'luasopia.core.32_shape'
-require 'luasopia.core.33_rect'
-require 'luasopia.core.34_polygon'
-require 'luasopia.core.35_circle'
-require 'luasopia.core.36_star'
-require 'luasopia.core.40_line' -- required refactoring
--- require 'luasopia.core.44_star'-- required refactoring
-require 'luasopia.core.45_heart'-- required refactoring
+require 'luasopia.core.c01_group'
+require 'luasopia.core.c02_image'
+require 'luasopia.core.c03_image_region'
+require 'luasopia.core.c04_getsheet'
+require 'luasopia.core.c05_sprite'
 
-require 'luasopia.core.50_sound'
-local enterframedbg = require 'luasopia.core.99_enterframe' -- 맨 마지막에 로딩해야 한다
+require 'luasopia.core.d01_text'
 
-require 'luasopia.core.60_scene'--이후에는 scene0.__stg__안에 객체가 생성
+require 'luasopia.core.e01_getshape'
+require 'luasopia.core.e02_shape'
+require 'luasopia.core.e03_rect'
+require 'luasopia.core.e04_polygon'
+require 'luasopia.core.e05_circle'
+require 'luasopia.core.e06_star'
+require 'luasopia.core.e20_heart'-- required refactoring
+require 'luasopia.core.e30_line' -- required refactoring
+
+require 'luasopia.core.f01_sound'
+
+require 'luasopia.core.g01_scene'--이후에는 scene0.__stg__안에 객체가 생성
+
+local enterframedbg = require 'luasopia.core.z01_enterframe' -- 맨 마지막에 로딩해야 한다
+
 
 
 
@@ -220,7 +223,7 @@ local init = function(args)
         if args.debug then
 
             _luasopia.debug = true
-            require 'luasopia.core.98_logf'
+            require 'luasopia.core.d02_logf' -- redef logf() global function
             if args.loglines then logf.setNumLines(args.loglines) end
             
             enterframedbg()

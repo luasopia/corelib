@@ -12,8 +12,8 @@ end
 
 -- --[[
 function runutil(utilname) -- runutil
-    local url = string.format('luasopia.util.%s.%s',utilname, utilname)
-    global.u = function(str) return string.format('luasopia/util/%s/%s', utilname, str) end
+    local url = string.format('luasopiaUtil.%s.main',utilname, utilname)
+    global.u = function(str) return string.format('luasopiaUtil/%s/%s', utilname, str) end
     local util = require(url)
     global.u = nil
     return util
