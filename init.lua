@@ -167,16 +167,17 @@ require 'luasopia.core.d01_text'
 
 require 'luasopia.core.e01_getshape'
 require 'luasopia.core.e02_shape'
-require 'luasopia.core.e03_rect'
+require 'luasopia.core.e03_rect' -- screen 객체 생성
 require 'luasopia.core.e04_polygon'
 require 'luasopia.core.e05_circle'
 require 'luasopia.core.e06_star'
-require 'luasopia.core.e20_heart'-- required refactoring
+require 'luasopia.core.e07_heart'
+-- require 'luasopia.core.e20_heart'-- required refactoring
 require 'luasopia.core.e30_line' -- required refactoring
 
 require 'luasopia.core.f01_sound'
 
-require 'luasopia.core.g01_scene'--이후에는 scene0.__stg__안에 객체가 생성
+require 'luasopia.core.g01_scene'-- scene0생성(이후 scene0.__stg__에 객체가 생성)
 
 local enterframedbg = require 'luasopia.core.z01_enterframe' -- 맨 마지막에 로딩해야 한다
 

@@ -1,5 +1,3 @@
--- if not_required then return end -- This prevents auto-loading in Gideros
-
 print('core.sound')
 
 -- local tIn = table.insert
