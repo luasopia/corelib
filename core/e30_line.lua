@@ -22,20 +22,12 @@ if _Gideros then
         return s
     end
 
-    function Line:init(x1,y1,x2,y2,opt,parent)
+    function Line:init(x1,y1,x2,y2,opt)
         self.__pts = {x1, y1, x2, y2}
         local cx, cy = (x1+x2)/2, (y1+y2)/2
         self.__ptsm = {x1-cx, y1-cy, x2-cx, y2-cy}
 
-        -------------------------------------------------------------------------
-        --2020/03/04 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
+        opt = opt or {}
         -------------------------------------------------------------------------
         self.__strkw = opt.width or 1
         self.__strkc = opt.color or WHITE -- stroke color
@@ -77,20 +69,11 @@ elseif _Corona then --##################################################
         return s
     end
 
-    function Line:init(x1,y1,x2,y2,opt,parent)
+    function Line:init(x1,y1,x2,y2,opt)
         local cx, cy = (x1+x2)/2, (y1+y2)/2
         self.__cntr = {cx, cy}
         self.__ptsm = {x1-cx, y1-cy, x2-cx, y2-cy}
-
-        -------------------------------------------------------------------------
-        --2020/03/04 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
+        opt = opt or {}
         -------------------------------------------------------------------------
 
         self.__strkw = opt.width or 1

@@ -8,10 +8,8 @@ if _Gideros then
     print('core.group(gid)')  
     local Snew = _Gideros.Sprite.new
   --------------------------------------------------------------------------------
-    function Group:init(parent)
+    function Group:init()
       self.__bd = Snew()
-      self.__pr = parent
-      -- self.class = 'Group'
       return Disp.init(self)
     end
 
@@ -90,10 +88,8 @@ elseif _Corona then
   
     local Gnew = _Corona.display.newGroup
   --------------------------------------------------------------------------------
-    function Group:init(parent)
+    function Group:init()
       self.__bd = Gnew()
-      self.__pr = parent or scrn
-      -- self.class = 'Group'
       return Disp.init(self) --return self:superInit()
     end
 

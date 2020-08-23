@@ -7,7 +7,8 @@ local int = math.floor
 local Timer = Timer
 local timers = Timer._tmrs -- 2020/06/24:Disp:remove()함수 내에서 직접 접근
 --local baselayer = _luasopia.baselayer
-local cx, cy = _luasopia.centerx, _luasopia.centery
+local lsp = _luasopia
+local cx, cy = lsp.centerx, lsp.centery
 --------------------------------------------------------------------------------
 -- Display 객체 d에 대해서
 -- 읽기- d:getx(), d:gety(), d:getangle() d:getscale() img:getalpha()
@@ -52,14 +53,11 @@ end
 
 function Display:init()
 
-    -- 2020/02/16 screen에 add하는 경우 중앙에 위치시킨다.
-    if self.__pr == nil then
-        self.__pr = _luasopia.stage --baselayer
-        self.__pr:add(self)
-        self:xy(cx, cy)
-    else -- 2020/03/04 : 그룹에 넣는 경우는 그 group의 원점에 놓는다.
-        self.__pr:add(self)
-    end
+    -- 2020/02/16: screen에 add하는 경우 중앙에 위치시킨다.
+    -- 2020/08/23: parent가 파라메터로 넘어오지 않게금 수정
+    self.__pr = lsp.stage
+    self.__pr:add(self)
+    self:xy(cx, cy)
 
     self.__bd.__obj = self -- body에 원객체를 등록 (_Grp의 __del함수에서 사용)
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)

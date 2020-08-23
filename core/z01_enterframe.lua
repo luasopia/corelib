@@ -2,6 +2,7 @@ print('core.enterFrame')
 
 local Disp = Display
 local Tmr = Timer
+local lsp = _luasopia
 
 local update = function()
 	-- if noupd then return end
@@ -33,8 +34,8 @@ local function setdebug() -- 디버그모드일 경우 호출됨
 	local getTxtMem
 	local TCOLOR = Color.LIGHT_PINK
 	
-	mtxts[1] = Text("",_luasopia.loglayer):xy(screen.centerx, 30):color(TCOLOR)
-	mtxts[2] = Text("",_luasopia.loglayer):xy(screen.centerx, 90):color(TCOLOR)
+	mtxts[1] = Text(""):addto(lsp.loglayer):xy(screen.centerx, 30):color(TCOLOR)
+	mtxts[2] = Text(""):addto(lsp.loglayer):xy(screen.centerx, 90):color(TCOLOR)
 	-- mtxts[1] = Text("", _luasopia.loglayer):xy(screen.centerx, 30)--:color(255,182,193)
 	-- mtxts[2] = Text("", _luasopia.loglayer):xy(screen.centerx, 90)--:color(255,182,193)
 	_luasopia.dcdobj = _luasopia.dcdobj + 2

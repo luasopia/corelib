@@ -85,20 +85,9 @@ if _Gideros then -- for Gideros ###############################################
 	end
 
 	-- 2020/02/15: text의 size를 조절하기 위해 sprite안에 text를 삽입
-	function Text:init(str, opt, parent)
-
+	function Text:init(str, opt)
 		self.__str = str
-
-		-------------------------------------------------------------------------
-        --2020/03/15 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일 수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
-        -------------------------------------------------------------------------
+        opt = opt or {}
 
 		self.__fnm = opt.font or fontname0 -- font name(fnm)
 		self.__fsz = opt.fontsize or fontsize0 -- font size (fsz)
@@ -184,18 +173,9 @@ elseif _Corona then -- for Corona ########################################
 		return text
 	end
 
-	function Text:init(str, opt, parent)
+	function Text:init(str, opt)
 		self.__str = str
-		
-		-------------------------------------------------------------------------
-        --2020/03/15 두 번째 파라메터는 opt 혹은 parent(Group object)일 수 있다.
-        if isobj(opt, Group) then
-            self.__pr = opt
-            opt = {}
-        else -- opt가 nil일 수도 table일 수도 있음
-            self.__pr = parent
-            opt = opt or {}
-        end
+        opt = opt or {}
         -------------------------------------------------------------------------
 		self.__fnm = opt.font or fontname0 -- font name(fnm)
 		self.__fsz = opt.fontsize or fontsize0 -- font size (fsz)
@@ -206,7 +186,6 @@ elseif _Corona then -- for Corona ########################################
 		self.__bd:insert(self.__tbd)
 
 		return Disp.init(self)
-
 	end
 
 	

@@ -4,7 +4,7 @@ local timeGapFrame = 1000/_luasopia.fps
 local Disp = Display
 local DispUpd = Disp.__upd
 --[[---------------------------------------------------------------------------
--- local spr = Sprite(sheet, seq [, parent] )
+-- local spr = Sprite(sheet, seq)
 -- local sheet = makeSheet(url, frameWidth, frameHeight, numFrames)
 -- local seq = { time = ms, -- required
 --               frames ( = {1,2,3...,numFrames}) -- 선택: 생략시 모든 프레임 순서 테이블
@@ -97,14 +97,11 @@ if _Gideros then
         return self
     end
 
-    function Sprite:init(sht, seq, parent)
+    function Sprite:init(sht, seq)
         self.__bd = Snew()
         self.__sht = sht
         -- self.__seq = seq.__sq or modseq(seq, sht.__frames)
         self.__sq = modseq(seq, sht.__frames)
-        self.__pr = parent
-
-        -- _util.showt(self.__seq)
 
         self:seq(1) -- set 'default'(id==1) sequence
         return Disp.init(self)
@@ -232,12 +229,11 @@ elseif _Corona then
     end
 
     -- initially, the animation is paused.
-    function Sprite:init(sht, seq, parent)
+    function Sprite:init(sht, seq)
         self.__sht = sht
         self.__sq = modseq(seq, sht.__frames)
         -- print_table(self.__sq)
         self.__bd = newS(sht.sheet, self.__sq)
-        self.__pr = parent
         
         self:seq(self)
         return Disp.init(self)

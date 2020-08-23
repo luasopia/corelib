@@ -19,16 +19,10 @@ if _Gideros then
 	--============================================================================== 
 
 	--------------------------------------------------------------------------------
-	function ImageRegion:init(url, sht, parent)
-		-- if not sht.__txtureRegion then
-		-- 	sht.__textureRegion = TextureRegion_new(Texture_new(url), sht.x, sht.y, sht.width, sht.height)
-		-- end
-		-- self.__bd = Bitmap_new(sht.__textureRegion)
-
+	function ImageRegion:init(url, sht)
 		local tr = TextureRegion_new(Texture_new(url), sht.x, sht.y, sht.width, sht.height)
 		self.__bd = Bitmap_new(tr)
 		self.__bd:setAnchorPoint(0.5, 0.5)
-		self.__pr = parent
 		return Display.init(self)
 	end
 
@@ -37,7 +31,8 @@ elseif _Corona then
 	print('core.imageRegion(Cor)')
 	local newImgSht = _Corona.graphics.newImageSheet
 	local newImg =  _Corona.display.newImage
-	function ImageRegion:init(url, sht, parent)
+
+	function ImageRegion:init(url, sht)
 		local opt = {frames={[1]=sht}}
 		-- {
 		-- 	{x=sht.x, y=sht.y, width=sht.width, height=sht.height} -- frame 1
@@ -45,7 +40,6 @@ elseif _Corona then
 		local imgsht = newImgSht(url, opt)
 		self.__bd = newImg(imgsht, 1)
 		self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
-		self.__pr = parent
 		return Display.init(self)
 	end
 

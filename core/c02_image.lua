@@ -2,8 +2,8 @@
 
 local Disp = Display
 --------------------------------------------------------------------------------
--- 2020/02/04: Image클래스의 인수를 두 개로 간단히 (parent는 생략 가능)
--- local p = Image(url [, parent])
+-- 2020/08/23: Image클래스의 인수를 url 한 개만으로
+-- local p = Image(url)
 -- p:set{x=0, y=0, xscale=1, yscale=1, scale=1, alpha=1}
 -- p:getx()), p:gety(), p:getxscale(), p:getyscale(), p:getscale(), p:getalpha() 
 -- p:x(v), p:y(v), p:xscale(v), p:yscale(v), p:scale(v), p:alpha(v) 
@@ -12,7 +12,6 @@ local Disp = Display
 -- p:removeafter(ms) -- ms 이후에 삭제
 -- p:move{dx=n, dy=n, dxscale=n, dyscale=n, dscale=n, dalpha=n}
 --------------------------------------------------------------------------------
-
 
 
 --------------------------------------------------------------------------------
@@ -28,13 +27,10 @@ if _Gideros then
     -- texture를 외부에서 따로 만들어서 여러 객체에서 공유하는 거나
     -- 아래와 같이 개별 객체에서 별도로 만드는 경우나 textureMemory의 차이가 없다.
     --------------------------------------------------------------------------------
-    function Image:init(url, parent)
-      --setmetatable(self, {__index=Disp.__get__})
-
+    function Image:init(url)
       local texture = Tnew(url)
       self.__bd = Bnew(texture)
       self.__bd:setAnchorPoint(0.5, 0.5)
-      self.__pr = parent or scrn
       return Disp.init(self) --return self:superInit()
     end
 
@@ -50,7 +46,6 @@ elseif _Corona then
   function Image:init(url, parent)
     self.__bd = newImg(url)
     self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
-    self.__pr = parent
     return Disp.init(self) --return self:superInit()
   end  
   
