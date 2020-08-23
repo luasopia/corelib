@@ -3,7 +3,7 @@ print('core.class')
 --------------------------------------------------------------------------------
 -- magic methods : init(), update(), remove()
 --------------------------------------------------------------------------------
-local nilFn = function() end
+local nilfunc = function() end
 
 --[[
 --2020/02/15 class 테이블에 __id__ 필드를 추가하고
@@ -26,8 +26,8 @@ end
 -- function isnum(v) return type(v)=='number' end
 
 local Object = {
-	init = nilFn, -- default constructor
-	remove = nilFn, -- default destructor
+	init = nilfunc, -- default constructor
+	remove = nilfunc, -- default destructor
 	__id__ = 0,
 	
 	-- 2020/02/21 added
@@ -50,7 +50,7 @@ class = function(baseClass)
 	local super = baseClass or Object
 	clsid = clsid + 1 -- 생성되는 클래스마다 고유의 id를 갖게 한다.
 	------------------------------------------------------------------------
-	-- init=nilFn 으로 지정해서 만약 사용자 생성자가 없어도
+	-- init=nilfunc 으로 지정해서 만약 사용자 생성자가 없어도
 	-- super.init이 자동 실행되는 것을 막는다.
 	-- 따라서 자식클래스는 **반드시 생성자를 만들어야 한다**
 	-- 부모생성자를 호출하려면 자식생성자 안에서 parentCls.init(self,...) 라고 호출
@@ -62,7 +62,7 @@ class = function(baseClass)
 	-- 그리고 cls 에 직접 __add 와 같은 필드를 추가할 수 있다.
 	------------------------------------------------------------------------
 	local cls = {	
-		init = nilFn,
+		init = nilfunc,
 		__id__ = clsid, -- 클래스 고유번호, isobjof()메서드에서 사용된다
 	}
 	cls.__index = cls --(*2)
@@ -88,16 +88,16 @@ class = function(baseClass)
 	clsid = clsid + 1 -- 생성되는 클래스마다 고유의 id를 갖게 한다.
 	return setmetatable(
 		------------------------------------------------------------------------
-		-- init=nilFn 으로 지정해서 만약 사용자 생성자가 없어도
+		-- init=nilfunc 으로 지정해서 만약 사용자 생성자가 없어도
 		-- super.init이 자동 실행되는 것을 막는다.
 		-- 따라서 자식클래스는 **반드시 생성자를 만들어야 한다**
 		-- 부모생성자를 호출하려면 자식생성자 안에서 parentCls.init(self,...) 라고 호출
 		-- 단, remove 은 빈함수로 지정하지 않았으므로
 		-- 자식의 소멸자가 없으면 **부모의 소멸자가 자동호출된다.**
 		------------------------------------------------------------------------
-		--{init=nilFn, __super=super, superInit=__superInit, superDel=__superDel}, -- cls
+		--{init=nilfunc, __super=super, superInit=__superInit, superDel=__superDel}, -- cls
 		{	
-			init = nilFn,
+			init = nilfunc,
 			__id__ = clsid, -- 클래스 고유번호, isobjof()메서드에서 사용된다
 		}, -- cls (constructor의 cls로 넘겨짐)
 		------------------------------------------------------------------------
