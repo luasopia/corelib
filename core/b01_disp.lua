@@ -65,7 +65,7 @@ function Display:init()
     self.__al = self.__al or 1 -- only for coronaSDK (for storing alpha)
 
     dobjs[self] = self
-    self._iupds = {}
+    self._iupds = {} -- 내부 update함수들을 저장
 end
 
 -- This function is called in every frames
