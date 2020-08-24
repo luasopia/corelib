@@ -18,6 +18,7 @@ if _Gideros then
         return self
     end
 
+    -- 여러 개의 shape들을 모두 지운다
     function Shape:_clr()
         for k = self.__bd:getNumChildren(),1,-1 do
             self.__bd:getChildAt(k):removeFromParent() -- 모든 차일드 삭제
