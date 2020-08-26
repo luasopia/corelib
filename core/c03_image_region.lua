@@ -23,6 +23,7 @@ if _Gideros then
 		local tr = TextureRegion_new(Texture_new(url), sht.x, sht.y, sht.width, sht.height)
 		self.__bd = Bitmap_new(tr)
 		self.__bd:setAnchorPoint(0.5, 0.5)
+		self.__sht = sht
 		return Display.init(self)
 	end
 
@@ -40,7 +41,12 @@ elseif _Corona then
 		local imgsht = newImgSht(url, opt)
 		self.__bd = newImg(imgsht, 1)
 		self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
+		self.__sht = sht
 		return Display.init(self)
 	end
 
 end
+
+--2020/08/26:added
+function ImageRegion:getwidth() return __sht.width end
+function ImageRegion:getheight() return __sht.height end

@@ -8,7 +8,7 @@ if _Gideros then
     local function tapfn(self, event) --printf('%s touch begin', self.name)
         local t = event.touch
         if self.__bd:hitTestPoint(t.x, t.y) and self.tap~=nil then
-            self:tap{numTaps=1, x=t.x, y=t.y}
+            self:tap{id=t.id, x=t.x, y=t.y}
             event:stopPropagation()
         end
     end
@@ -48,18 +48,18 @@ elseif _Corona then ---------------------------------------
         -- 터치이벤트를 시작하자마자 종료시킨다.
         if e.phase=='began' then logf('tap begin')
             
-            -- 아래는 'end' 이벤트를 강제로 발생시키는데
-            --self.__bd:dispatchEvent{name='touch',id=e.id, phase='ended', target=self.__bd}
+            -- 아래는 'end' 이벤트를 발생시켜서 터치이벤트를 강제종료하려는 의도인데
+            -- self.__bd:dispatchEvent{name='touch',id=e.id, phase='ended', target=self.__bd}
             -- 이렇게 해도 어차피 터치를 뗄 때 'end'이벤트가 또 발생한다.
 
-            self:tap{id = e.id, phase="begin", x=e.x, y=e.y, dx=dx, dy=dy}
+            self:tap{id = e.id, x=e.x, y=e.y}
             return true
           
         elseif e.phase == 'ended' then logf('tap end')
             return true
   
         else -- if  event.phase =='cancelled' then
-          return true
+            return true
         end
   
     end

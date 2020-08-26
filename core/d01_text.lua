@@ -3,11 +3,6 @@
 print('core.text')
 local Color = Color
 --------------------------------------------------------------------------------
--- Text(str) 
--- Text(str, font)
--- Text(str, parent)
--- Text(str, font, parent)
---------------------------------------------------------------------------------
 -- 2020/02/15:아래테이블은 !luasophia/ttf 폴더의 public domain ttf 리스트
 -- 첫 번째 폰트가 defualt 폰트로 지정됨
 local ttfs = {'opensans', 'typed', 'cabin', 'cruft',}
@@ -148,6 +143,10 @@ if _Gideros then -- for Gideros ###############################################
 		return self
 	end
 
+	-- 2020/08/26 added
+	function Text:getwidth() return self.__tbd:getWidth() end
+	function Text:getheight() return self.__tbd:getHeight()	end
+
 
 elseif _Corona then -- for Corona ########################################
 
@@ -190,6 +189,7 @@ elseif _Corona then -- for Corona ########################################
 
 	
 	function Text:fontsize(v)
+		self.__fsz = v
 		self.__tbd.size = v
 		return self
 	end
@@ -225,4 +225,13 @@ elseif _Corona then -- for Corona ########################################
 		return self
 	end
 
+	-- 2020/08/26 added
+	function Text:getwidth() return self.__bd.width end
+	
+	-- 2020/08/26 Gideros와 같이 문자열 영역을 정확히 계산하기위해서
+	-- 높이를 아래와 같이 보정 (solar2d는 실제 높이보다 더 큰수를 반환함)
+	function Text:getheight() 
+		return self.__bd.height - 0.6*self.__fsz
+	end
+	
 end

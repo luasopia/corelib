@@ -155,7 +155,6 @@ require 'luasopia.core.b07_disp_path'
 require 'luasopia.core.b08_disp_fllw'
 require 'luasopia.core.b09_disp_wave' -- 2020/07/01
 require 'luasopia.core.b10_disp_coll'
-require 'luasopia.core.b20_disp_shape' -- will be deprecated
 
 require 'luasopia.core.c01_group'
 require 'luasopia.core.c02_image'
@@ -172,12 +171,15 @@ require 'luasopia.core.e04_polygon'
 require 'luasopia.core.e05_circle'
 require 'luasopia.core.e06_star'
 require 'luasopia.core.e07_heart'
--- require 'luasopia.core.e20_heart'-- required refactoring
+require 'luasopia.core.e08_square'
+
 require 'luasopia.core.e30_line' -- required refactoring
 
 require 'luasopia.core.f01_sound'
 
 require 'luasopia.core.g01_scene'-- scene0생성(이후 scene0.__stg__에 객체가 생성)
+
+require 'luasopia.core.h01_button'
 
 local enterframedbg = require 'luasopia.core.z01_enterframe' -- 맨 마지막에 로딩해야 한다
 
