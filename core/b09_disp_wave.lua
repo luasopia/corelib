@@ -25,6 +25,7 @@ function Disp:wave(prd, amp)
     self._prd = prd or prd0
     self._tmrwv = self:timer(tmgap, wvtmr, INF)
 
+    return self
 end
 
 function Disp:stopwave()
@@ -32,6 +33,7 @@ function Disp:stopwave()
         self._tmrwv:remove() -- dobj:removetimer(dobj._tmrwv)
         self:s(dobj._orgns)
     end
+    return self
 end
 
 Disp.stopxwave = Disp.stopwave

@@ -9,9 +9,11 @@ if _Gideros then
 
     function Color:init(r, g, b, a)
         if isobj(r, Color) then
+            self.__r, self.__g, self.__b = r.__r, r.__g, r.__b
             self.hex = r.hex
             self.a = g or r.a or 1 -- in this case, 2nd argument is an alpha
         else
+            self.__r, self.__g, self.__b = r, g, b
             self.hex = r*65536 + g*256 + b
             self.a = a or 1
         end
@@ -21,9 +23,11 @@ elseif _Corona then
     
     function Color:init(r, g, b, a)
         if isobj(r,Color) then
+            self.__r, self.__g, self.__b = r.__r, r.__g, r.__b
             self.r, self.g, self.b = r.r, r.g, r.b
             self.a = g or r.a or 1 -- in this case, 2nd argument is an alpha
         else
+            self.__r, self.__g, self.__b = r, g, b
             self.r, self.g, self.b = r/255, g/255, b/255
             -- self.rgb = {self.r, self.g, self.b}
             self.a = a or 1
@@ -37,6 +41,12 @@ local lowval = 40 -- 2020/06/12 added to prevent generating too dark color
 Color.rand = function()
     return Color(rand(lowval,255),rand(lowval,255),rand(lowval,255))
 end
+
+-- 2020/08/27: added 반전색을 만들어주는 함수
+Color.invert = function(c)
+    return Color(255-c.__r, 255-c.__g, 255-c.__b)
+end
+
 
 -- web color (refer to : https://en.wikipedia.org/wiki/Web_colors )
 

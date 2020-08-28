@@ -46,7 +46,7 @@ elseif _Corona then ---------------------------------------
   
         -- 2020/02/17 : 'ended'이벤트를 self.tap()호출하기 전 강제로 발생시켜
         -- 터치이벤트를 시작하자마자 종료시킨다.
-        if e.phase=='began' then logf('tap begin')
+        if e.phase=='began' then --logf('tap begin')
             
             -- 아래는 'end' 이벤트를 발생시켜서 터치이벤트를 강제종료하려는 의도인데
             -- self.__bd:dispatchEvent{name='touch',id=e.id, phase='ended', target=self.__bd}

@@ -10,13 +10,8 @@ local timers = Timer._tmrs -- 2020/06/24:Disp:remove()함수 내에서 직접 �
 local lsp = _luasopia
 local cx, cy = lsp.centerx, lsp.centery
 --------------------------------------------------------------------------------
--- Display 객체 d에 대해서
--- 읽기- d:getx(), d:gety(), d:getangle() d:getscale() img:getalpha()
--- 쓰기- d:set{}, d:setx(v), d:sety(v), d:setxy(x,y) d:setangle(v)
---       d:setscale(v) d:setalpha(v)
--- 메서드 - d:move{}, d:shift{}, d:removeAfter(n), d:remove()
---------------------------------------------------------------------------------
--- 2020/02/06: 모든 set...()함수는 self를 반환하도록 수정됨
+-- ref : https://luasopia.blogspot.com/p/blog-page.html
+-- 2020/02/06: 모든 set함수는 self를 반환하도록 수정됨
 -- 향후: 내부코드는 속도를 조금이라도 높이기 위해서 self.__bd객체를 직접 접근한다
 ----------------------------------------------------------------------------------
 Display = class()
@@ -138,7 +133,11 @@ function Display:getparent() return self.__pr end
 function Display:addupdate( fn )
     self._iupds[fn] = fn
 end
-----------------------------------------------------------------------------------
+
+--2020/08/27: added
+function Display:getwidth() return 0 end
+function Display:getheight() return 0 end
+
 ----------------------------------------------------------------------------------
 if _Gideros then -- gideros
     

@@ -179,8 +179,6 @@ require 'luasopia.core.f01_sound'
 
 require 'luasopia.core.g01_scene'-- scene0생성(이후 scene0.__stg__에 객체가 생성)
 
-require 'luasopia.core.h01_button'
-
 local enterframedbg = require 'luasopia.core.z01_enterframe' -- 맨 마지막에 로딩해야 한다
 
 
@@ -192,6 +190,8 @@ require 'luasopia.lib.Path' -- 2020/06/13 added
 require 'luasopia.lib.Tail' -- 2020/06/18 added
 require 'luasopia.lib.maketile' -- 2020/06/24 added
 
+require 'luasopia.widget.button'
+require 'luasopia.widget.progressbar'
 
 
 -- 반환되는 함수(init)가 아예 호출이 안될 때 logf를 빈함수로 설정
