@@ -235,3 +235,6 @@ elseif _Corona then -- for Corona ########################################
 	end
 	
 end
+
+	--2020/11/06 added
+	function Text:getstring() return self.__str end
