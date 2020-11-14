@@ -12,11 +12,15 @@ local fontcolor0 = Color.WHITE
 Button = class(Group)
 --[[
     local btn = Button('string', func [, opt])
+    
+    1st parameters of func() is button object
+    2nd paramter of func() is event argument (table)
+
     opt = {
         fontsize = n, -- default:50
+        fontcolor = color, -- default: Color.WHITE
         margin = n, -- in pixel, default:fontzise*0.5
         fill = color, -- default: Color.GREEN
-        fontcolor = color, -- default: Color.WHITE
         strokecolor = color, -- default: Color.LIGHT_GREEN
         strokewidth = n,  -- in pixel, default:fontzise*0.15
         effect = bool, -- default:true  'shrink', 'expand', 'invertcolor'
@@ -50,7 +54,6 @@ function Button:init(str, func, opt)
 
     self.rect:width(self.__wdth):height(self.__hght)
     
-    --self.rect.tap = func
     function self.rect:tap(e)
         if effect then
             self.__btn:s(0.97) -- 0.97
@@ -74,16 +77,33 @@ function Button:init(str, func, opt)
         --]]
         func(self.__btn, e)
     end
-
-    print(self.text:getwidth())
-    print(self.text:getheight())
-
 end
 
 function Button:getwidth() return self.__wdth end
 function Button:getheight() return self.__hght end
 
+-- 2020/11/14: (text)string, fontsize가 변경되면 rect사이즈도 조절한다.
+local function resizerect(self)
+    local margin = self.text:getfontsize()*marginratio
+    self.__wdth = self.text:getwidth()  + 2*margin
+    self.__hght = self.text:getheight() + 2*margin
+    print(self.__wdth, self.__hght)
+    self.rect:width(self.__wdth)
+    self.rect:height(self.__hght)
+    return self
+end
+
+function Button:fontsize(n)
+    self.text:fontsize(n)
+    return resizerect(self)
+end
+
+function Button:string(str)
+    self.text:string(str)
+    return resizerect(self)
+end
+
+function Button:fontcolor(c) self.text:color(c); return self end
 function Button:fill(c) self.rect:fill(c); return self end
 function Button:strokecolor(c) self.rect:strokecolor(c); return self end
 function Button:strokewidth(w) self.rect:strokewidth(w); return self end
-function Button:fontcolor(c) self.text:color(c); return self end

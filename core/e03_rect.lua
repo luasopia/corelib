@@ -36,12 +36,12 @@ end
 --2020/06/23
 function Rect:width(w)
     self._wdth = w
-    self:_re_pts1( mkpts(w,self._hght,self._apx, self._apy) )
+    self:_re_pts1( mkpts(w, self._hght, self._apx, self._apy) )
     return self
 end
 
 function Rect:height(h)
-    self._hght = g
+    self._hght = h
     self:_re_pts1( mkpts(self._wdth, h, self._apx, self._apy) )
     return self
 end

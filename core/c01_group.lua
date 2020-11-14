@@ -5,7 +5,7 @@ local Disp = Display
 Group = class(Disp)
 --------------------------------------------------------------------------------
 if _Gideros then
-    print('core.group(gid)')  
+    --print('core.group(gid)')
     local Snew = _Gideros.Sprite.new
   --------------------------------------------------------------------------------
     function Group:init()
