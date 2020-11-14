@@ -103,6 +103,9 @@ function Button:string(str)
     return resizerect(self)
 end
 
+function Button:getstring() return self.text:getstring() end
+function Button:getfontsize() return self.text:getfontsize() end
+
 function Button:fontcolor(c) self.text:color(c); return self end
 function Button:fill(c) self.rect:fill(c); return self end
 function Button:strokecolor(c) self.rect:strokecolor(c); return self end
