@@ -87,7 +87,7 @@ local function resizerect(self)
     local margin = self.text:getfontsize()*marginratio
     self.__wdth = self.text:getwidth()  + 2*margin
     self.__hght = self.text:getheight() + 2*margin
-    print(self.__wdth, self.__hght)
+    --print(self.__wdth, self.__hght)
     self.rect:width(self.__wdth)
     self.rect:height(self.__hght)
     return self

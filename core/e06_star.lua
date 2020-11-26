@@ -71,7 +71,8 @@ if _Gideros then
 elseif _Corona then
 
     mkpts = function(r, np, irt, ax, ay)
-        local rgap,rirt = PI/np, r*irt
+
+        local rgap, rirt = PI/np, r*irt
         local pts = {0, -r}
 
         local rot, xr, yr
@@ -124,18 +125,18 @@ end
 --2020/06/23
 function Star:radius(r)
     self._rds = r
-    self:_re_pts1( mkpts(r,self._npts, self._apx, self._apy) )
+    self:_re_pts1( mkpts(r, self._npts, self._irt, self._apx, self._apy) )
     return self
 end
 
 function Star:points(n)
     self._npts = n
-    self:_re_pts1( mkpts(self._rds, n, self._apx, self._apy) )
+    self:_re_pts1( mkpts(self._rds, n, self._irt, self._apx, self._apy) )
     return self
 end
 
 function Star:ratio(rt)
     self._irt = rt
-    self:_re_pts1( mkpts(self._rds, n, self._apx, self._apy) )
+    self:_re_pts1( mkpts(self._rds, self._npts, rt, self._apx, self._apy) )
     return self
 end
