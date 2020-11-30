@@ -54,6 +54,10 @@ function Button:init(str, func, opt)
 
     self.rect:width(self.__wdth):height(self.__hght)
     
+
+    --(3) register tap() method
+    self.rect.__func = func -- **rect의 필드**로 저장해야한다
+
     function self.rect:tap(e)
         if effect then
             self.__btn:s(0.97) -- 0.97
@@ -75,7 +79,11 @@ function Button:init(str, func, opt)
             self.__btn.text:color(fontcolor)
         end)
         --]]
-        func(self.__btn, e)
+        
+        -- 등록된 함수가 없을 수도(nil일 수도) 있다.
+        if self.__btn ~= nil then
+            self.__func(self.__btn, e)
+        end
     end
 end
 
@@ -98,8 +106,8 @@ function Button:fontsize(n)
     return resizerect(self)
 end
 
-function Button:string(str)
-    self.text:string(str)
+function Button:string(...)
+    self.text:string(...)
     return resizerect(self)
 end
 
@@ -110,3 +118,6 @@ function Button:fontcolor(c) self.text:color(c); return self end
 function Button:fill(c) self.rect:fill(c); return self end
 function Button:strokecolor(c) self.rect:strokecolor(c); return self end
 function Button:strokewidth(w) self.rect:strokewidth(w); return self end
+
+--2020/11/28: 콜백함수를 등록한다
+function Button:onclick(func) self.rect.__func = func; return self end
