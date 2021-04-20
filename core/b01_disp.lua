@@ -243,6 +243,7 @@ if _Gideros then -- gideros
     --------------------------------------------------------------------------------
 
     function Display:remove()
+
         if self.__tmrs then -- 이 시점에서는 이미 죽은 timer도 있을 것
             -- __rm == true/false 상관없이 무조건 true로 만들면 살아있는 것만 죽을 것임
             -- for k=1,#self.__tmrs do self.__tmrs[k]:remove() end
@@ -250,6 +251,7 @@ if _Gideros then -- gideros
                 timers[tmr] = nil --tmr:remove() 
             end
         end
+
         if self.__tch then self:stoptouch() end
         if self.__tap then self:stoptap() end
 
@@ -261,6 +263,7 @@ if _Gideros then -- gideros
         if self._tag ~=nil then dtobj[self._tag][self] = nil end
         -- ndobjs = ndobjs - 1
     end
+
 
     -- 2020/06/08 : 추가 
     function Display:getglobalxy(x,y)
@@ -384,4 +387,25 @@ elseif _Corona then -- if coronaSDK --------------------------------------
     function Display:getglobalxy(x,y)
         return self.__bd:localToContent(x or 0,y or 0)
     end
+
 end
+
+--2021/04/20 :set메서드 추가
+Display.setx = Display.x
+Display.sety = Display.y
+Display.setxy = Display.xy
+
+Display.setrot = Display.rot
+Display.setr = Display.rot
+Display.setxyr = Display.xyr
+
+Display.setscale = Display.scale
+Display.sets = Display.scale
+
+Display.setalpha = Display.alpha
+Display.seta = Display.alpha
+
+Display.setxscale = Display.xscale
+Display.setyscale = Display.yscale
+
+Display.setanchor = Display.anchor

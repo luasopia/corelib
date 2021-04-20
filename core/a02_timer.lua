@@ -8,7 +8,7 @@ local tmgapf = 1000/_luasopia.fps
 --------------------------------------------------------------------------------
 -- 2020/01/15 times that is NOT use intrinsic (Gideros/Corona) Timer class
 --
--- tmr = Timer(delay, func [,loops] [,onend])
+-- tmr = Timer(delay, func [,loops [,onend]])
 --
 -- 	After delay [ms], func (function) is called.
 -- 	loops (default=1) designates the total number of calling func
@@ -109,8 +109,8 @@ function Timer:init(delay, func, loops, onEnd)
 	timers[self]=self
 end
 
-function Timer:pause() end
-function Timer:resume() end
+-- function Timer:pause() end
+-- function Timer:resume() end
 
 function Timer:remove()
 	if self.__dobj then -- display object에 붙어있는 타이머의 경우
