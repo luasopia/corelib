@@ -138,8 +138,9 @@ end
 function Display:getwidth() return 0 end
 function Display:getheight() return 0 end
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 if _Gideros then -- gideros
+ --------------------------------------------------------------------------------
     
     --[[
     Display.__get__ = function(o, k)
@@ -158,28 +159,19 @@ if _Gideros then -- gideros
 
     function Display:getx() return self.__bd:getX() end
     function Display:gety() return self.__bd:getY() end
-
     function Display:getrot() return self.__bd:getRotation() end -- 2020/02/26
-    Display.getr = Display.getrot
-
     -- gideros getScale() returns xScale, yScale, and zScale
     function Display:getscale() local sx, sy = self.__bd:getScale(); return (sx+sy)/2 end
-    Display.gets = Display.getscale
-
     function Display:getalpha() return self.__bd:getAlpha() end
-    Display.geta = Display.getalpha
-
     function Display:getxscale() return self.__bd:getScaleX() end
-    Display.getxs = Display.getxscale
-
     function Display:getyscale() return self.__bd:getScaleY() end
-    Display.getys = Display.getyscale
 
     function Display:getxy() return self.__bd:getPosition() end
     
     function Display:getvisible() return self.__bd:isVisible() end
 
     function Display:getanchor() return self.__bd:getAnchorPoint() end
+    
     -- 2020/02/04 args.init을 제거하고 대신 set()메서드 추가
     function Display:set(arg)
         local t
@@ -193,40 +185,33 @@ if _Gideros then -- gideros
         return self
     end
 
-    -- 2020/02/18 ---------------------------------------------------------
-    function Display:x(v) self.__bd:setX(v); return self end
-    function Display:y(v) self.__bd:setY(v); return self end
-    
-    function Display:rot(v) self.__bd:setRotation(v); return self end -- 2020/02/26
-    Display.r = Display.rot
-
+    -- 2020/02/18 (Gideros), 2021/04/22 다시 정리 ##################################
+    function Display:setx(v) self.__bd:setX(v); return self end
+    function Display:sety(v) self.__bd:setY(v); return self end
+    function Display:setrot(v) self.__bd:setRotation(v); return self end -- 2020/02/26
     -- gid는 setScale(v)라고 하면 scaleX, scaleY(, scaleZ)에 모두 v가 적용됨
-    function Display:scale(x,y) self.__bd:setScale(x,y); return self end
-    Display.s = Display.scale
-    
+    function Display:setscale(x,y) self.__bd:setScale(x,y); return self end
     -- 2020/04/26 : alpha가 1초과면 1로 세팅한다.
-    -- gideros는 1이 넘으면 이미지가 열화(?)되고, 코로나는 자동으로 1로 세팅됨
-    function Display:alpha(v) self.__bd:setAlpha(v>1 and 1 or v);return self end
-    Display.a = Display.alpha
-
+    -- Gideros는 1이 넘으면 이미지가 열화(?)되고, Solar2D는 자동으로 1로 세팅됨
+    function Display:setalpha(v) self.__bd:setAlpha(v>1 and 1 or v);return self end
     -- xs()와 ys()는 x and scale, y and scale로 혼동할 여지가 있어서 삭제
-    function Display:xscale(v) self.__bd:setScaleX(v); return self end
-    Display.xs = Display.xscale
+    function Display:setxscale(v) self.__bd:setScaleX(v); return self end
+    function Display:setyscale(v) self.__bd:setScaleY(v); return self end
+    
+    function Display:setxy(x,y) self.__bd:setPosition(x,y); return self end
 
-    function Display:yscale(v) self.__bd:setScaleY(v); return self end
-    Display.ys = Display.yscale
-
-    function Display:xy(x,y) self.__bd:setPosition(x,y); return self end
-    function Display:xyr(x,y,r)
+    function Display:setxyrot(x,y,r)
         self.__bd:setPosition(x,y)
         self.__bd:setRotation(r);
         return self
     end
     
-    function Display:anchor(x,y) self.__bd:setAnchorPoint(x,y);return self end
+    function Display:setanchor(x,y)
+        self.__bd:setAnchorPoint(x,y)
+        return self
+    end
     
     -- 2020/02/18 ---------------------------------------------------------
-    
     
     function Display:hide() self.__bd:setVisible(false); return self end
     function Display:show() self.__bd:setVisible(true); return self end
@@ -236,6 +221,7 @@ if _Gideros then -- gideros
         self.__bd:setColorTransform(r, g ,b)
     return self
     end
+    
     --------------------------------------------------------------------------------
     -- 2020/01/17, 2020/01/27
     -- 외부에서 객체를 제거하려면 소멸자 remove()메서드를 호출한다.
@@ -270,27 +256,16 @@ if _Gideros then -- gideros
         return self.__bd:localToGlobal(x or 0,y or 0)
     end
 
-elseif _Corona then -- if coronaSDK --------------------------------------
-
+--------------------------------------------------------------------------------    
+elseif _Corona then -- if coronaSDK
+--------------------------------------------------------------------------------    
     function Display:getx() return self.__bd.x end
     function Display:gety() return self.__bd.y end
-
     function Display:getrot() return self.__bd.rotation end -- 2020/02/26
-    Display.getr = Display.getrot
-    -- function Display:getr() return self.__bd.rotation end -- 2020/02/25
-
-    -- function Display:getangle() return self.__bd.rotation end
     function Display:getscale() return (self.__bd.xScale + self.__bd.yScale)/2 end
-    Display.gets = Display.getscale
-
     function Display:getalpha() return self.__al end
-    Display.geta = Display.getalpha
-
     function Display:getxscale() return self.__bd.xScale end
-    Display.getxs = Display.getxscale
-
     function Display:getyscale() return self.__bd.yScale end
-    Display.getys = Display.getyscale
     
     function Display:getxy() return self.__bd.x, self.__bd.y end
     
@@ -323,34 +298,26 @@ elseif _Corona then -- if coronaSDK --------------------------------------
         return self
     end
 
-    -- 2020/02/18 시험메서드--------------------------------------------------
-    function Display:x(v) self.__bd.x = v; return self end
-    function Display:y(v) self.__bd.y = v; return self end
-    
-    function Display:rot(v) self.__bd.rotation = v; return self end -- 2020/02/25
-    Display.r = Display.rot
-    
+    -- 2020/02/18 시험메서드 (Solar2D)###############################################
+    function Display:setx(v) self.__bd.x = v; return self end
+    function Display:sety(v) self.__bd.y = v; return self end
+    function Display:setrot(v) self.__bd.rotation = v; return self end -- 2020/02/25
     -- setscale(v) 는 xScale, yScale 둘 다 v로;setscale(x,y)는 xScale=x, yScale=y로 설정
-    function Display:scale(x, y) self.__bd.xScale, self.__bd.yScale = x, y or x;return self end
-    Display.s = Display.scale
+    function Display:setscale(x, y) self.__bd.xScale, self.__bd.yScale = x, y or x;return self end
+    function Display:setalpha(v) self.__al, self.__bd.alpha = v,v; return self end
+    function Display:setxscale(v) self.__bd.xScale = v; return self end
+    function Display:setyscale(v) self.__bd.yScale = v; return self end
     
-    function Display:alpha(v) self.__al, self.__bd.alpha = v,v; return self end
-    Display.a = Display.alpha
-    
-    function Display:xscale(v) self.__bd.xScale = v; return self end
-    Display.xs = Display.xscale
-
-    function Display:yscale(v) self.__bd.yScale = v; return self end
-    Display.ys = Display.yscale
-
-    function Display:xy(x,y) self.__bd.x, self.__bd.y = x, y; return self end
-    function Display:xyr(x,y,r) 
-        self.__bd.x, self.__bd.y = x, y
-        self.__bd.rotation = r
+    function Display:setxy(x,y) self.__bd.x, self.__bd.y = x, y; return self end
+    function Display:setxyrot(x,y,r) 
+        self.__bd.x, self.__bd.y, self.__bd.rotation = x, y, r
         return self
     end
 
-    function Display:anchor(x,y) self.__bd.anchorX, self.__bd.anchorY = x,y;return self end
+    function Display:setanchor(x,y)
+        self.__bd.anchorX, self.__bd.anchorY = x,y
+        return self
+    end
 
     -- 2020/02/18 ---------------------------------------------------------
 
@@ -388,24 +355,25 @@ elseif _Corona then -- if coronaSDK --------------------------------------
         return self.__bd:localToContent(x or 0,y or 0)
     end
 
-end
+end -- elseif _Corona then
 
---2021/04/20 :set메서드 추가
-Display.setx = Display.x
-Display.sety = Display.y
-Display.setxy = Display.xy
+--2021/04/21 :set메서드의 축명함수들 추가
+-- (set method는 혼동을 줄이기위해서 아래의 두 개만으로 정리)
+Display.x = Display.setx
+Display.y = Display.sety
+Display.r = Display.setrot
+Display.s = Display.setscale
+Display.a = Display.setalpha
+Display.xs = Display.setxscale
+Display.ys = Display.setyscale
 
-Display.setrot = Display.rot
-Display.setr = Display.rot
-Display.setxyr = Display.xyr
+Display.xy = Display.setxy
+Display.xyr = Display.setxyrot
+Display.anchor = Display.setanchor
 
-Display.setscale = Display.scale
-Display.sets = Display.scale
-
-Display.setalpha = Display.alpha
-Display.seta = Display.alpha
-
-Display.setxscale = Display.xscale
-Display.setyscale = Display.yscale
-
-Display.setanchor = Display.anchor
+--2021/04/22 :get메서드의 축명함수들 추가
+Display.getr = Display.getrot
+Display.gets = Display.getscale
+Display.geta = Display.getalpha
+Display.getxs = Display.getxscale
+Display.getys = Display.getyscale
