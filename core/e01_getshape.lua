@@ -13,7 +13,7 @@ opt = {
 The anchor point is located at the origin (0,0) point.
 ------------------------------------------------------------------------------]]
 if _Gideros then
-
+--------------------------------------------------------------------------------
     local GShape = _Gideros.Shape
 
     function _luasopia.getshape(pts, opt)
@@ -35,7 +35,9 @@ if _Gideros then
         return s
     end
 
+--------------------------------------------------------------------------------
 elseif _Corona then
+--------------------------------------------------------------------------------
 
     local newPoly = _Corona.display.newPolygon
     
@@ -68,8 +70,9 @@ elseif _Corona then
 end -- elseif _Corona then
 
 --------------------------------------------------------------------------------
-
 -- 2020/06/13 Rawshape 클래스는 lib.Tail 클래스에서 사용됨
+--------------------------------------------------------------------------------
+
 local getshp = _luasopia.getshape
 local Disp = Display
 

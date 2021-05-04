@@ -140,3 +140,8 @@ function Shape:empty()
     self._sopt.fc = Color(0,0,0,0)    self:_clr1()
     return self:_add( getshp(self._pts, self._sopt) )
 end
+
+-- 2021/05/04에 추가
+
+Shape.setstrokewidth = Shape.strokewidth
+Shape.setstrokecolor = Shape.strokecolor
