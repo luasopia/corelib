@@ -4,7 +4,7 @@
 --------------------------------------------------------------------------------
 Rect = class(Shape)
 --------------------------------------------------------------------------------
--- 2020/02/23 : anchor위치에 따라 네 꼭지점의 좌표를 결정
+--[[
 local function mkpts(w, h, apx, apy)
     local x1, y1 = w*-apx, h*-apy -- (x,y) of left-top
     local x2, y2 = w*(1-apx), h*(1-apy) -- (x,y) of right-bottom
@@ -15,17 +15,36 @@ local function mkpts(w, h, apx, apy)
         x1, y2,
     }
 end
+--]]
+
+-- 2020/02/23 : anchor위치에 따라 네 꼭지점의 좌표를 결정
+function Rect:__mkpts__()
+
+    local w,h,apx,apy = self.__w__, self.__h__, self._apx, self._apy
+    local x1, y1 = w*-apx, h*-apy -- (x,y) of left-top
+    local x2, y2 = w*(1-apx), h*(1-apy) -- (x,y) of right-bottom
+
+    -- 2021/05/08 : 충돌판정에 필요한 점의 정보 저장
+    -- x,y,1/변의길이(단위벡터를 계산하는 데 필요함)
+    self.__cpts__ = {x1,y1,1/h,  x2, y1,1/w,  x2, y2,1/h,   x1,y2,1/w }
+
+    return {x1, y1,  x2, y1,  x2, y2,  x1, y2 }
+end
 
 function Rect:init(width, height, opt)
-    self._wdth, self._hght = width, height or width
+
+    self.__w__, self.__h__ = width, height or width
     self._apx, self._apy = 0.5, 0.5 -- AnchorPointX, AnchorPointY
-    return Shape.init(self, mkpts(width, self._hght, 0.5, 0.5), opt)
+    --return Shape.init(self, mkpts(width, self.__h__, 0.5, 0.5), opt)
+    return Shape.init(self, self:__mkpts__(), opt)
+
 end
 
 -- 2020/02/23 : Gideros의 경우 anchor()함수는 오버라이딩해야 한다.
 function Rect:anchor(ax, ay)
     self._apx, self._apy = ax, ay
-    self:_re_pts1(mkpts(self._wdth, self._hght, ax, ay))
+    --self:_re_pts1(mkpts(self.__w__, self.__h__, ax, ay))
+    self:_re_pts1(self:__mkpts__())
     return self
 end
 
@@ -34,20 +53,24 @@ function Rect:getanchor()
 end
 
 --2020/06/23
-function Rect:width(w)
-    self._wdth = w
-    self:_re_pts1( mkpts(w, self._hght, self._apx, self._apy) )
-    return self
+function Rect:setwidth(w)
+    self.__w__ = w
+    --return self:_re_pts1( mkpts(w, self.__h__, self._apx, self._apy) )
+    return self:_re_pts1(self:__mkpts__())
 end
 
-function Rect:height(h)
-    self._hght = h
-    self:_re_pts1( mkpts(self._wdth, h, self._apx, self._apy) )
-    return self
+function Rect:setheight(h)
+    self.__h__ = h
+    --return self:_re_pts1( mkpts(self.__w__, h, self._apx, self._apy) )
+    return self:_re_pts1( self:__mkpts__() )
 end
 
-function Rect:getwidth() return self._wdth end
-function Rect:getheight() return self._hght end
+function Rect:getwidth() return self.__w__ end
+function Rect:getheight() return self.__h__ end
+
+-- 2021/05/04: add aliases of set methods 
+Rect.width = Rect.setwidth
+Rect.height = Rect.setheight
 
 --##############################################################################
 --------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
--- 2020/06/15 
+-- 2020/06/15: first created
+-- 2021/05/07: added __clr_add__() method 
 --------------------------------------------------------------------------------
 local Rawshape = _luasopia.Rawshape
 local WHITE = Color.WHITE -- default stroke/fill color
@@ -13,41 +14,64 @@ if _Gideros then
 
     newGrp = _Gideros.Sprite.new
 
-    function Shape:_add(shp)
+    function Shape:__add__(shp)
         self.__bd:addChild(shp)
         return self
     end
 
+--[[
     -- 여러 개의 shape들을 모두 지운다
-    function Shape:_clr()
+    function Shape:__clr__()
         for k = self.__bd:getNumChildren(),1,-1 do
             self.__bd:getChildAt(k):removeFromParent() -- 모든 차일드 삭제
         end
     end
+--]]
+
+    -- 2021/05/07 : add clear and add in one method
+    function Shape:__clr_add__()
+
+        for k = self.__bd:getNumChildren(),1,-1 do
+            self.__bd:getChildAt(k):removeFromParent() -- 모든 차일드 삭제
+        end
+
+        local shp = getshp(self._pts, self._sopt)
+        self.__bd:addChild(shp)
+        return self
+
+    end
 
     -- shape이 딱 하나만 있는 경우
-    function Shape:_clr1()
-        self.__bd:getChildAt(1):removeFromParent()
-    end
+    -- function Shape:__clr1__() self.__bd:getChildAt(1):removeFromParent() end
 --------------------------------------------------------------------------------
 elseif _Corona then
 
     newGrp = _Corona.display.newGroup
 
-    function Shape:_add(shp)
+    function Shape:__add__(shp)
         self.__bd:insert(shp)
         return self
     end
 
-    function Shape:_clr()
+    function Shape:__clr__()
         for k = self.__bd.numChildren, 1, -1 do
             self.__bd[k]:removeSelf() -- 차일드 각각의 소멸자 호출(즉시 삭제)
           end    
     end
 
-    function Shape:_clr1()
-        self.__bd[1]:removeSelf()
+    -- 2021/05/07 : add clear and add in one method
+    function Shape:__clr_add__()
+        for k = self.__bd.numChildren, 1, -1 do
+            self.__bd[k]:removeSelf() -- 차일드 각각의 소멸자 호출(즉시 삭제)
+        end    
+
+        local shp = getshp(self._pts, self._sopt)
+        self.__bd:insert(shp)
+        return self
     end
+
+    -- shape이 딱 하나만 있는 경우
+    --function Shape:__clr1__()  self.__bd[1]:removeSelf()  end
 end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -64,7 +88,7 @@ function Shape:init(pts, opt)
     end
 
     self.__bd = newGrp()
-    self:_add( getshp(pts, self._sopt) )
+    self:__add__( getshp(pts, self._sopt) )
 
     return Disp.init(self)
 end
@@ -79,26 +103,31 @@ function Shape:_rdrw(pts, opt)
         so.fc = opt.fill or opt.fillcolor or so.fc
     end
     
-    self:_clr()
-    return self:_add( getshp(pts, self._sopt) )
+    --self:__clr__()
+    --return self:__add__( getshp(pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 -- pts만 새로 주어지는 경우 (shape객체가 하나만 있는 경우)
 function Shape:_re_pts1(pts)
     self._pts = pts
-    self:_clr1()
-    return self:_add( getshp(pts, self._sopt) )
+
+    --self:__clr__()
+    --return self:__add__( getshp(pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 -- 옵션만 변경되는 경우 (shape객체가 하나만 있는 경우)
 function Shape:_re_opt1(pts, opt)
+
     local so = self._sopt
     so.sw = opt.strokewidth or so.sw
     so.sc = opt.strokecolor or so.sc
     so.fc = opt.fill or opt.fillcolor or so.fc
     
-    self:_clr1()
-    return self:_add( getshp(self._pts, so) )
+    --self:__clr__()
+    --return self:__add__( getshp(self._pts, so) )
+    return self:__clr_add__()
 end
 
 -- pts와 opt 둘 다 변경되는 경우 (shape객체가 하나만 있는 경우)
@@ -113,35 +142,47 @@ function Shape:_rdrw1(pts, opt)
     so.fc = opt.fill or opt.fillcolor or so.fc
     --end
     
-    self:_clr1()
-    return self:_add( getshp(pts, self._sopt) )
+    --self:__clr__()
+    --return self:__add__( getshp(pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 function Shape:fill(color)
     self._sopt.fc = color
-    self:_clr1()
-    return self:_add( getshp(self._pts, self._sopt) )
+
+    --self:__clr__()
+    --return self:__add__( getshp(self._pts, self._sopt) )
+    return self:__clr_add__()
 end
-Shape.fillcolor = Shape.fill
+
 
 function Shape:strokewidth(sw)
     self._sopt.sw = sw
-    self:_clr1()
-    return self:_add( getshp(self._pts, self._sopt) )
+
+    --self:__clr__()
+    --return self:__add__( getshp(self._pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 function Shape:strokecolor(color)
     self._sopt.sc = color
-    self:_clr1()
-    return self:_add( getshp(self._pts, self._sopt) )
+
+    --self:__clr__()
+    --return self:__add__( getshp(self._pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 function Shape:empty()
-    self._sopt.fc = Color(0,0,0,0)    self:_clr1()
-    return self:_add( getshp(self._pts, self._sopt) )
+    self._sopt.fc = Color(0,0,0,0)
+
+    --self:__clr__()
+    --return self:__add__( getshp(self._pts, self._sopt) )
+    return self:__clr_add__()
 end
 
 -- 2021/05/04에 추가
 
 Shape.setstrokewidth = Shape.strokewidth
 Shape.setstrokecolor = Shape.strokecolor
+
+Shape.fillcolor = Shape.fill

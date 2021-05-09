@@ -18,7 +18,7 @@ local Disp = Display
 Image = class(Disp)
 --------------------------------------------------------------------------------
 if _Gideros then
-  print('core.Image(gid)')
+    print('core.Image(gid)')
 
   
     local Tnew = _Gideros.Texture.new
@@ -31,26 +31,68 @@ if _Gideros then
       local texture = Tnew(url)
       self.__bd = Bnew(texture)
       self.__bd:setAnchorPoint(0.5, 0.5)
+
+      --------------------------
+      --2021/05/09 : add info for collision box
+      local w, h = self.__bd:getWidth(true), self.__bd:getHeight(true)
+      local hw, hh = w/2, h/2
+      self.__cpts__ = {-hw,-hh,1/h,  hw,-hh,1/w,  hw,hh,1/h,  -hw,hh,1/w}
+      self.__w__, self.__h__ = w, h
+      --------------------------
+
       return Disp.init(self) --return self:superInit()
     end
 
-    -- 2020/06/20 arguemt ture means 'do not consider transformation'
-    function Image:getwidth() return self.__bd:getWidth(true) end
-    function Image:getheight() return self.__bd:getHeight(true) end
+    -- 2020/06/20 arguement ture means 'do not consider transformation'
+    function Image:getwidth() return self.__w__ end
+    function Image:getheight() return self.__h__ end
+
+    -- 2021/05/09: Gideros는 anchor를 조절하면 __cpts__도 조정해야
+    -- getglobalxy()메서드가 제대로된 좌표값을 계산한다. 
+    -- 그래서 setanchor()를 overide해야 한다
+    -- (Solar2D는 getglobalxy()메서드가 anchor도 고려하야 자동으로 계산해줌)
+    -- scale은 getglobalxy()메서드가 자동으로 고려된다
+    function Display:setanchor(ax,ay)
+
+      self.__bd:setAnchorPoint(ax,ay)
+
+      local w,h = self.__w__, self.__h__
+      self.__cpts__ = {
+        -w*ax,-h*ay, 1/h,
+        w*(1-ax),-h*ay, 1/w,
+        w*(1-ax),h*(1-ay), 1/h,
+        -w*ax,h*(1-ay), 1/w
+      }
+      return self
+
+    end
+    Image.anchor = Image.setanchor
+
   
 elseif _Corona then
 
   print('core.Image(cor)')
   local newImg = _Corona.display.newImage
   --------------------------------------------------------------------------------
-  function Image:init(url, parent)
+  function Image:init(url)
     self.__bd = newImg(url)
     self.__bd.anchorX, self.__bd.anchorY = 0.5, 0.5
+
+    --------------------------
+    --2021/05/09 : add info for collision box
+    -- Solar2D는 getglobalxy()메서드가 anchor와 scale을 자동으로 고려해주므로
+    -- anchor/scale이 변경될 때 self.__cpts__를 조정해줄 필요가 없다
+    local w, h = self.__bd.width, self.__bd.height
+    local hw, hh = w/2, h/2
+    self.__cpts__ = {-hw,-hh,1/h,  hw,-hh,1/w,  hw,hh,1/h,  -hw,hh,1/w}
+    self.__w__, self.__h__ = w, h
+    --------------------------
+
     return Disp.init(self) --return self:superInit()
   end  
   
   -- 2020/06/20
-  function Image:getwidth() return self.__bd.width end
-  function Image:getheight() return self.__bd.height end
+  function Image:getwidth() return self.__w__ end
+  function Image:getheight() return self.__h__ end
 
 end
